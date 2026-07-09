@@ -1,0 +1,58 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.001     # 保持低干预概率，因为投篮是连贯动作，被打断很难恢复
+  kappa: 1169.7                 # 标准探索参数
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 32            # 强正则化：投篮需要肌肉协同发力，抑制高频抖动能提高命中率
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40                       # 肌肉时间常数
+  test_episode_every: 5
+  time_dist: 5
+  with_learning: true
+
+env_args: {}
+
+mpo_args:
+  hidden_size: 2048             # MyoFullBody 标配，捕捉全身协调性
+  lr_actor: 2.5e-05             # [稳健] 投篮对动作精度要求极高，低学习率防止策略震荡
+  lr_critic: 5.0e-05
+  lr_dual: 0.002
+
+tonic:
+  after_training: ''
+  
+  # Replay Buffer 设置
+  # steps_before_batches=2e5: 投篮需要大量随机探索才能偶尔蒙进几个球，预热很重要
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=10,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=200000))
+  
+  before_training: ''
+  checkpoint: last
+  
+  # 🔥 [核心修改] 指向投篮环境 MyoBasketball-v0
+  # reset_type='init': 使用我们在 reset() 中写好的"持球姿态"，不要随机乱动
+  environment: deprl.environments.Gym('MyoBasketball-v0', scaled_actions=False, reset_type='init')
+  
+  environment_name: deprl_basketball_v0
+  full_save: 0
+  
+  # 确保导入了环境注册代码
+  header: import deprl, myosuite; from myosuite.utils import gym
+  
+  name: MyoBasketball_Run
+  
+  # 并行环境数：投篮环境计算量适中，80个并行能保证吞吐量
+  parallel: 80                  
+  resume: 0
+  seed: 0
+  sequential: 10
+  test_environment: null
+  
+  # 训练步数：投篮是精细活，2亿步 (2e8) 是合理的起步训练量
+  trainer: deprl.custom_trainer.Trainer(steps=int(2e8), epoch_steps=int(2e5), save_steps=int(1e6))
+
+working_dir: ./baselines_Basketball

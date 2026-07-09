@@ -1,0 +1,66 @@
+working_dir: ./baselines_DEPRL
+
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.0004
+  kappa: 1169.7
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 16
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 3
+  time_dist: 5
+  with_learning: true
+
+# 环境参数：这些参数会通过 kwargs 传给 MPC2BundledEnv -> ImitateEnvV0
+env_args:
+  # 动作文件
+  motion_dir: "/home/pangjr/omt/musclebone/myosuite/myosuite/envs/myo/myobase"
+  # 权重文件
+  weight_path: "/home/pangjr/omt/musclebone/myosuite/myosuite/envs/myo/myobase/reward.json"
+  # Gemini API (请确保 rank 0 逻辑在 imitate_v0.py 里处理好了，或者只用单线程测试)
+  gemini_api_key: "sk-6d2d6c034e6d40a69737ea41ce9c49d6"
+  ai_check_freq: 50000
+  
+  # 中间件参数覆盖 (可选，如果不写就用 register_env.py 里的默认值)
+  k_bar: 500.0
+  residual_scale: 0.1
+
+mpo_args:
+  hidden_size: 2048 # 对于残差控制，网络可以不用这么大，但保持原样也没问题
+  lr_actor: 3.53e-05
+  lr_critic: 6.081e-05
+  lr_dual: 0.00213
+
+tonic:
+  name: myoImitate_MPC2
+  seed: 0
+  resume: 0
+  full_save: 0
+  parallel: 40  # 建议根据CPU核心数调整，不要太多导致 API 限流
+  sequential: 10
+  checkpoint: last
+  
+  # 🔥 [关键修改] Header 必须包含 register_env 所在的目录
+  # 请将 /path/to/your/code 替换为你存放 mpc2_middleware.py 的真实目录
+  # 如果所有文件都在 /home/pangjr/mengtao.o/musclebone/myosuite/myosuite/envs/myo/myobase 下，则保持不变
+  header: "import sys; sys.path.insert(0, '/home/pangjr/omt/musclebone/myosuite/myosuite/envs/myo/myobase'); import register_env; register_env.register_custom_envs()"
+  
+  environment_name: deprl_baseline
+  
+  # 🔥 [关键修改] 这里的环境名称必须与 register_env.py 里的一致
+  # reset_type='init' 是给 ImitateEnvV0 用的
+  environment: "deprl.environments.Gym('myoFullImitate-v0', scaled_actions=False, reset_type='init')"
+  
+  test_environment: null
+  
+  agent: "deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=3, batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=int(1e5)))"
+  
+  trainer: "deprl.custom_trainer.Trainer(steps=int(1e9), epoch_steps=int(2e5), save_steps=int(5e5))"
+  
+  before_training: ''
+  after_training: ''

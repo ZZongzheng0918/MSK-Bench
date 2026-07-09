@@ -1,0 +1,51 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Sit">
+    <include file="../scene/msk_bench_scene.xml"/>
+
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+    <option timestep="0.001" integrator="Euler" />
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <asset>
+        <material name="wooden_cover" rgba="0.6 0.4 0.2 1" specular="0.2" shininess="0.1"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="-.025 0.1 1">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="chair" pos="-0.5 0 0" euler="0 0 0">
+            <geom type="cylinder" pos="0.138 0.138 0.225" size="0.02 0.225" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            <geom type="cylinder" pos="0.138 -0.138 0.225" size="0.02 0.225" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            <geom type="cylinder" pos="-0.138 0.138 0.225" size="0.02 0.225" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            <geom type="cylinder" pos="-0.138 -0.138 0.225" size="0.02 0.225" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            
+            <geom type="box" pos="0 0 0.45" size="0.17 0.17 0.02" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3" friction="2.0 0.1 0.1"/>
+            
+            <geom name="back_support_left" type="box" pos="-0.15 -0.138 0.65" size="0.02 0.02 0.2" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            <geom name="back_support_right" type="box" pos="-0.15 0.138 0.65" size="0.02 0.02 0.2" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+            <geom name="back_panel" type="box" pos="-0.15 0 0.75" size="0.02 0.17 0.08" material="wooden_cover" 
+                  conaffinity="1" contype="1" condim="3"/>
+        </body>
+
+    </worldbody>
+
+
+</mujoco>

@@ -1,0 +1,72 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Powerlift">
+    <option timestep="0.002" integrator="Euler" iterations="100" ls_iterations="50" solver="Newton">
+        <flag eulerdamp="enable"/>
+    </option>
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <default>
+        <default class="visual">
+            <geom group="2" contype="0" conaffinity="0"/>
+        </default>
+        <default class="collision">
+            <geom group="3"/>
+        </default>
+    </default>
+
+    <include file="../scene/msk_bench_scene.xml"/>
+
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <asset>
+        <material name="steel_mat" rgba="0.5 0.5 0.5 1" specular="0.9" shininess="0.5" reflectance="0.3"/>
+        <material name="weight_mat" rgba="0.1 0.1 0.1 1" specular="0.3" shininess="0.1"/>
+        <material name="grip_mat" rgba="1 0 0 0.5"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 0.95"> 
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="dumbbell" pos="0.5 0 0.2">
+            <freejoint name="free_dumbbell"/>
+            
+            <inertial pos="0 0 0" mass="0.05" diaginertia="0.5 0.1 0.5"/>
+            
+            <geom name="post" type="cylinder" pos="0 0 0" size="0.029 0.65" zaxis="0 1 0" material="steel_mat" class="visual"/>
+            <geom type="cylinder" pos="0 0 0" size="0.029 0.65" zaxis="0 1 0" class="collision"/>
+            
+            <geom name="left_weight" type="cylinder" pos="0 0.75 0" size="0.2 0.2" zaxis="0 1 0" material="weight_mat" class="visual"/>
+            <geom type="cylinder" pos="0 0.75 0" size="0.2 0.2" zaxis="0 1 0" class="collision"/>
+            
+            <geom name="right_weight" type="cylinder" pos="0 -0.75 0" size="0.2 0.2" zaxis="0 1 0" material="weight_mat" class="visual"/>
+            <geom type="cylinder" pos="0 -0.75 0" size="0.2 0.2" zaxis="0 1 0" class="collision"/>
+
+            <site name="bar_grip_l" pos="0 0.15 0" size="0.01" rgba="1 0 0 1"/>
+            <site name="bar_grip_r" pos="0 -0.15 0" size="0.01" rgba="1 0 0 1"/>
+        </body>
+    </worldbody>
+
+    <equality>
+        <weld name="weld_l" body1="lunate_l" body2="dumbbell" relpose="0 0 0 1 0 0 0" anchor="0 0.15 0" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+        
+        <weld name="weld_r" body1="lunate" body2="dumbbell" relpose="0 0 0 1 0 0 0" anchor="0 -0.15 0" solimp="0.9 0.95 0.001" solref="0.02 1"/>
+    </equality>
+
+    <contact>
+        <exclude body1="Full Body" body2="dumbbell"/> 
+    </contact>
+
+</mujoco>

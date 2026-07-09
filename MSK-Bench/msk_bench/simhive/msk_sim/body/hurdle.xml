@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Hurdle">
+    <include file="../scene/msk_bench_scene.xml"/>
+    
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <option timestep="0.002" integrator="Euler" />
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <default>
+        <default class="hurdle">
+            <geom type="box" contype="1" conaffinity="1" condim="3" friction="1.0 0.005 0.0001"/>
+        </default>
+    </default>
+
+    <!-- The shared asset block is defined in the scene file. -->
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 1.05">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="h1" pos="2.0 0 0.1"> <geom class="hurdle" size="0.02 2.0 0.1"/> </body>
+        <body name="h2" pos="4.0 0 0.15"> <geom class="hurdle" size="0.02 2.0 0.15"/> </body>
+        <body name="h3" pos="6.0 0 0.2"> <geom class="hurdle" size="0.02 2.0 0.2"/> </body>
+        <body name="h4" pos="8.0 0 0.2"> <geom class="hurdle" size="0.02 2.0 0.25"/> </body>
+        <body name="h5" pos="10.0 0 0.2"> <geom class="hurdle" size="0.02 2.0 0.25"/> </body>
+
+    </worldbody>
+</mujoco>

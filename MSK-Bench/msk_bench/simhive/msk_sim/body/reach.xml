@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Reach">
+    <include file="../scene/msk_bench_scene.xml"/>
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <option timestep="0.002" integrator="Euler" />
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <asset>
+        <material name="mat_target" rgba="1.0 0.0 0.0 1.0" specular="0.5" shininess="0.5" emission="0.0"/>
+        <material name="mat_floor" rgba="0.2 0.2 0.2 1" specular="0.1" shininess="0.1"/>
+    </asset>
+
+    <worldbody>
+
+        <body name="Full Body" pos="0 0 1.05">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="target" pos="0.5 -0.2 1.4">
+            <geom name="target_geom" type="sphere" size="0.05" material="mat_target" contype="0" conaffinity="0"/>
+            <site name="target_site" pos="0 0 0" size="0.01" rgba="1 1 0 1"/>
+        </body>
+
+    </worldbody>
+</mujoco>

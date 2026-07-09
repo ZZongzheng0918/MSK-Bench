@@ -1,0 +1,58 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.0004
+  kappa: 1200.0             # [微调] 稍微增加一点探索强度，因为需要先学会走路
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 32        # 保持较高的正则化，有助于生成平滑的肌肉动作
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40                   # 时间常数，对于连贯动作很重要
+  test_episode_every: 3
+  time_dist: 5
+  with_learning: true
+
+env_args: {}
+
+mpo_args:
+  hidden_size: 2048         # MyoSuite 高维动作空间必需的大网络
+  lr_actor: 3.0e-05         # [微调] 标准的保守学习率
+  lr_critic: 6.0e-05
+  lr_dual: 0.002
+
+tonic:
+  after_training: ''
+  # Replay Buffer 设置
+  # return_steps=10: n-step returns
+  # steps_before_batches=2e5: 预热步数，行走任务建议多预热一会
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=10,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=200000))
+  
+  before_training: ''
+  checkpoint: last
+  
+  # 🟢 [关键修改] 这里指向我们刚注册的 WalkAndSit 环境
+  # scaled_actions=False 是 DepRL 处理肌肉模型的标准设置
+  environment: deprl.environments.Gym('myoWalkAndSit-v0', scaled_actions=False, reset_type='init')
+  
+  environment_name: deprl_walk_sit_experiment
+  full_save: 0
+  
+  # 导入必要的库，确保环境注册代码被执行
+  header: import deprl, myosuite; from myosuite.utils import gym
+  
+  name: myoWalkAndSit
+  
+  # 并行数量，根据显存/CPU调整。100个进程对于收集数据非常快。
+  parallel: 100             
+  resume: 0
+  seed: 0
+  sequential: 10
+  test_environment: null
+  
+  # 训练总步数 2e8 = 2亿步，这是一个长期任务
+  trainer: deprl.custom_trainer.Trainer(steps=int(2e8), epoch_steps=int(2e5), save_steps=int(1e6))
+
+working_dir: ./baselines_WalkAndSit

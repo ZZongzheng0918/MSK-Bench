@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench StepStones">
+    <include file="../scene/msk_bench_scene.xml"/>
+    
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <option timestep="0.002" integrator="Euler" />
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <default>
+        <geom contype="1" conaffinity="1" condim="3" friction="2.0 0.005 0.0001" priority="1"/>
+    </default>
+
+    <asset>
+        <material name="mat_start" rgba="0.2 0.8 0.2 1" specular="0.3" shininess="0.3"/>
+        <material name="mat_wood" rgba="0.6 0.4 0.2 1" specular="0.1" shininess="0.1"/>
+        <material name="mat_end" rgba="0.8 0.2 0.2 1" specular="0.3" shininess="0.3"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 3.15">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="stone0" pos="0.00 0.00 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_start"/>
+        </body>
+
+        <body name="stone1" pos="0.45 0.05 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone2" pos="0.90 -0.05 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone3" pos="1.35 0.02 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone4" pos="1.80 -0.02 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone5" pos="2.25 0.05 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone6" pos="2.70 -0.05 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone7" pos="3.15 0.00 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+        <body name="stone8" pos="3.60 0.00 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_end"/>
+        </body>
+        
+        <body name="stone9" pos="4.50 0.00 1.0">
+            <geom type="cylinder" size="0.15 1.0" material="mat_wood"/>
+        </body>
+
+    </worldbody>
+</mujoco>

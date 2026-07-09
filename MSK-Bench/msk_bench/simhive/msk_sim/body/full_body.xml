@@ -1,0 +1,33 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Full Body">
+    <include file="../scene/msk_bench_scene.xml"/>
+
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+    <option timestep="0.001" integrator="Euler" />
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <worldbody>
+        <body name="Full Body" pos="-.025 0.1 1">
+            <freejoint name="root"/>
+
+            <include file="../torso/assets/torso_chain.xml"/>
+
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+    </worldbody>
+
+    <keyframe>
+        <key time="0" qpos="0 0 0.93 0.9962 0 0.0872 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
+        <key time="0" qpos="0 0 0.93 0.9962 0 0.0872 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0" />
+        <key time="0" qpos="0 0 0.93 0.9962 0 0.0872 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -0.15 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0 0 0 0 0.1 0 0 0 0 0 0 0 0" />
+        <key time="0" qpos="0 0 0.93 0.9962 0 0.0872 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.15 0 0 0.25 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.5 0 0 0 0 0.1 0 0 0 0 0 0 0 0 -0.15 0 0 0 0 0 0 0 0 0 0 0 0 0" />
+    </keyframe>
+
+</mujoco>

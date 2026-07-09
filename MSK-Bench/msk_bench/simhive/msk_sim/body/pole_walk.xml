@@ -1,0 +1,77 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench PoleWalk">
+    <include file="../scene/msk_bench_scene.xml"/>
+    
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <option timestep="0.002" integrator="Euler" />
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <default>
+        <geom group="0" contype="1" conaffinity="1" condim="3" friction="1.5 0.005 0.0001"/>
+        <default class="eye_beam">
+            <site type="cylinder" size="0.01 10" rgba="0 0 0 0" group="1"/>
+        </default>
+    </default>
+
+    <asset>
+        <material name="mat_pole" rgba="0.8 0.3 0.3 1" specular="0.5" shininess="0.5"/>
+        <material name="mat_wall" rgba="0.5 0.5 0.5 0.1"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 1.0">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+            
+            <site name="eye_site_c" pos="0.2 0 0.5" zaxis="1 0 0" class="eye_beam"/>
+            
+            <site name="eye_site_l1" pos="0.2 0 0.5" zaxis="0.96 0.25 0" class="eye_beam"/>
+            <site name="eye_site_l2" pos="0.2 0 0.5" zaxis="0.86 0.5 0" class="eye_beam"/>
+            
+            <site name="eye_site_r1" pos="0.2 0 0.5" zaxis="0.96 -0.25 0" class="eye_beam"/>
+            <site name="eye_site_r2" pos="0.2 0 0.5" zaxis="0.86 -0.5 0" class="eye_beam"/>
+        </body>
+
+        <body name="p1" pos="0.8 0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p2" pos="0.8 -0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p3" pos="-0.8 0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p4" pos="-0.8 -0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+
+        <body name="p5" pos="1.6 0 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p6" pos="-1.6 0 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p7" pos="0 1.6 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p8" pos="0 -1.6 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+
+        <body name="p9" pos="1.4 1.4 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p10" pos="1.4 -1.4 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p11" pos="-1.4 1.4 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p12" pos="-1.4 -1.4 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+
+        <body name="p13" pos="2.4 0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p14" pos="2.4 -0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p15" pos="-2.4 0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+        <body name="p16" pos="-2.4 -0.8 1.0"> <geom type="cylinder" size="0.1 1.0" material="mat_pole"/> </body>
+
+        <geom type="box" pos="0 5.5 1" size="6 0.1 2" material="mat_wall"/>
+        <geom type="box" pos="0 -5.5 1" size="6 0.1 2" material="mat_wall"/>
+        <geom type="box" pos="5.5 0 1" size="0.1 6 2" material="mat_wall"/>
+        <geom type="box" pos="-5.5 0 1" size="0.1 6 2" material="mat_wall"/>
+
+    </worldbody>
+
+    <sensor>
+        <rangefinder name="eye_c" site="eye_site_c"/>
+        <rangefinder name="eye_l1" site="eye_site_l1"/>
+        <rangefinder name="eye_l2" site="eye_site_l2"/>
+        <rangefinder name="eye_r1" site="eye_site_r1"/>
+        <rangefinder name="eye_r2" site="eye_site_r2"/>
+    </sensor>
+</mujoco>

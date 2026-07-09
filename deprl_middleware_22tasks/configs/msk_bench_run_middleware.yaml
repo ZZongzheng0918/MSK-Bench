@@ -1,0 +1,48 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.001
+  kappa: 1169.7
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 32
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 5
+  time_dist: 5
+  with_learning: true
+
+env_args: {}
+
+mpo_args:
+  hidden_size: 1024
+  lr_actor: 5.0e-05
+  lr_critic: 8.0e-05
+  lr_dual: 0.002
+
+tonic:
+  after_training: ''
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=3, batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=1e5))
+  before_training: ''
+  checkpoint: last
+  environment: deprl.environments.Gym('MSKBenchRun-Middleware-v0', scaled_actions=False, latent_dim=64, mode='hard', encoder_path=None, decoder_path=None, strict_weights=False)
+  environment_name: deprl_middleware_run
+  full_save: 0
+  header: |
+    import sys
+    sys.path.insert(0, r'D:/MSK-Bench/deprl_middleware_22tasks')
+    sys.path.insert(0, r'D:/MSK-Bench/MSK-Bench')
+    import deprl
+    import msk_bench
+    import deprl_middleware_22tasks.registry
+  name: MSKBenchRun_Middleware_DEP
+  parallel: 4
+  resume: 0
+  seed: 0
+  sequential: 4
+  test_environment: null
+  trainer: deprl.custom_trainer.Trainer(steps=int(1e8), epoch_steps=int(2e5), save_steps=int(2e6))
+
+working_dir: ./baselines_MSKBench_Middleware

@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msk-bench-msgym"
+version = "0.1.0"
+description = "msgym and DynSyn-SAC benchmark integration for MSK-Bench"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+dependencies = [
+    "gymnasium>=0.29.1",
+    "mujoco>=3.3.0",
+    "dm-control>=1.0.28",
+    "numpy",
+    "scipy",
+    "pandas",
+    "imageio",
+    "stable_baselines3[extra]>=2.3.2",
+    "sb3_contrib>=2.3.0",
+    "torch",
+    "tensorboard>=2.12.1",
+]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["msgym*", "DynSyn*"]
+
+[tool.setuptools.package-data]
+msgym = ["motion_data/*.npz"]

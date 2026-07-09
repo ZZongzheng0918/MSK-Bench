@@ -1,0 +1,8 @@
+[project]
+name = "deprl-middleware-22tasks"
+version = "0.1.0"
+description = "Transformer middleware wrapper for depRL on the 22 MSK-Bench tasks."
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["."]

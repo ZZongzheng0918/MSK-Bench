@@ -1,0 +1,52 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.0004
+  kappa: 1169.7
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 16
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 3
+  time_dist: 5
+  with_learning: true
+env_args: {}
+mpo_args:
+  hidden_size: 2048
+  lr_actor: 3.53e-05
+  lr_critic: 6.081e-05
+  lr_dual: 0.00213
+tonic:
+  after_training: ''
+  # Replay Buffer 设置保持不变，这是 MPO 的经验参数
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=3,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=2e5))
+  before_training: ''
+  checkpoint: last
+  
+  # 🔥 [关键修改 1] 环境名称改为 MyoRun-v0
+  # 🔥 [关键修改 2] reset_type='none'，确保使用我们在类中写的“起跑姿势”，不要让库帮我们随机重置
+  environment: deprl.environments.Gym('MyoRun-v0', scaled_actions=False, reset_type='none')
+  
+  environment_name: deprl_run_baseline
+  full_save: 0
+  
+  # 🔥 [关键修改 3] 必须导入包含注册代码的文件 (假设是 myo_run.py)
+  # 如果您的文件名不是 myo_run.py，请修改这里的 "import myo_run"
+  header: import deprl, myosuite; from myosuite.utils import gym
+  
+  name: myoRun
+  parallel: 100  # 跑步需要大量采样，100个进程有助于快速收敛
+  resume: 0
+  seed: 0
+  sequential: 10
+  test_environment: null
+  
+  # 训练 2亿步 (2e8)，每 20万步 (2e5) 一个 Epoch
+  trainer: deprl.custom_trainer.Trainer(steps=int(2e8), epoch_steps=int(2e5), save_steps=int(1e6))
+
+# 输出目录
+working_dir: ./baselines_MyoRun

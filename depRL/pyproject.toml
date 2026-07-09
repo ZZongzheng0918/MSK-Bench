@@ -1,0 +1,57 @@
+[project]
+name = "MSK-Bench"
+dynamic = ["version"]
+description = "MSK-Bench full-body musculoskeletal benchmark environments simulated in MuJoCo."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache 2.0" }
+authors = [
+    { name = "MSK-Bench Authors" },
+]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+    "License :: OSI Approved :: Apache Software License",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "click",
+    "sk-video",
+    "gymnasium==0.29.1",
+    "termcolor",
+    "flatten_dict",
+    "h5py",
+    "imageio",
+    "numpy",
+    "mujoco==3.3.0",
+    "dm-control==1.0.28",
+    "Pillow",
+    "pink-noise-rl",
+    "packaging",
+    "gitpython",
+    "torch",
+    "wandb",
+    "gdown",
+    "pandas",
+    "pyyaml",
+]
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "msk_bench" = "../MSK-Bench/msk_bench" }
+packages = { find = { where = [".", "../MSK-Bench"], include = ["msk_bench*", "deprl*"] } }
+
+[tool.setuptools.package-data]
+"msk_bench" = ["**/*"]
+"deprl" = ["param_files/*.json"]
+
+[tool.setuptools.dynamic]
+version = {attr = "msk_bench.version.__version__"}
+
+[project.scripts]
+deprl-train = "deprl.main:main"
+deprl-log = "deprl.log:main"
+deprl-plot = "deprl.plot:main"
