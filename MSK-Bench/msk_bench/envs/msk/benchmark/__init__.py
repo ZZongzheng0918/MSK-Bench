@@ -11,11 +11,17 @@ curr_dir = os.path.dirname(os.path.abspath(__file__))
 
 MSK_BENCH_ENTRY = "msk_bench.envs.msk.benchmark.msk_bench_v0"
 MSK_BENCH_BODY_DIR = os.path.abspath(os.path.join(curr_dir, "../../../simhive/msk_sim/body"))
+RESIDUAL_RL_DIR = os.path.join(curr_dir, "residualrl")
 
 
 def msk_bench_model(filename):
     """Resolve a model filename from the bundled MSK-Bench body model directory."""
     return os.path.join(MSK_BENCH_BODY_DIR, filename)
+
+
+def residualrl_resource(filename):
+    """Resolve a residual-control resource from the bundled residualrl folder."""
+    return os.path.join(RESIDUAL_RL_DIR, filename)
 
 
 def register_msk_bench_task(task_name, class_name, model_file, max_episode_steps=1000, **kwargs):
@@ -25,6 +31,16 @@ def register_msk_bench_task(task_name, class_name, model_file, max_episode_steps
         entry_point=f"{MSK_BENCH_ENTRY}:{class_name}",
         max_episode_steps=max_episode_steps,
         kwargs={"model_path": msk_bench_model(model_file), **kwargs},
+    )
+
+
+def register_residual_msk_bench_task(task_name, entry_point, max_episode_steps=1000, **kwargs):
+    """Register one optional residual-control MSK-Bench extension task."""
+    register(
+        id=f"MSKBench{task_name}-v0",
+        entry_point=entry_point,
+        max_episode_steps=max_episode_steps,
+        kwargs=kwargs,
     )
 
 
@@ -50,3 +66,21 @@ register_msk_bench_task("WalkAndSit", "MSKBenchWalkAndSitEnvV0", "sit.xml", rese
 register_msk_bench_task("ChinUp", "MSKBenchChinUpEnvV0", "chin_up.xml", max_episode_steps=500, reset_type="init", min_height=0.5)
 register_msk_bench_task("Catch", "MSKBenchCatchEnvV0", "catch.xml", reset_type="init", min_height=0.75, target_x_vel=0.0)
 register_msk_bench_task("PoleWalk", "MSKBenchPoleWalkEnvV0", "pole_walk.xml", reset_type="init", min_height=0.6, target_x_vel=0.5)
+register_residual_msk_bench_task(
+    "ResidualRun",
+    "msk_bench.envs.msk.benchmark.residualrl.run:make_env",
+    max_episode_steps=5000,
+    motion_path=residualrl_resource("walking_run04_poses.npz"),
+)
+register_residual_msk_bench_task(
+    "ResidualStair",
+    "msk_bench.envs.msk.benchmark.residualrl.stair:make_env",
+    max_episode_steps=2000,
+    motion_path=residualrl_resource("stair_prior_89d.npz"),
+)
+register_residual_msk_bench_task(
+    "ResidualWalk",
+    "msk_bench.envs.msk.benchmark.residualrl.walk:make_env",
+    max_episode_steps=1000,
+    motion_path=residualrl_resource("walking_medium09_poses.npz"),
+)

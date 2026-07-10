@@ -27,6 +27,12 @@ EXPECTED_TASKS = [
     "MSKBenchCatch-v0",
     "MSKBenchPoleWalk-v0",
 ]
+RESIDUAL_TASKS = [
+    "MSKBenchResidualRun-v0",
+    "MSKBenchResidualStair-v0",
+    "MSKBenchResidualWalk-v0",
+]
+TRAINING_CONFIG_TASKS = EXPECTED_TASKS + RESIDUAL_TASKS
 
 
 def snake_case_task(env_id):
@@ -80,13 +86,13 @@ class DepRLIntegrationTests(unittest.TestCase):
             self.assertNotIn("myosuite", text.lower())
             self.assertIn("deprl.environments.Gym", text)
             self.assertRegex(text, r"working_dir:\s*\.\/baselines_MSKBench")
-        self.assertEqual(set(seen), set(EXPECTED_TASKS))
+        self.assertEqual(set(seen), set(TRAINING_CONFIG_TASKS))
 
     def test_msk_bench_training_config_names_are_canonical(self):
         config_dir = ROOT / "experiments" / "msk_bench_training_files"
         expected_names = {
             f"msk_bench_{snake_case_task(env_id)}.yaml"
-            for env_id in EXPECTED_TASKS
+            for env_id in TRAINING_CONFIG_TASKS
         }
         actual_names = {config.name for config in config_dir.glob("*.yaml")}
         self.assertEqual(actual_names, expected_names)
