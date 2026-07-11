@@ -9,17 +9,26 @@ import gymnasium.spaces as spaces
 import mujoco
 import numpy as np
 from loco_mujoco.core.utils.math import calculate_relative_site_quantities
-from musclemimic.environments.humanoids.myofullbody import MyoFullBody
+try:
+    from musclemimic.integrations.msk_bench import (
+        CHECKPOINT_ENV_VAR,
+        MyoFullBody,
+        get_jax_policy,
+        resolve_checkpoint_source,
+    )
+except ModuleNotFoundError as exc:
+    if exc.name and exc.name.startswith("musclemimic"):
+        raise ModuleNotFoundError(
+            "ResidualRL requires MuscleMimic. Install the local musclemimic project "
+            "with the benchmark extra; see the MSK-Bench workspace README."
+        ) from exc
+    raise
 from scipy.spatial.transform import Rotation as R
 
 
 RESIDUAL_DIR = Path(__file__).resolve().parent
-DEFAULT_MODEL_PATH = RESIDUAL_DIR / "models" / "myofullbody.xml"
-DEFAULT_BASE_MODEL_DIR = RESIDUAL_DIR / "base_policy"
 DEFAULT_OBS_DIM = 2418
 DEFAULT_ACT_DIM = 354
-
-_JAX_POLICY_CACHE = {}
 
 
 def resolve_path(value: str | os.PathLike | None, default: Path) -> str:
@@ -28,38 +37,13 @@ def resolve_path(value: str | os.PathLike | None, default: Path) -> str:
     return str(Path(value))
 
 
-def get_jax_policy(model_dir, expected_obs_dim: int = DEFAULT_OBS_DIM, act_dim: int = DEFAULT_ACT_DIM):
-    pid = os.getpid()
-    cache_key = (pid, str(model_dir), int(expected_obs_dim), int(act_dim))
-    if cache_key not in _JAX_POLICY_CACHE:
-        import jax
-        import jax.numpy as jnp
-        from musclemimic.algorithms import PPOJax
-        from musclemimic.runner.eval_utils import align_agent_state, load_checkpoint
-        from omegaconf import OmegaConf
-
-        config, agent_state, _ = load_checkpoint(model_dir)
-        OmegaConf.set_struct(config, False)
-
-        class DummyEnv:
-            def __init__(self, obs_dim, action_dim):
-                self.observation_space = spaces.Box(low=-np.inf, high=np.inf, shape=(obs_dim,), dtype=np.float32)
-                self.action_space = spaces.Box(low=-1.0, high=1.0, shape=(action_dim,), dtype=np.float32)
-                self.mdp_info = SimpleNamespace(observation_space=self.observation_space, action_space=self.action_space)
-                self.info = self.mdp_info
-
-        dummy_env = DummyEnv(expected_obs_dim, act_dim)
-        agent_conf = PPOJax.init_agent_conf(dummy_env, config)
-        train_state = align_agent_state(agent_state, agent_conf).train_state
-
-        @jax.jit
-        def get_action(ts, obs):
-            vars_in = {"params": ts.params, "run_stats": ts.run_stats}
-            y, _ = agent_conf.network.apply(vars_in, jnp.atleast_2d(obs), mutable=["run_stats"])
-            return jnp.squeeze(y[0].mean())
-
-        _JAX_POLICY_CACHE[cache_key] = (get_action, train_state)
-    return _JAX_POLICY_CACHE[cache_key]
+def resolve_model_path(value: str | os.PathLike | None) -> str | None:
+    if value is None:
+        return None
+    path = Path(value).expanduser().resolve()
+    if not path.is_file():
+        raise FileNotFoundError(f"Model XML does not exist: {path}")
+    return str(path)
 
 
 class NPZTrajectoryAdapter:
@@ -216,7 +200,7 @@ class FullBodyReferenceEnv(gymnasium.Env, MyoFullBody):
         return self._SimCompat(self._model, self._data)
 
     def __init__(self, model_path=None, motion_path=None, **kwargs):
-        model_path = resolve_path(model_path, DEFAULT_MODEL_PATH)
+        model_path = resolve_model_path(model_path)
         motion_path = resolve_path(motion_path, RESIDUAL_DIR / self.motion_filename)
         MyoFullBody.__init__(
             self,
@@ -292,4 +276,4 @@ def root_local_velocity(mj_data):
 
 
 def default_base_model_dir(value=None) -> str:
-    return resolve_path(value, DEFAULT_BASE_MODEL_DIR)
+    return resolve_checkpoint_source(value)
