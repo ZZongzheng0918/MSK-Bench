@@ -1,115 +1,121 @@
-# MSK-Bench 工作区
+# MSK-Bench Workspace
 
-本目录整合了 MSK-Bench 环境、训练算法以及 MuscleMimic residual-control 扩展。ResidualRL 使用 MuscleMimic 的 MyoFullBody 模型和基础 PPO 策略，再将 benchmark 智能体输出作为 residual action 叠加到基础动作上。
+This workspace integrates the MSK-Bench simulation environments, training algorithms, and a MuscleMimic-based residual-control extension. ResidualRL uses the MuscleMimic MyoFullBody model and a pretrained PPO base policy, then adds residual actions produced by the MSK-Bench agent to the base actions. This preserves the learned motion prior while allowing adaptation to new tasks and terrains.
 
-## 目录
+## Directory Structure
 
-- `MSK-Bench/`：`msk_bench` Python 包和标准/ResidualRL 环境。
-- `musclemimic-main/`：保留完整训练、评估和动作重定向能力的 MuscleMimic 源码。
-- `depRL/`、`ppo/`、`sac/`、`msgym/`：benchmark 算法与相关入口。
-- `tests/`：不依赖 checkpoint 的工作区合同测试。
+- `MSK-Bench/`: Contains the `msk_bench` Python package, standard environments, and ResidualRL environments.
+- `musclemimic-main/`: MuscleMimic source code with the full training, evaluation, and motion-retargeting functionality.
+- `depRL/`, `ppo/`, `sac/`, `msgym/`: Training algorithms and related entry points used by MSK-Bench.
+- `tests/`: Workspace interface tests that can run without loading a model checkpoint.
 
-ResidualRL 不包含 MuscleMimic checkpoint，也不再内嵌 `musclemimic-models` 源码副本。
+ResidualRL does not include MuscleMimic model checkpoints and no longer contains a bundled copy of the `musclemimic-models` source code.
 
-## 系统要求
+## System Requirements
 
-MuscleMimic 要求 Python 3.11 或更高版本，并使用 uv 管理依赖。根据上游 MuscleMimic README：
+MuscleMimic requires Python 3.11 or later and uses `uv` for dependency management. According to the upstream MuscleMimic documentation:
 
-- 训练需要 Linux、NVIDIA GPU 和兼容的 CUDA/JAX 环境。
-- 推理与评估由上游正式支持 Linux 和 macOS。
-- Windows 不在上游正式支持范围内；可进行静态测试，但完整 JAX/MuJoCo 运行可能需要 Linux 或 WSL2。
+- Training requires Linux, an NVIDIA GPU, and a compatible CUDA/JAX environment.
+- Inference and evaluation are officially supported on Linux and macOS.
+- Windows is not officially supported upstream. Static tests can be run on Windows, but a full JAX/MuJoCo setup will generally require Linux or WSL2.
 
-## 安装
+## Installation
 
-先安装 [uv](https://docs.astral.sh/uv/)，然后在 MuscleMimic 项目中同步官方依赖：
+First, install [uv](https://docs.astral.sh/uv/). Then enter the MuscleMimic project directory and synchronize the official dependencies:
 
 ```bash
 cd musclemimic-main
 uv sync
 ```
 
-ResidualRL 还使用 Gymnasium。由于它属于 MSK-Bench 集成层而不是 MuscleMimic 核心依赖，请安装到同一个 uv 环境：
+ResidualRL also depends on Gymnasium. Because Gymnasium is an MSK-Bench integration-layer dependency rather than a core MuscleMimic dependency, install it into the same `uv` environment:
 
 ```bash
 uv pip install gymnasium==0.29.1
 ```
 
-如果之后再次执行 `uv sync`，请重新执行上面的 `uv pip install gymnasium==0.29.1`。运行 benchmark 命令时使用 `uv run --no-sync`，避免 uv 在启动前移除这个集成层依赖。
+If you run `uv sync` again later, reinstall Gymnasium using the command above. When running MSK-Bench commands, use `uv run --no-sync` to prevent `uv` from removing this integration-layer dependency before startup.
 
-MuscleMimic 的 `pyproject.toml` 已声明 `musclemimic-models>=1.0.2`，因此 `uv sync` 会安装正式的 `musclemimic-models` 包和 `myofullbody.xml`；不需要把模型源码复制到 `residualrl`。
+The MuscleMimic `pyproject.toml` already declares `musclemimic-models>=1.0.2`. Therefore, `uv sync` automatically installs the officially released `musclemimic-models` package and the `myofullbody.xml` file. There is no need to copy the model source code into the `residualrl` directory.
 
-### CUDA 训练环境
+### CUDA Training Environment
 
-Linux x86_64 + NVIDIA GPU 可按上游说明安装 CUDA extra：
+On Linux x86_64 with an NVIDIA GPU, install the optional CUDA dependencies according to the upstream instructions:
 
 ```bash
 uv sync --extra cuda
 uv pip install gymnasium==0.29.1
 ```
 
-## 配置 Python 路径
+## Configure the Python Path
 
-从 `musclemimic-main` 目录运行时，把 MSK-Bench 包目录加入 `PYTHONPATH`。
+When running from the `musclemimic-main` directory, add the MSK-Bench package directory to `PYTHONPATH`.
 
-PowerShell：
+### PowerShell
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path '..\MSK-Bench').Path
 uv run --no-sync python -c "import msk_bench; print('MSK-Bench registered')"
 ```
 
-Linux/macOS：
+### Linux/macOS
 
 ```bash
 export PYTHONPATH="$(cd ../MSK-Bench && pwd)"
 uv run --no-sync python -c "import msk_bench; print('MSK-Bench registered')"
 ```
 
-## MuscleMimic checkpoint
+## MuscleMimic Model Checkpoint
 
-默认基础策略来源是：
+The default base policy is loaded from:
 
 ```text
 hf://amathislab/mm-fullbody-base
 ```
 
-MuscleMimic 的 checkpoint 加载器支持 Hugging Face URI、本地 `checkpoint_<step>` 目录和包含多个 checkpoint 的父目录。首次使用默认 URI 时会联网下载，可能需要 Hugging Face 登录或资源访问权限。
+The MuscleMimic checkpoint loader supports the following sources:
 
-推荐提前下载或缓存 checkpoint，并通过环境变量指定本地目录：
+1. A Hugging Face URI;
+2. A local `checkpoint_<step>` directory;
+3. A parent directory containing multiple checkpoints.
 
-PowerShell：
+The first time the default Hugging Face URI is used, the model will be downloaded from the internet. A Hugging Face login or permission to access the resource may be required.
+
+It is recommended to download or cache the checkpoint in advance and specify the local directory through an environment variable.
+
+### PowerShell
 
 ```powershell
 $env:MSK_BENCH_MUSCLEMIMIC_CHECKPOINT = 'D:\checkpoints\mm-fullbody-base'
 ```
 
-Linux/macOS：
+### Linux/macOS
 
 ```bash
 export MSK_BENCH_MUSCLEMIMIC_CHECKPOINT=/data/checkpoints/mm-fullbody-base
 ```
 
-创建环境时也可以传入 `base_model_dir`；优先级为：
+You can also pass the `base_model_dir` argument directly when creating the environment. The base-policy path is resolved in the following order:
 
-1. `base_model_dir` 参数；
-2. `MSK_BENCH_MUSCLEMIMIC_CHECKPOINT` 环境变量；
-3. 官方 Hugging Face URI。
+1. The `base_model_dir` argument;
+2. The `MSK_BENCH_MUSCLEMIMIC_CHECKPOINT` environment variable;
+3. The official Hugging Face URI.
 
-checkpoint 不随本仓库分发。
+Model checkpoints are not distributed with this repository.
 
-## ResidualRL 环境
+## ResidualRL Environments
 
-可用环境：
+The following environments are currently available:
 
 - `MSKBenchResidualWalk-v0`
 - `MSKBenchResidualRun-v0`
 - `MSKBenchResidualStair-v0`
 
-最小示例：
+Minimal example:
 
 ```python
 import gymnasium as gym
-import msk_bench  # 导入时注册环境
+import msk_bench  # Importing the package automatically registers the environments
 
 env = gym.make("MSKBenchResidualWalk-v0")
 observation, info = env.reset(seed=0)
@@ -119,71 +125,108 @@ observation, reward, terminated, truncated, info = env.step(
 env.close()
 ```
 
-从 `musclemimic-main` 目录运行：
+Run the script from the `musclemimic-main` directory:
 
 ```bash
 uv run --no-sync python path/to/your_script.py
 ```
 
-第一次执行 `step()` 时会加载基础策略；如果使用默认 Hugging Face URI，此时可能发生下载。
+The base policy is loaded the first time `step()` is called. If the default Hugging Face URI is used, the model files may be downloaded automatically at that point.
 
-## 路径覆盖
+## Custom Model Path
 
-通常不需要传 `model_path`：`MyoFullBody` 会通过已安装的 `musclemimic-models` 解析默认 XML。如果需要自定义模型，可以传入存在的 XML 文件；无效路径会在 MuJoCo 加载前抛出包含绝对路径的 `FileNotFoundError`。
+Normally, you do not need to pass `model_path` manually because `MyoFullBody` resolves the default XML file through the installed `musclemimic-models` package.
 
-三个参考轨迹仍随 benchmark 保存在：
+To use a custom model, pass the path to an existing XML file. If the path is invalid, the program raises a `FileNotFoundError` containing the absolute path before MuJoCo attempts to load the model.
+
+The three reference trajectory files remain stored under:
 
 ```text
 MSK-Bench/msk_bench/envs/msk/benchmark/residualrl/
 ```
 
-## 测试
+## Testing
 
-不需要 checkpoint 的工作区测试：
+### Workspace Tests Without a Checkpoint
 
 ```bash
 cd D:/MSK-Bench
 python -m unittest discover -s tests -v
 ```
 
-在完整 MuscleMimic 环境中运行适配器测试：
+### MuscleMimic Integration Tests
+
+Run the adapter tests inside a complete MuscleMimic environment:
 
 ```bash
 cd musclemimic-main
 uv run --no-sync pytest -p no:cacheprovider tests/unit/test_msk_bench_integration.py -v
 ```
 
-完整 smoke test 还需要有效 checkpoint，并应验证三个 residual 环境均可完成 `reset()` 和至少一次 `step()`。
+A complete smoke test also requires a valid model checkpoint. It should verify that all three ResidualRL environments can complete `reset()` and at least one `step()` call.
 
-## 常见问题
+## Troubleshooting
 
-### 缺少 gymnasium
+### Gymnasium Is Missing
 
-出现 `Either gym or gymnasium is required` 或 `No module named 'gymnasium'`：
+If either of the following errors appears:
+
+```text
+Either gym or gymnasium is required
+```
+
+or:
+
+```text
+No module named 'gymnasium'
+```
+
+run:
 
 ```bash
 cd musclemimic-main
 uv pip install gymnasium==0.29.1
 ```
 
-随后使用 `uv run --no-sync`。
+Then run the program with `uv run --no-sync`.
 
-### 缺少 musclemimic 或 musclemimic_models
+### `musclemimic` or `musclemimic_models` Is Missing
 
-确认当前目录是 `musclemimic-main` 并已运行 `uv sync`。不要把已删除的 `musclemimic_models-main` 源码目录重新加入 `PYTHONPATH`。
+Confirm that the current directory is `musclemimic-main` and that you have already run:
 
-### checkpoint 不存在
+```bash
+uv sync
+```
 
-检查 `MSK_BENCH_MUSCLEMIMIC_CHECKPOINT` 是否指向完整 Orbax checkpoint 或其父目录。也可清除该变量，让加载器使用默认 Hugging Face URI。
+Do not add the removed `musclemimic_models-main` source directory back to `PYTHONPATH`.
 
-### 观测或动作维度不匹配
+### Model Checkpoint Not Found
 
-当前 ResidualRL 策略合同为 2418 维观测和 354 维动作。应使用与 MyoFullBody 关闭手指动作配置匹配的官方基础策略。
+Check whether `MSK_BENCH_MUSCLEMIMIC_CHECKPOINT` points to a complete Orbax checkpoint directory or to a parent directory containing checkpoints.
 
-### `uv lock` 在 Git extra 上耗时
+You can also clear the environment variable so that the loader falls back to the default Hugging Face URI.
 
-MuscleMimic 的 SMPL/GMR extras 含 Git 依赖。首次重新解析锁文件可能需要访问 GitHub；普通安装优先使用仓库已有 `uv.lock` 和 `uv sync`。
+### Observation or Action Dimension Mismatch
 
-## License 与资源许可
+The current ResidualRL policy interface expects:
 
-MuscleMimic 源码使用 Apache-2.0 license。模型、动作数据和 Hugging Face checkpoint 可能采用独立 license；使用或重新分发前请分别查看对应仓库和数据页面，本 benchmark 不重新分发这些 checkpoint。
+- Observation dimension: 2418;
+- Action dimension: 354.
+
+Use the official base policy that matches the MyoFullBody configuration with finger actions disabled.
+
+### `uv lock` Takes a Long Time to Resolve Git Extras
+
+The optional SMPL/GMR dependencies in MuscleMimic include Git-based dependencies. Resolving the lock file for the first time may require access to GitHub and can therefore take a long time.
+
+For a standard installation, prefer the existing `uv.lock` file in the repository and run:
+
+```bash
+uv sync
+```
+
+## License and Resource Terms
+
+The MuscleMimic source code is licensed under Apache-2.0. Model files, motion data, and Hugging Face checkpoints may use separate licenses.
+
+Before using or redistributing these resources, review the licensing terms in the corresponding code repository, model repository, and dataset pages. This MSK-Bench workspace does not redistribute the model checkpoints.
