@@ -7,7 +7,6 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-
 ROOT = Path(__file__).resolve().parents[1]
 COMMON = ROOT / "MSK-Bench/msk_bench/envs/msk/benchmark/residualrl/common.py"
 MUSCLEMIMIC_ROOT = ROOT / "musclemimic-main"
@@ -85,7 +84,8 @@ class ResidualRLMuscleMimicContractTests(unittest.TestCase):
         text = COMMON.read_text(encoding="utf-8")
         self.assertNotIn('RESIDUAL_DIR / "models" / "myofullbody.xml"', text)
         self.assertNotIn('RESIDUAL_DIR / "base_policy"', text)
-        self.assertIn("CHECKPOINT_ENV_VAR", text)
+        self.assertIn("resolve_checkpoint_source", text)
+        self.assertNotIn("benchmark extra", text)
 
     def test_cleaned_checkout_retains_core_capabilities(self):
         for relative in (

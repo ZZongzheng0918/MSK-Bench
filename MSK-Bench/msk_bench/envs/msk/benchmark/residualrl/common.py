@@ -3,15 +3,18 @@ from __future__ import annotations
 import os
 from pathlib import Path
 from types import SimpleNamespace
+from typing import ClassVar
 
 import gymnasium
 import gymnasium.spaces as spaces
 import mujoco
 import numpy as np
+from scipy.spatial.transform import Rotation
+
 from loco_mujoco.core.utils.math import calculate_relative_site_quantities
+
 try:
     from musclemimic.integrations.msk_bench import (
-        CHECKPOINT_ENV_VAR,
         MyoFullBody,
         get_jax_policy,
         resolve_checkpoint_source,
@@ -20,13 +23,13 @@ except ModuleNotFoundError as exc:
     if exc.name and exc.name.startswith("musclemimic"):
         raise ModuleNotFoundError(
             "ResidualRL requires MuscleMimic. Install the local musclemimic project "
-            "with the benchmark extra; see the MSK-Bench workspace README."
+            "and Gymnasium; see the MSK-Bench workspace README."
         ) from exc
     raise
-from scipy.spatial.transform import Rotation as R
-
 
 RESIDUAL_DIR = Path(__file__).resolve().parent
+__all__ = ["get_jax_policy"]
+
 DEFAULT_OBS_DIM = 2418
 DEFAULT_ACT_DIM = 354
 
@@ -104,7 +107,7 @@ class NPZTrajectoryAdapter:
 
 
 class FullBodyGoalWrapper:
-    SITES_FOR_MIMIC = [
+    SITES_FOR_MIMIC: ClassVar[list[str]] = [
         "pelvis_mimic", "upper_body_mimic", "head_mimic",
         "left_shoulder_mimic", "left_elbow_mimic", "left_hand_mimic",
         "right_shoulder_mimic", "right_elbow_mimic", "right_hand_mimic",
@@ -186,7 +189,7 @@ class FullBodyGoalWrapper:
 
 
 class FullBodyReferenceEnv(gymnasium.Env, MyoFullBody):
-    metadata = {"render_modes": ["human", "rgb_array"]}
+    metadata: ClassVar[dict[str, list[str]]] = {"render_modes": ["human", "rgb_array"]}
     motion_filename = "walking_run04_poses.npz"
     max_episode_steps = 1000
 
@@ -270,7 +273,7 @@ def root_local_velocity(mj_data):
     lin_vel_global = mj_data.qvel[:3]
     ang_vel_global = mj_data.qvel[3:6]
     quat = mj_data.qpos[3:7]
-    root_rot = R.from_quat([quat[1], quat[2], quat[3], quat[0]])
+    root_rot = Rotation.from_quat([quat[1], quat[2], quat[3], quat[0]])
     lin_vel_local = root_rot.inv().apply(lin_vel_global)
     return np.concatenate([lin_vel_local, ang_vel_global])
 

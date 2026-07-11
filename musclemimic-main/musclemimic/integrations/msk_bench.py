@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import os
-from functools import lru_cache
+from functools import cache
 from types import SimpleNamespace
+from typing import TYPE_CHECKING
 
+if TYPE_CHECKING:
+    from musclemimic.environments.humanoids import MyoFullBody
 import numpy as np
-
 
 CHECKPOINT_ENV_VAR = "MSK_BENCH_MUSCLEMIMIC_CHECKPOINT"
 DEFAULT_CHECKPOINT_SOURCE = "hf://amathislab/mm-fullbody-base"
@@ -40,7 +42,7 @@ def validate_policy_action(action, expected_dim: int) -> np.ndarray:
     return value
 
 
-@lru_cache(maxsize=None)
+@cache
 def get_jax_policy(checkpoint_source: str | None, expected_obs_dim: int, act_dim: int):
     """Load and cache a validated JAX PPO inference function and train state."""
     import jax
