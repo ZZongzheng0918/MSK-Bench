@@ -127,6 +127,25 @@ class ResidualRLMuscleMimicContractTests(unittest.TestCase):
         with self.assertRaisesRegex(FileNotFoundError, "Model XML does not exist"):
             module.resolve_model_path(ROOT / "missing-model.xml")
 
+    def test_workspace_readme_documents_residualrl_setup(self):
+        readme_path = ROOT / "README.md"
+        self.assertTrue(readme_path.is_file(), "root README.md is missing")
+        readme = readme_path.read_text(encoding="utf-8")
+        for required in (
+            "uv sync",
+            "uv pip install gymnasium==0.29.1",
+            "hf://amathislab/mm-fullbody-base",
+            "MSK_BENCH_MUSCLEMIMIC_CHECKPOINT",
+            "MSKBenchResidualWalk-v0",
+            "MSKBenchResidualRun-v0",
+            "MSKBenchResidualStair-v0",
+            "musclemimic-models",
+            "checkpoint",
+            "license",
+        ):
+            with self.subTest(required=required):
+                self.assertIn(required, readme)
+
 
 if __name__ == "__main__":
     unittest.main()
