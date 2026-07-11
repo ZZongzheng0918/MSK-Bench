@@ -1,0 +1,22 @@
+# Bimanual configuration with Soft Mixture of Experts (MoE)
+# Inherits from conf_bimanual.yaml and only overrides MoE settings
+defaults:
+  - conf_bimanual
+  - _self_
+
+experiment:
+  # Network architecture (same as base for reference)
+  actor_hidden_layers: [1024, 1024, 1024, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024]
+
+  # Enable Soft Mixture of Experts (MoE)
+  use_moe: true
+  moe_config:
+    num_experts: 6                    # Number of experts per MoE layer
+    moe_at_layers: [2]                # Apply MoE at layers 2 (0-indexed)
+    apply_moe_to: "both"              # "actor", "critic", or "both"
+    apply_moe_to_output: false        # Apply MoE to output layers
+    expert_hidden_ratio: 0.5          # Expert hidden dim = output_dim * ratio
+    temperature: 0.7                  # Gating temperature (lower = sharper selection)
+    load_balance_loss_weight: 0.01    # Weight for load balancing loss
+    gate_init_std: 0.01               # Std for gating network initialization

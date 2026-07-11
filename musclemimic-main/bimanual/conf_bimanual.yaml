@@ -1,0 +1,225 @@
+# Bimanual configuration for deep mimic imitation learning (aligned with fullbody base structure)
+defaults:
+  - override hydra/job_logging: default
+  - override hydra/launcher: basic
+
+wandb:
+  project: "musclemimic"
+  mode: "online"
+  tags: ["bimanual"]
+
+experiment:
+  task_factory:
+    name: ImitationFactory
+    params:
+      amass_dataset_conf:
+        dataset_group: "AMASS_BIMANUAL_TRAIN_MOTIONS"
+
+  env_params:
+    env_name: MjxMyoBimanualArm
+    headless: True
+    horizon: 1000
+    mjx_backend: warp
+    num_envs: 8192
+
+    # Disable only for simplified bimanual variants.
+    disable_fingers: false
+
+    # Observations (mirroring style of fullbody config)
+    enable_muscle_length_observations: false
+    enable_muscle_velocity_observations: false
+    enable_muscle_force_observations: true
+    enable_muscle_excitation_observations: false
+    enable_muscle_activation_observations: true
+    enable_touch_sensor_observations: false
+
+    init_state_type: TrajInitialStateHandler
+    goal_type: GoalBimanualTrajMimic
+    goal_params:
+      visualize_goal: false
+      n_step_lookahead: 1
+      upper_body_xml_name: thorax
+      enable_motion_phase: true
+      # Optional goal parameters for variants that support them.
+      # n_step_stride: 20
+      # use_concise_lookahead: true
+      sites_for_mimic:
+        - upper_body_mimic
+        - left_shoulder_mimic
+        - left_elbow_mimic
+        - left_hand_mimic
+        - right_shoulder_mimic
+        - right_elbow_mimic
+        - right_hand_mimic
+
+    control_type: ${control_config.torque_control.control_type}
+    control_params: ${control_config.torque_control.control_params}
+
+    reward_type: MimicReward
+    reward_params:
+      qpos_w_sum: 0.5
+      qvel_w_sum: 0.5
+      root_vel_w_sum: 0.0     # Keep explicit for reward variants that use root velocity.
+      rpos_w_sum: 2.0
+      rquat_w_sum: 0.2
+      rvel_w_sum: 0.5
+      use_mean_exp_reward: false
+      sites_for_mimic:
+        - upper_body_mimic
+        - left_shoulder_mimic
+        - left_elbow_mimic
+        - left_hand_mimic
+        - right_shoulder_mimic
+        - right_elbow_mimic
+        - right_hand_mimic
+
+    # Terminal-state configuration
+    terminal_state_type: EnhancedBimanualTerminalStateHandler
+    terminal_state_params:
+      # Canonical threshold alias used by shared tooling
+      mean_site_deviation_threshold: 0.05
+
+      # Handler-specific thresholds
+      max_site_deviation: 0.05
+      enable_reference_check: true
+      site_deviation_mode: "mean"
+      debug_print: false
+      debug_every: 10
+
+  # Algorithm selection
+  algorithm: PPOJax
+
+  # Network architecture (match fullbody style)
+  actor_hidden_layers: [1024, 1024, 1024, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024]
+  activation: silu
+
+  # Training configuration (match fullbody naming)
+  lr: 4e-4
+  num_envs: ${experiment.env_params.num_envs}
+  total_timesteps: 2048000000
+  max_grad_norm: 1.0
+  anneal_lr: false
+  lr_schedule_type: "warmup_cosine"
+  warmup_steps: null
+  min_lr_ratio: 0.1
+  weight_decay: 1e-3
+  normalize_env: true
+  debug:
+    enabled: false
+    profile_traj_batch: false
+    profile_val_batch: false
+    track_nacon: false
+
+  # Optimizer configuration
+  optimizer_type: "muon"
+  muon_config:
+    beta: 0.95
+    nesterov: true
+    ns_steps: 5
+    weight_decay: 1e-3
+    adaptive: false
+
+  # PPO-specific hyperparameters (moved into ppo_config like fullbody)
+  ppo_config:
+    num_steps: 10
+    update_epochs: 1
+    num_minibatches: 32
+    gamma: 0.99
+    gae_lambda: 0.95
+    clip_eps: 0.2
+    clip_eps_vf: 0.2
+    init_std: 0.2
+    learnable_std: true
+    ent_coef: 0.0
+    vf_coef: 0.5
+
+  # LayerNorm (enabled by default)
+  use_layernorm: true
+  layernorm_eps: 1e-5
+
+  # MoE disabled by default (same scaffold as fullbody)
+  use_moe: false
+  moe_config:
+    num_experts: 16
+    moe_at_layers: [3]
+    apply_moe_to: "both"
+    apply_moe_to_output: false
+    expert_hidden_ratio: 0.5
+    temperature: 0.5
+    load_balance_loss_weight: 0.01
+    gate_init_std: 0.01
+
+  # Seeds and checkpointing
+  n_seeds: 1
+  seeds: null
+  vmap_across_seeds: false
+  save_checkpoints: true
+  max_checkpoints_to_keep: 5
+  checkpoints_on_validation: true
+  resume_from: null
+  async_checkpointing: true
+  reset_logging_timestep: false
+  reset_lr_schedule_on_resume: false
+
+  # Auto-resume configuration
+  auto_resume: true
+  run_id: null
+  checkpoint_root: null
+
+  # Adaptive termination + reward curriculum scaffolds (off by default, same as fullbody)
+  adaptive_termination:
+    enabled: false
+    init_threshold: 0.10
+    low_band: 0.10
+    high_band: 0.20
+    adjust_factor: 0.95
+    consecutive_k: 5
+    min_threshold: 0.03
+    ema_alpha: 0.1
+
+  reward_curriculum:
+    enabled: false
+    qvel_w_sum_init: 0.5
+    root_vel_w_sum_init: 0.0
+    qvel_w_sum_max: 0.8
+    root_vel_w_sum_max: 0.2
+    eta: 0.02
+    ema_alpha: 0.2
+    term_rate_threshold: 0.08
+    consecutive_k: 5
+
+  # Validation configuration
+  validation:
+    active: true
+    deterministic: false
+    num_steps: 500
+    num_envs: 20
+    num: 200
+    video_length: 3000
+    video_frequency: 1
+    video_fps: 30
+    quantities:
+      - JointPosition
+      - JointVelocity
+      - RelSitePosition
+      - RelSiteVelocity
+      - RelSiteOrientation
+    measures:
+      - EuclideanDistance
+      - DynamicTimeWarping
+      - DiscreteFrechetDistance
+    rel_site_names:
+      - upper_body_mimic
+      - left_shoulder_mimic
+      - left_elbow_mimic
+      - left_hand_mimic
+      - right_shoulder_mimic
+      - right_elbow_mimic
+      - right_hand_mimic
+    joints_to_ignore: []
+
+control_config:
+  torque_control:
+    control_type: DefaultControl
+    control_params: {}

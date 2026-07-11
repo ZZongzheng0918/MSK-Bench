@@ -1,0 +1,37 @@
+defaults:
+  - conf_bimanual # Inherit from base config
+
+# Override wandb tags to indicate GMR
+wandb:
+  tags: ["bimanual", "gmr"]
+
+# Override task factory to use GMR retargeting
+experiment:
+  actor_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 2048, 2048, 2048, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 2048, 2048, 2048, 1024]
+  task_factory:
+    params:
+      amass_dataset_conf:
+        dataset_group: "AMASS_BIMANUAL_TRAIN_MOTIONS" #"AMASS_BIMANUAL_MARGINAL_MOTIONS" 
+        retargeting_method: gmr
+        gmr_config:
+          src_human: smplh
+          target_fps: 30
+          solver: daqp
+          damping: 0.5
+          offset_to_ground: false
+          use_velocity_limit: false
+          use_fitted_shape: true  # Auto-fit SMPL shape to robot
+          shape_fitting_iterations: 500
+  
+  env_params:
+    goal_params:
+      n_step_lookahead: 5
+      n_step_stride: 20
+
+    terminal_state_params:
+      # Canonical threshold alias used by shared tooling
+      mean_site_deviation_threshold: 0.25
+
+      # Handler-specific thresholds
+      max_site_deviation: 0.25

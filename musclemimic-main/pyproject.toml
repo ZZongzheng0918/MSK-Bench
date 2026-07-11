@@ -1,0 +1,167 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+
+[project]
+name = "musclemimic"
+version = "0.1.0"
+description = "Towards Embodied AI with MuscleMimic: Unlocking full-body musculoskeletal motor learning at scale"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{name="MuscleMimic Team"}]
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+keywords = [
+    "Imitation Learning",
+    "Reinforcement Learning",
+    "Biomechanics",
+    "Muscle Models",
+    "Motion Capture",
+    "JAX",
+    "MuJoCo"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    # Core dependencies
+    "numpy==2.2.6",
+    "scipy>=1.14.0",
+
+    # MuJoCo/JAX stack
+    "mujoco-mjx==3.4.0",
+    "mujoco==3.4.0",
+    "warp-lang==1.10.0",
+    "jax==0.7.2",
+    "jaxlib==0.7.2",
+    "flax==0.12.0",
+    "optax>=0.2.4",
+    "orbax==0.1.9",
+    "distrax==0.1.7",
+
+    # Configuration & utilities
+    "hydra-core",
+    "pyyaml",
+    "ml-collections>=1.1.0",
+
+    # Data processing
+    "opencv-python",
+    "gitpython",
+    "lxml>=6.0.0",
+    "tqdm",
+    "huggingface_hub",
+
+    # Visualization & media
+    "imageio>=2.37.0",
+    "imageio-ffmpeg>=0.6.0",
+    "glfw>=2.9.0",
+    "seaborn>=0.13.2",
+
+    # ML metrics & logging
+    "metrx",
+    "wandb>=0.19.10",
+
+    "viser>=1.0.10",
+    "trimesh>=4.0.0",
+    "Pillow>=10.0.0",
+    "musclemimic_models>=1.0.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff",
+    "pytest",
+    "pre-commit",
+]
+
+cuda = [
+    "jax[cuda12]==0.7.2 ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+]
+
+# SMPL dependencies
+smpl = [
+    "torch",
+    "smplx @ git+https://github.com/amathislab/smplx",
+    "joblib",
+]
+
+# GMR (General Motion Retargeting)
+gmr = [
+    "general-motion-retargeting @ git+https://github.com/amathislab/gmr_plus.git",
+]
+
+[project.scripts]
+
+# Dataset path configuration
+musclemimic-set-smpl-model-path = "musclemimic.utils:set_smpl_model_path"
+musclemimic-set-amass-path = "musclemimic.utils:set_amass_path"
+musclemimic-set-conv-amass-path = "musclemimic.utils:set_converted_amass_path"
+musclemimic-set-lafan1-path = "musclemimic.utils:set_lafan1_path"
+musclemimic-set-conv-lafan1-path = "musclemimic.utils:set_converted_lafan1_path"
+musclemimic-set-all-caches = "musclemimic.utils:set_all_caches"
+musclemimic-download-gmr-caches = "musclemimic.utils.gmr_cache:download_gmr_dataset_group_cli"
+
+[project.urls]
+Homepage = "https://github.com/amathislab/musclemimic"
+Repository = "https://github.com/amathislab/musclemimic"
+Issues = "https://github.com/amathislab/musclemimic/issues"
+
+[[tool.uv.index]]
+name = "mujoco"
+url = "https://py.mujoco.org"
+explicit = true
+
+[[tool.uv.index]]
+name = "nvidia"
+url = "https://pypi.nvidia.com"
+explicit = true
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["musclemimic*", "loco_mujoco*", "bimanual*", "fullbody*"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes (includes import errors)
+    "I",   # isort
+    "N",   # pep8-naming
+    "UP",  # pyupgrade
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "DTZ", # flake8-datetimez
+    "RUF", # Ruff-specific rules
+]
+ignore = [
+    "E501",  # line too long (handled by formatter)
+    "B008",  # do not perform function calls in argument defaults
+    "C901",  # too complex
+    "F401",  # imported but unused (too noisy during development)
+]
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]  # Allow unused imports in __init__.py files
+
+[tool.ruff.lint.isort]
+known-first-party = ["musclemimic", "loco_mujoco"]
+
+[tool.pytest.ini_options]
+markers = [
+    "integration: marks tests as integration tests (may require external resources)",
+]

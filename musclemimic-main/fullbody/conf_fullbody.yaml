@@ -1,0 +1,263 @@
+# This is the base config - variants inherit from this and override specific settings
+#
+# Usage: python fullbody/experiment.py
+# Variants: python fullbody/experiment.py --config-name=<config_name>
+defaults:
+  - override hydra/job_logging: default
+  - override hydra/launcher: basic
+
+wandb:
+  project: "musclemimic"
+  mode: "online"  # Options: online, offline, disabled
+  tags: ["fullbody"]
+
+experiment:
+  task_factory:
+    name: ImitationFactory
+    params:
+      amass_dataset_conf:
+        dataset_group: "KIT_KINESIS_TRAINING_MOTIONS"
+  env_params:
+    env_name: MjxMyoFullBody
+    headless: True
+    horizon: 1000
+    disable_fingers: true
+    mjx_backend: warp
+    num_envs: 8192
+
+    enable_muscle_length_observations: true
+    enable_muscle_velocity_observations: true
+    enable_muscle_force_observations: true
+    enable_muscle_excitation_observations: true
+    enable_muscle_activation_observations: true
+    enable_touch_sensor_observations: true
+
+    init_state_type: TrajInitialStateHandler
+    goal_type: GoalTrajMimic
+    goal_params:
+      n_step_lookahead: 5
+      n_step_stride: 20
+      upper_body_xml_name: torso
+      enable_motion_phase: true  # Include motion phase [0,1] in goal observation
+      use_concise_lookahead: true  # Use root_pos/vel deltas + site_rpos only (smaller obs)
+      sites_for_mimic:
+        - pelvis_mimic
+        - upper_body_mimic
+        - head_mimic
+        - left_shoulder_mimic
+        - left_elbow_mimic
+        - left_hand_mimic
+        - right_shoulder_mimic
+        - right_elbow_mimic
+        - right_hand_mimic
+        - left_hip_mimic
+        - left_knee_mimic
+        - left_ankle_mimic
+        - left_toes_mimic
+        - right_hip_mimic
+        - right_knee_mimic
+        - right_ankle_mimic
+        - right_toes_mimic
+    control_type: ${control_config.torque_control.control_type}
+    control_params: ${control_config.torque_control.control_params}
+    reward_type: MimicReward
+    reward_params:
+      qpos_w_sum: 0.1
+      qvel_w_sum: 0.1
+      root_pos_w_sum: 0.1
+      root_vel_w_sum: 0.1
+      rpos_w_sum: 0.6
+      rquat_w_sum: 0.01
+      rvel_w_sum: 0.1
+      action_rate_coeff: 0.0
+      activation_energy_coeff: 0.0
+      use_mean_exp_reward: false
+      sites_for_mimic:
+        - pelvis_mimic
+        - upper_body_mimic
+        - head_mimic
+        - left_shoulder_mimic
+        - left_elbow_mimic
+        - left_hand_mimic
+        - right_shoulder_mimic
+        - right_elbow_mimic
+        - right_hand_mimic
+        - left_hip_mimic
+        - left_knee_mimic
+        - left_ankle_mimic
+        - left_toes_mimic
+        - right_hip_mimic
+        - right_knee_mimic
+        - right_ankle_mimic
+        - right_toes_mimic
+    terminal_state_type: MeanRelativeSiteDeviationWithRootTerminalStateHandler
+    terminal_state_params:
+      mean_site_deviation_threshold: 1.0
+      root_deviation_threshold: 1.0
+      root_orientation_threshold: 1.0
+      enable_site_check: true
+
+  # Algorithm selection
+  algorithm: PPOJax
+
+  # Network architecture (shared across algorithms)
+  actor_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024]
+  activation: silu
+
+  # Training configuration (shared)
+  lr: 4e-4
+  num_envs: ${experiment.env_params.num_envs}
+  total_timesteps: 2048000000
+  max_grad_norm: 1.0
+  anneal_lr: true
+  lr_schedule_type: "linear"
+  warmup_steps: null
+  min_lr_ratio: 0.1
+  weight_decay: 0
+  normalize_env: true
+  debug:
+    enabled: false              
+    profile_traj_batch: false   # Profile trajectory batch info
+    profile_val_batch: false    # Profile validation batch info
+    track_nacon: false          # Track max number of contacts per step
+
+  # Optimizer configuration (shared)
+  optimizer_type: "muon"
+  muon_config:
+    beta: 0.95
+    nesterov: true
+    ns_steps: 5
+    adaptive: false
+
+  # PPO-specific hyperparameters
+  ppo_config:
+    num_steps: 20
+    update_epochs: 1
+    num_minibatches: 128
+    gamma: 0.99
+    gae_lambda: 0.95
+    clip_eps: 0.2
+    clip_eps_vf: 0.2
+    init_std: 3.0
+    learnable_std: true
+    ent_coef: 0.0
+    vf_coef: 0.5
+
+  # LayerNorm (enabled by default)
+  use_layernorm: true
+  layernorm_eps: 1e-5
+
+  # MoE disabled in base (use _moe variants to enable)
+  use_moe: false
+  moe_config:
+    num_experts: 16
+    moe_at_layers: [3]
+    apply_moe_to: "both"
+    apply_moe_to_output: false
+    expert_hidden_ratio: 0.5
+    temperature: 0.5
+    load_balance_loss_weight: 0.01
+    gate_init_std: 0.01
+
+  # Seeds and checkpointing
+  n_seeds: 1
+  seeds: null
+  vmap_across_seeds: false
+  save_checkpoints: true
+  max_checkpoints_to_keep: 10
+  checkpoints_on_validation: true
+  resume_from: null
+  async_checkpointing: false
+  reset_logging_timestep: false
+  reset_lr_schedule_on_resume: false  # Reset LR schedule counter (keeps optimizer momentum)
+
+  # Auto-resume configuration (preemption robustness)
+  auto_resume: true             # Auto-detect and resume from latest checkpoint
+  run_id: null                  # Optional explicit experiment ID; if null, uses config hash
+  checkpoint_root: null         # Optional stable checkpoint root; if null, uses checkpoint_dir
+
+  # Adaptive termination threshold curriculum (one-way ratchet)
+  adaptive_termination:
+    enabled: false
+    init_threshold: 0.5     # Starting threshold (meters) - also max due to ratchet
+    low_band: 0.10          # <10%: decrease threshold (harder)
+    high_band: 0.20         # >20%: increase threshold (up to init)
+    adjust_factor: 0.95     # thr *= factor (decrease) or /= factor (increase)
+    consecutive_k: 5        # Require K consecutive updates on same side before adjusting
+    min_threshold: 0.1      # Minimum threshold (meters)
+    ema_alpha: 0.1          # EMA smoothing for rate estimation
+
+  # Reward curriculum - increases qvel_w_sum and root_vel_w_sum when stable
+  # Trigger: when EMA(termination_rate) < threshold for K consecutive updates
+  reward_curriculum:
+    enabled: false              # Set true for curriculum run
+    qvel_w_sum_init: 0.1        # Initial qvel weight (matches reward_params.qvel_w_sum)
+    root_vel_w_sum_init: 0.1    # Initial root_vel weight
+    qvel_w_sum_max: 0.4         # Maximum qvel weight
+    root_vel_w_sum_max: 0.4     # Maximum root_vel weight
+    eta: 0.02                   # Multiplicative growth rate per trigger
+    ema_alpha: 0.2              # EMA smoothing for termination rate
+    term_rate_threshold: 0.08   # Threshold: trigger when EMA < this
+    consecutive_k: 5            # Require K consecutive updates below threshold
+
+  # Adaptive trajectory sampling based on early termination rate
+  # Higher early termination rate -> higher sampling probability (prioritize harder trajectories)
+  adaptive_sampling:
+    enabled: false
+    beta: 0.2                   # EMA decay rate (higher = faster adaptation)
+    alpha: 1.0                  # Prioritization exponent (higher = more aggressive)
+    floor_mix: 0.1              # Uniform mixture floor (ensures all trajectories get some samples, put this higher to make it more uniform)
+    eps_div: 1e-6               # Division stability constant
+    eps_pow: 1e-6               # Power stability constant
+    ema_done_init: 10.0         # Pseudo-count prior for done EMA
+    ema_early_init: 5.0         # Pseudo-count prior for early termination EMA
+
+  # Validation configuration
+  validation:
+    active: true
+    deterministic: false
+    num_steps: 500
+    num_envs: 100
+    num: 100
+    video_length: 3000
+    video_frequency: 1
+    # Motions for validation
+    amass_dataset_conf:
+      dataset_group: "KIT_KINESIS_TESTING_MOTIONS"
+    terminal_state_type: MeanRelativeSiteDeviationTerminalStateHandler
+    terminal_state_params:
+      mean_site_deviation_threshold: 0.5
+      enable_site_check: true
+    quantities:
+      - JointPosition
+      - JointVelocity
+      - RelSitePosition
+      - RelSiteVelocity
+      - RelSiteOrientation
+    measures:
+      - EuclideanDistance
+    rel_site_names:
+      - pelvis_mimic
+      - upper_body_mimic
+      - head_mimic
+      - left_shoulder_mimic
+      - left_elbow_mimic
+      - left_hand_mimic
+      - right_shoulder_mimic
+      - right_elbow_mimic
+      - right_hand_mimic
+      - left_hip_mimic
+      - left_knee_mimic
+      - left_ankle_mimic
+      - left_toes_mimic
+      - right_hip_mimic
+      - right_knee_mimic
+      - right_ankle_mimic
+      - right_toes_mimic
+
+# Control configuration
+control_config:
+  torque_control:
+    control_type: DefaultControl
+    control_params: {}
