@@ -1,29 +1,22 @@
-# msgym / DynSyn-SAC Benchmark
+﻿# DynSyn/msgym Baseline
 
-This directory integrates msgym and DynSyn-SAC as a benchmark algorithm alongside `depRL`, `ppo`, and `sac`.
+This directory contains the MSK-Bench integration for DynSyn/msgym baseline workflows. It includes configuration files, evaluator wrappers, Stable-Baselines3-compatible artifact loading, and benchmark-specific command entry points.
 
-## Contents
+## Attribution
 
-- `msgym/`: Gymnasium environments for MS-Human-700.
-- `DynSyn/`: DynSyn SAC implementation.
-- `SB3-Scripts/`: training and evaluation entry points.
-- `configs/`: 22 normalized MSK-Bench training configs with project-relative output paths.
+- Upstream: https://github.com/Beanpow/DynSyn
+- License: preserve `LICENSE` (Apache-2.0) and any nested upstream notice files if additional upstream code is synced later.
+- Local MSK-Bench changes: evaluator entry points, benchmark environment wiring, model-root/model-path/norm-path argument compatibility, JSON/CSV result export, EMG export, and rendering helpers.
 
-The canonical MS-Human-700 model assets live in:
+Do not remove this attribution section or replace this README wholesale with the upstream README. This file documents the modified MSK-Bench integration surface, not only the original upstream project.
 
-```text
-D:\MSK-Bench\MSK-Bench\msk_bench\simhive\ms_human_700
-```
-
-`msgym.envs.utils.get_ms_human_model_path()` prefers that MSK-Bench asset location and falls back to local msgym assets if present.
-
-## Usage
+## Useful Commands
 
 ```powershell
-cd D:\MSK-Bench\msgym
-python SB3-Scripts\train.py --list-configs
-python SB3-Scripts\train.py -f configs\msk_bench_walk.json
-python SB3-Scripts\eval.py -f runs\msgym_logs\MSKBenchWalk-v0\<run-id>
+python msgym\eval_msgym_success.py --env MSKBenchWalk-v0 --episodes 10 --benchmark-root D:\MSK-Bench
+python msgym\eval_msgym_energy.py --env MSKBenchWalk-v0 --episodes 5 --benchmark-root D:\MSK-Bench
 ```
 
-Training outputs are written under `runs/msgym_logs` by default.
+Use `--model-root`, `--model-path`, `--norm-path`, or `--log-path` to point evaluators at trained artifacts.
+
+See `../THIRD_PARTY_NOTICES.md` and `../PATCHES.md` for the release-facing third-party notice and local patch summary.

@@ -1,0 +1,71 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "msk-bench"
+version = "0.1.0"
+description = "MSK-Bench musculoskeletal benchmark environments and baseline entry points."
+requires-python = ">=3.11"
+dependencies = [
+  "gymnasium>=0.29,<1.0",
+  "mujoco>=3.1",
+  "numpy>=1.24",
+  "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+core = []
+sb3 = [
+  "stable-baselines3>=2.3",
+  "tensorboard>=2.14",
+]
+deprl = [
+  "torch>=2.0",
+  "pyyaml>=6.0",
+]
+dynsyn = [
+  "stable-baselines3>=2.3",
+  "sb3-contrib>=2.3",
+  "torch>=2.0",
+]
+residual = [
+  "jax>=0.4",
+  "omegaconf>=2.3",
+  "mujoco>=3.1",
+]
+dev = [
+  "pytest>=8",
+  "ruff>=0.5",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["msk_bench*"]
+
+[tool.setuptools.package-data]
+msk_bench = [
+  "simhive/**/*",
+  "envs/msk/benchmark/residualrl/*.npz",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+exclude = [
+  "third_party",
+  "depRL/deprl",
+  "depRL/local_tests",
+  "msk_bench/envs",
+  "msk_bench/physics",
+  "msk_bench/renderer",
+  "msk_bench/robot",
+  "msk_bench/utils",
+  "msgym/SB3-Scripts/utils.py",
+  "__pycache__",
+  ".ruff_cache",
+]
+
+[tool.ruff.lint]
+select = ["E", "F"]
+ignore = ["E501", "E402"]

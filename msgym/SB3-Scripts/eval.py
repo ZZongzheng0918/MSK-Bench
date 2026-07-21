@@ -15,23 +15,30 @@ import sb3_contrib
 import stable_baselines3 as sb3
 from stable_baselines3.common.vec_env import VecNormalize, DummyVecEnv
 from DynSyn import SAC_DynSyn
-from utils import create_env, create_vec_env, record_video
+from utils import create_env, record_video
 
-_CUSTOM_AGENTS = {
+AGENT_REGISTRY = {
+    "SAC": sb3.SAC,
+    "PPO": sb3.PPO,
+    "TD3": sb3.TD3,
+    "DDPG": sb3.DDPG,
+    "A2C": sb3.A2C,
+    "DQN": sb3.DQN,
     "SAC_DynSyn": SAC_DynSyn,
 }
+AGENT_REGISTRY.update({name: getattr(sb3_contrib, name) for name in ("ARS", "CrossQ", "MaskablePPO", "QRDQN", "RecurrentPPO", "TQC", "TRPO") if hasattr(sb3_contrib, name)})
+POLICY_REGISTRY = {"MlpPolicy": "MlpPolicy", "CnnPolicy": "CnnPolicy", "MultiInputPolicy": "MultiInputPolicy"}
 
 
 def _ensure_env_registered(env_name: str) -> None:
     if isinstance(env_name, str) and env_name.startswith("msgym/"):
-        import msgym
-
+        import msgym  # noqa: F401
 def load_policy(args: Any) -> Any:
     policy = args.agent_kwargs.pop("policy", None)
     policy = "MlpPolicy" if policy is None else policy
-    if policy != "MlpPolicy":
-        policy = eval(policy)
-    return policy
+    if policy not in POLICY_REGISTRY:
+        raise ValueError(f"Unknown policy '{policy}'. Available policies: {sorted(POLICY_REGISTRY)}")
+    return POLICY_REGISTRY[policy]
 
 def evaluate(args: argparse.Namespace) -> None:
     """Load a trained model and record evaluation videos."""
@@ -54,15 +61,9 @@ def evaluate(args: argparse.Namespace) -> None:
     _ensure_env_registered(arg_config.env_name)
 
     # Load the appropriate agent class
-    if hasattr(sb3, arg_config.agent) or hasattr(sb3_contrib, arg_config.agent):
-        Agent = getattr(
-            sb3_contrib, arg_config.agent,
-            getattr(sb3, arg_config.agent, None),
-        )
-    else:
-        Agent = _CUSTOM_AGENTS.get(arg_config.agent)
-        if Agent is None:
-            Agent = eval(arg_config.agent)
+    Agent = AGENT_REGISTRY.get(arg_config.agent)
+    if Agent is None:
+        raise ValueError(f"Unknown agent '{arg_config.agent}'. Available agents: {sorted(AGENT_REGISTRY)}")
     
     # Load the model
     print(f"Loading model from {checkpoint_dir}")

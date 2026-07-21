@@ -23,7 +23,7 @@ env_args:
   # 权重文件
   weight_path: "/home/pangjr/omt/musclebone/myosuite/myosuite/envs/myo/myobase/reward.json"
   # Gemini API (请确保 rank 0 逻辑在 imitate_v0.py 里处理好了，或者只用单线程测试)
-  gemini_api_key: "sk-6d2d6c034e6d40a69737ea41ce9c49d6"
+  gemini_api_key: null
   ai_check_freq: 50000
   
   # 中间件参数覆盖 (可选，如果不写就用 register_env.py 里的默认值)

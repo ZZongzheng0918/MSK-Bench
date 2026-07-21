@@ -13,6 +13,7 @@ import importlib
 import json
 import os
 import random
+import re
 import shutil
 import sys
 import time
@@ -28,6 +29,9 @@ for path in (PROJECT_ROOT, SCRIPT_DIR, MSK_BENCH_SOURCE):
     if path.exists() and path_text not in sys.path:
         sys.path.insert(0, path_text)
 
+AGENT_REGISTRY: dict[str, Any] = {}
+POLICY_REGISTRY: dict[str, Any] = {"MlpPolicy": "MlpPolicy", "CnnPolicy": "CnnPolicy", "MultiInputPolicy": "MultiInputPolicy"}
+SCHEDULE_REGISTRY: dict[str, Any] = {}
 _CUSTOM_AGENTS: dict[str, Any] = {}
 
 
@@ -42,7 +46,7 @@ def load_training_modules() -> None:
     global CheckpointCallback, EvalCallback, SaveConfigToTensorboardCallback
     global SaveVecNormalizeOnBestCallback, TensorboardCallback, VideoRecorderCallback
     global VecNormalize, create_vec_env, gymnasium, linear_schedule, np, sb3
-    global sb3_contrib, set_random_seed, torch, _CUSTOM_AGENTS
+    global sb3_contrib, set_random_seed, torch, AGENT_REGISTRY, SCHEDULE_REGISTRY, _CUSTOM_AGENTS
 
     import gymnasium
     import numpy as np
@@ -66,6 +70,20 @@ def load_training_modules() -> None:
     _CUSTOM_AGENTS = {
         "SAC_DynSyn": SAC_DynSyn,
     }
+    AGENT_REGISTRY = {
+        name: getattr(sb3, name)
+        for name in ("A2C", "DDPG", "DQN", "PPO", "SAC", "TD3")
+        if hasattr(sb3, name)
+    }
+    AGENT_REGISTRY.update(
+        {
+            name: getattr(sb3_contrib, name)
+            for name in ("ARS", "CrossQ", "MaskablePPO", "QRDQN", "RecurrentPPO", "TQC", "TRPO")
+            if hasattr(sb3_contrib, name)
+        }
+    )
+    AGENT_REGISTRY.update(_CUSTOM_AGENTS)
+    SCHEDULE_REGISTRY = {"linear_schedule": linear_schedule}
 
 
 def set_global_determinism(seed: int) -> None:
@@ -94,9 +112,25 @@ def _ensure_env_registered(env_name: str) -> None:
 def load_policy(args: argparse.Namespace) -> Any:
     policy = args.agent_kwargs.pop("policy", None)
     policy = "MlpPolicy" if policy is None else policy
-    if policy != "MlpPolicy":
-        policy = eval(policy)
-    return policy
+    if policy not in POLICY_REGISTRY:
+        raise ValueError(f"Unknown policy '{policy}'. Available policies: {sorted(POLICY_REGISTRY)}")
+    return POLICY_REGISTRY[policy]
+
+
+def resolve_schedule(value: Any) -> Any:
+    if not isinstance(value, str):
+        return value
+    stripped = value.strip()
+    try:
+        return float(stripped)
+    except ValueError:
+        pass
+    match = re.fullmatch(r"linear_schedule\(([-+0-9.eE]+)\)", stripped)
+    if match:
+        return SCHEDULE_REGISTRY["linear_schedule"](float(match.group(1)))
+    if stripped in SCHEDULE_REGISTRY:
+        return SCHEDULE_REGISTRY[stripped]
+    raise ValueError(f"Unknown learning-rate schedule '{value}'. Available schedules: {sorted(SCHEDULE_REGISTRY)}")
 
 
 def register_callback(
@@ -231,15 +265,12 @@ def train(args: argparse.Namespace, config_str: str) -> None:
     eval_env = build_eval_env(args)
     callback_list = register_callback(args, video_dir, log_dir, config_str, eval_env=eval_env, checkpoint_dir=checkpoint_dir)
 
-    if hasattr(sb3, args.agent) or hasattr(sb3_contrib, args.agent):
-        Agent = getattr(sb3_contrib, args.agent, getattr(sb3, args.agent, None))
-    else:
-        Agent = _CUSTOM_AGENTS.get(args.agent)
-        if Agent is None:
-            Agent = eval(args.agent)
+    Agent = AGENT_REGISTRY.get(args.agent)
+    if Agent is None:
+        raise ValueError(f"Unknown agent '{args.agent}'. Available agents: {sorted(AGENT_REGISTRY)}")
 
-    if "learning_rate" in args.agent_kwargs and not isinstance(args.agent_kwargs["learning_rate"], float):
-        args.agent_kwargs["learning_rate"] = eval(args.agent_kwargs["learning_rate"])
+    if "learning_rate" in args.agent_kwargs:
+        args.agent_kwargs["learning_rate"] = resolve_schedule(args.agent_kwargs["learning_rate"])
     args.agent_kwargs["seed"] = args.seed
 
     vec_env = build_env(args, monitor_dir)

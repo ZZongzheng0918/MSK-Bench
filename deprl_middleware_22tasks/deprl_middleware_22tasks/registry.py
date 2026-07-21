@@ -20,9 +20,10 @@ except ModuleNotFoundError:
 
 try:
     import msk_bench  # noqa: F401
+    from msk_bench.registry import CANONICAL_TASKS
 except ModuleNotFoundError:
     msk_bench = None
-
+    CANONICAL_TASKS = ()
 
 
 @dataclass(frozen=True)
@@ -37,29 +38,17 @@ class TaskSpec:
         return self.env_id.replace("-v0", "-Middleware-v0")
 
 
-MSK_BENCH_TASKS: tuple[TaskSpec, ...] = (
-    TaskSpec("MSKBenchStand-v0", "stand", "hard", 1000),
-    TaskSpec("MSKBenchPowerlift-v0", "powerlift", "hard", 900),
-    TaskSpec("MSKBenchSingleLegStand-v0", "single_leg_stand", "hard", 1000),
-    TaskSpec("MSKBenchSit-v0", "sit", "hard", 1000),
-    TaskSpec("MSKBenchBalance-v0", "balance", "residual", 1000),
-    TaskSpec("MSKBenchSquat-v0", "squat", "hard", 1000),
-    TaskSpec("MSKBenchWalk-v0", "walk", "hard", 1000),
-    TaskSpec("MSKBenchCrawl-v0", "crawl", "hard", 1000),
-    TaskSpec("MSKBenchRun-v0", "run", "hard", 1000),
-    TaskSpec("MSKBenchJump-v0", "jump", "hard", 1000),
-    TaskSpec("MSKBenchWalkTurn-v0", "walk_turn", "hard", 2000),
-    TaskSpec("MSKBenchSidestep-v0", "sidestep", "hard", 1000),
-    TaskSpec("MSKBenchStairs-v0", "stairs", "hard", 2000),
-    TaskSpec("MSKBenchHurdle-v0", "hurdle", "hard", 1000),
-    TaskSpec("MSKBenchStepStones-v0", "step_stones", "hard", 1000),
-    TaskSpec("MSKBenchSlide-v0", "slide", "hard", 1500),
-    TaskSpec("MSKBenchDoorOpen-v0", "door_open", "residual", 1000),
-    TaskSpec("MSKBenchReach-v0", "reach", "primate_bimanual", 500),
-    TaskSpec("MSKBenchWalkAndSit-v0", "walk_and_sit", "hard", 500),
-    TaskSpec("MSKBenchChinUp-v0", "chin_up", "residual", 500),
-    TaskSpec("MSKBenchCatch-v0", "catch", "primate_bimanual", 200),
-    TaskSpec("MSKBenchPoleWalk-v0", "pole_walk", "hard", 1000),
+MODE_BY_ENV_ID = {
+    "MSKBenchBalance-v0": "residual",
+    "MSKBenchDoorOpen-v0": "residual",
+    "MSKBenchChinUp-v0": "residual",
+    "MSKBenchReach-v0": "primate_bimanual",
+    "MSKBenchCatch-v0": "primate_bimanual",
+}
+
+MSK_BENCH_TASKS: tuple[TaskSpec, ...] = tuple(
+    TaskSpec(task.env_id, task.slug, MODE_BY_ENV_ID.get(task.env_id, "hard"), task.horizon)
+    for task in CANONICAL_TASKS
 )
 
 

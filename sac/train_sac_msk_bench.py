@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import multiprocessing as mp
 import os
 import re
@@ -11,32 +12,20 @@ from pathlib import Path
 
 os.environ.setdefault("JAX_PLATFORMS", "cpu")
 
+def _ensure_registry_import_path() -> None:
+    root = Path(__file__).resolve().parents[1]
+    package_root = root / "MSK-Bench"
+    for candidate in (package_root, root):
+        candidate_text = str(candidate)
+        if candidate.exists() and candidate_text not in sys.path:
+            sys.path.insert(0, candidate_text)
+
+
+_ensure_registry_import_path()
+from msk_bench.registry import CANONICAL_ENV_IDS  # noqa: E402
 ALGORITHM_NAME = "SAC"
 DEFAULT_ENV_ID = "MSKBenchStand-v0"
-MSK_BENCH_ENVS = (
-    "MSKBenchStand-v0",
-    "MSKBenchPowerlift-v0",
-    "MSKBenchSingleLegStand-v0",
-    "MSKBenchSit-v0",
-    "MSKBenchBalance-v0",
-    "MSKBenchSquat-v0",
-    "MSKBenchWalk-v0",
-    "MSKBenchCrawl-v0",
-    "MSKBenchRun-v0",
-    "MSKBenchJump-v0",
-    "MSKBenchWalkTurn-v0",
-    "MSKBenchSidestep-v0",
-    "MSKBenchStairs-v0",
-    "MSKBenchHurdle-v0",
-    "MSKBenchStepStones-v0",
-    "MSKBenchSlide-v0",
-    "MSKBenchDoorOpen-v0",
-    "MSKBenchReach-v0",
-    "MSKBenchWalkAndSit-v0",
-    "MSKBenchChinUp-v0",
-    "MSKBenchCatch-v0",
-    "MSKBenchPoleWalk-v0",
-)
+MSK_BENCH_ENVS = CANONICAL_ENV_IDS
 
 
 def project_root() -> Path:
@@ -71,18 +60,29 @@ def selected_envs(env_id: str) -> tuple[str, ...]:
     return (env_id,)
 
 
+@dataclass(frozen=True)
+class SanitizeResult:
+    value: object
+    had_invalid: bool
+
+
 def sanitize_value(np, value):
     if isinstance(value, dict):
-        return {key: sanitize_value(np, item) for key, item in value.items()}
+        sanitized = {key: sanitize_value(np, item) for key, item in value.items()}
+        return SanitizeResult(
+            {key: item.value for key, item in sanitized.items()},
+            any(item.had_invalid for item in sanitized.values()),
+        )
     try:
         array = np.asarray(value)
     except (TypeError, ValueError):
-        return value
+        return SanitizeResult(value, False)
     if not np.issubdtype(array.dtype, np.number):
-        return value
-    if np.isnan(array).any() or np.isinf(array).any():
-        return np.nan_to_num(value, nan=0.0, posinf=10.0, neginf=-10.0)
-    return value
+        return SanitizeResult(value, False)
+    had_invalid = bool(np.isnan(array).any() or np.isinf(array).any())
+    if had_invalid:
+        return SanitizeResult(np.nan_to_num(value, nan=0.0, posinf=10.0, neginf=-10.0), True)
+    return SanitizeResult(value, False)
 
 
 def build_save_vec_normalize_callback(BaseCallback):
@@ -109,7 +109,11 @@ def build_make_env(np, gym, Monitor):
                 obs, info = result
             else:
                 obs, info = result, {}
-            return sanitize_value(np, obs), info
+            clean_result = sanitize_value(np, obs)
+            info = dict(info)
+            if clean_result.had_invalid:
+                info["sanitizer_had_invalid"] = True
+            return clean_result.value, info
 
         def step(self, action):
             result = self.env.step(action)
@@ -119,16 +123,17 @@ def build_make_env(np, gym, Monitor):
                 obs, reward, terminated, info = result
                 truncated = False
             info = dict(info)
-            clean_obs = sanitize_value(np, obs)
-            obs_changed = clean_obs is not obs
+            clean_result = sanitize_value(np, obs)
+            clean_obs = clean_result.value
             try:
                 reward_is_bad = bool(np.isnan(reward) or np.isinf(reward))
             except TypeError:
                 reward_is_bad = False
-            if obs_changed:
+            if clean_result.had_invalid:
                 reward = -100.0
                 terminated = True
                 info["error_flag"] = "obs_nan"
+                info["sanitizer_had_invalid"] = True
             if reward_is_bad:
                 reward = -100.0
                 terminated = True
@@ -290,12 +295,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--clip-obs", type=float, default=10.0)
     parser.add_argument("--verbose", type=int, default=1)
     parser.add_argument("--learning-rate", type=float, default=1e-4)
-    parser.add_argument("--n-steps", type=int, default=2048)
+    parser.add_argument("--buffer-size", type=int, default=1_000_000)
     parser.add_argument("--batch-size", type=int, default=256)
-    parser.add_argument("--n-epochs", type=int, default=10)
     parser.add_argument("--gamma", type=float, default=0.99)
-    parser.add_argument("--gae-lambda", type=float, default=0.95)
-    parser.add_argument("--clip-range", type=float, default=0.2)
+    parser.add_argument("--tau", type=float, default=0.005)
+    parser.add_argument("--train-freq", type=int, default=1)
+    parser.add_argument("--gradient-steps", type=int, default=1)
     parser.add_argument("--ent-coef", type=float, default=0.05)
     resume = parser.add_mutually_exclusive_group()
     resume.add_argument("--resume", dest="resume", action="store_true", default=True)

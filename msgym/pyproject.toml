@@ -6,7 +6,6 @@ build-backend = "setuptools.build_meta"
 name = "msk-bench-msgym"
 version = "0.1.0"
 description = "msgym and DynSyn-SAC benchmark integration for MSK-Bench"
-readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "Apache-2.0" }
 dependencies = [

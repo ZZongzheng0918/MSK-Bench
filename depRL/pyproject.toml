@@ -2,7 +2,6 @@
 name = "MSK-Bench"
 dynamic = ["version"]
 description = "MSK-Bench full-body musculoskeletal benchmark environments simulated in MuJoCo."
-readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "Apache 2.0" }
 authors = [

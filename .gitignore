@@ -1,0 +1,37 @@
+﻿# Python generated files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+
+# Build/package outputs
+build/
+dist/
+*.egg-info/
+
+# Local notebooks/checkpoints/logs
+.ipynb_checkpoints/
+*.log
+*.tmp
+
+# Local experiment outputs
+artifacts/
+checkpoints/
+data/
+outputs/
+runs/
+wandb/
+*.mp4
+*.avi
+*.gif
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
