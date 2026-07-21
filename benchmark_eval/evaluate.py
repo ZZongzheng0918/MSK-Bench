@@ -90,10 +90,12 @@ class EvaluationRequest:
     output_csv: Path | None = None
     output_dir: Path | None = None
     model_root: Path | None = None
+    model_dir: Path | None = None
     model_path: Path | None = None
     norm_path: Path | None = None
     run_path: Path | None = None
     log_path: Path | None = None
+    checkpoint: str | None = None
     checkpoint_file: Path | None = None
     max_steps: int | None = None
     deterministic: bool = False
@@ -208,6 +210,8 @@ def build_command(request: EvaluationRequest, algorithm: str, *, python: str = "
 
     if request.model_root is not None:
         command += ["--model-root", str(request.model_root)]
+    if request.model_dir is not None and normalized_algorithm in {"ppo", "sac"}:
+        command += ["--model-dir", str(request.model_dir)]
     if request.model_path is not None and normalized_algorithm in {"ppo", "sac", "msgym"}:
         command += ["--model-path", str(request.model_path)]
     if request.norm_path is not None and normalized_algorithm in {"ppo", "sac", "msgym"}:
@@ -215,6 +219,8 @@ def build_command(request: EvaluationRequest, algorithm: str, *, python: str = "
     run_path = request.log_path if normalized_algorithm == "msgym" and request.log_path is not None else request.run_path
     if run_path is not None:
         command += ["--log-path" if normalized_algorithm == "msgym" else "--run-path", str(run_path)]
+    if request.checkpoint is not None and normalized_algorithm in {"deprl", "middleware"}:
+        command += ["--checkpoint", str(request.checkpoint)]
     if request.checkpoint_file is not None and normalized_algorithm in {"deprl", "middleware"}:
         command += ["--checkpoint-file", str(request.checkpoint_file)]
 
@@ -266,10 +272,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--csv", dest="output_csv", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, default=None)
     parser.add_argument("--model-root", type=Path, default=None)
+    parser.add_argument("--model-dir", type=Path, default=None)
     parser.add_argument("--model-path", type=Path, default=None)
     parser.add_argument("--norm-path", type=Path, default=None)
     parser.add_argument("--run-path", type=Path, default=None)
     parser.add_argument("--log-path", type=Path, default=None)
+    parser.add_argument("--checkpoint", default=None)
     parser.add_argument("--checkpoint-file", type=Path, default=None)
     parser.add_argument("--max-steps", type=int, default=None)
     parser.add_argument("--deterministic", action="store_true")
@@ -290,10 +298,12 @@ def request_from_args(args: argparse.Namespace) -> EvaluationRequest:
         output_csv=args.output_csv,
         output_dir=args.output_dir,
         model_root=args.model_root,
+        model_dir=args.model_dir,
         model_path=args.model_path,
         norm_path=args.norm_path,
         run_path=args.run_path,
         log_path=args.log_path,
+        checkpoint=args.checkpoint,
         checkpoint_file=args.checkpoint_file,
         max_steps=args.max_steps,
         deterministic=args.deterministic,

@@ -292,6 +292,34 @@ python benchmark_eval\evaluate.py `
   --execute
 ```
 
+Evaluation scripts load trained artifacts from explicit paths or from the repository's default run layouts. Use `--model-root` for per-task artifact trees, `--model-path`/`--norm-path` for a single PPO/SAC/msgym model, `--model-dir` for a single PPO/SAC run directory, `--log-path` for a msgym run, and `--run-path` plus `--checkpoint` or `--checkpoint-file` for depRL-style runs.
+
+PPO or SAC example with a single trained checkpoint:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm ppo `
+  --env MSKBenchWalk-v0 `
+  --episodes 10 `
+  --model-path checkpoints\ppo\walk\best_model.zip `
+  --norm-path checkpoints\ppo\walk\vec_normalize.pkl `
+  --execute
+```
+
+depRL or middleware example with a Tonic run directory:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm deprl `
+  --env MSKBenchWalk-v0 `
+  --episodes 10 `
+  --run-path checkpoints\deprl\walk_run `
+  --checkpoint last `
+  --execute
+```
+
 Supported canonical algorithms:
 
 | Canonical name | Accepted aliases | Notes |
@@ -326,12 +354,14 @@ Useful shared evaluator arguments:
 | `--benchmark-root` | Repository root used to resolve scripts and assets. |
 | `--json` / `--csv` | Explicit output files. Multi-algorithm runs suffix the algorithm name. |
 | `--output-dir` | Output directory. Scalar metrics write `metric_algorithm.json/csv`; EMG and render use per-algorithm subdirectories. |
-| `--model-root` | Root directory containing model artifacts. |
+| `--model-root` | Root directory containing per-task model artifacts. |
+| `--model-dir` | Single PPO or SAC run/checkpoint directory searched before `--model-root`. |
 | `--model-path` | Direct model file for PPO, SAC, or msgym. |
 | `--norm-path` | Observation-normalization file for PPO, SAC, or msgym. |
 | `--run-path` | depRL or middleware run directory. |
 | `--log-path` | msgym log path. |
-| `--checkpoint-file` | depRL or middleware checkpoint file. |
+| `--checkpoint` | depRL or middleware checkpoint selector, such as `last` or a training step. |
+| `--checkpoint-file` | Explicit depRL or middleware checkpoint file. |
 | `--execute` | Actually run subprocesses instead of printing commands. |
 
 Extra metric-specific arguments can be passed after `--`. Robustness scripts accept noise controls such as `--noise-type`, `--action-scales`, `--obs-scales`, and `--dynamics-scales`:
@@ -364,13 +394,25 @@ Algorithm-specific scripts remain available and are used by the unified evaluato
 | msgym | `msgym/eval_msgym_success.py` | `msgym/eval_msgym_robustness.py` | `msgym/eval_msgym_smooth.py` | `msgym/eval_msgym_energy.py` | `msgym/export_msgym_emg.py` | `msgym/render_msgym.py` |
 | middleware | `deprl_middleware_22tasks/eval_middleware_success.py` | `deprl_middleware_22tasks/eval_middleware_robustness.py` | `deprl_middleware_22tasks/eval_middleware_smooth.py` | `deprl_middleware_22tasks/eval_middleware_energy.py` | `deprl_middleware_22tasks/export_middleware_emg.py` | `deprl_middleware_22tasks/render_middleware.py` |
 
-Common direct evaluator arguments include `--env`, `--list-envs`, `--episodes`, `--benchmark-root`, `--model-root`, `--max-steps`, `--json`, and `--csv`. PPO/SAC/msgym evaluators also accept `--model-path` and `--norm-path`. depRL and middleware evaluators accept depRL-style run/checkpoint arguments such as `--run-path`, `--checkpoint`, `--checkpoint-file`, `--header`, `--agent`, and `--environment`/`--env-expr`.
+Common direct evaluator arguments include `--env`, `--list-envs`, `--episodes`, `--benchmark-root`, `--model-root`, `--model-dir`, `--max-steps`, `--json`, and `--csv`. PPO/SAC/msgym evaluators also accept `--model-path` and `--norm-path`. msgym accepts `--log-path`. depRL and middleware evaluators accept depRL-style run/checkpoint arguments such as `--run-path`, `--checkpoint`, `--checkpoint-file`, `--header`, `--agent`, and `--environment`/`--env-expr`.
 
 ## Training
 
-Full benchmark training is compute-intensive and is not part of the test suite. PPO and SAC scripts default to long runs, so start with `--list-envs` and `--dry-run` before launching a full experiment.
+### Training Overview
 
-### PPO
+Full benchmark training is compute-intensive and is not part of the test suite. Start with listing commands, dry runs, or a single short task before launching full benchmark sweeps.
+
+Training artifacts are intentionally not committed. Use these default layouts when you want the unified evaluator to find outputs automatically, or pass explicit paths with `--model-path`, `--norm-path`, `--log-path`, `--run-path`, `--checkpoint`, or `--checkpoint-file`.
+
+| Baseline | Training entry point | Default artifact layout | Evaluation loading arguments |
+|---|---|---|---|
+| PPO | `ppo/train_ppo_msk_bench.py` | `ppo/runs/<task-slug>/checkpoints/best_model.zip` and `vec_normalize.pkl` | `--model-root ppo/runs`, or `--model-path` plus `--norm-path` |
+| SAC | `sac/train_sac_msk_bench.py` | `sac/runs/<task-slug>/checkpoints/best_model.zip` and `vec_normalize.pkl` | `--model-root sac/runs`, or `--model-path` plus `--norm-path` |
+| depRL | `python -m deprl.main <yaml>` from `depRL/` | `depRL/baselines_MSKBench/<tonic-name>/<timestamp>/checkpoints/step_*.pt` | `--model-root depRL/baselines_MSKBench`, or `--run-path` plus `--checkpoint` |
+| DynSyn/msgym | `msgym/SB3-Scripts/train.py` | `msgym/runs/msgym_logs/<env>/<timestamp_seed>/checkpoint/best_model.zip` and `best_env.zip` | `--model-root msgym/runs/msgym_logs`, `--log-path`, or `--model-path` plus `--norm-path` |
+| Middleware | generated depRL/Tonic middleware configs | `depRL/baselines_MSKBench_Middleware/<tonic-name>/<timestamp>/checkpoints/step_*.pt` | `--model-root depRL/baselines_MSKBench_Middleware`, or `--run-path` plus `--checkpoint` |
+
+### PPO Training
 
 ```powershell
 python ppo\train_ppo_msk_bench.py --list-envs
@@ -385,7 +427,18 @@ python ppo\train_ppo_msk_bench.py `
 
 PPO defaults include 8 training envs, 2 eval envs, seed 0, learning rate `3e-4`, `n_steps=2048`, batch size 256, 10 epochs, gamma 0.99, GAE lambda 0.95, clip range 0.2, entropy coefficient 0.005, and resume enabled. Use `--no-resume` to start fresh.
 
-### SAC
+Evaluate the trained PPO checkpoint from the default output root:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm ppo `
+  --env MSKBenchWalk-v0 `
+  --model-root ppo\runs `
+  --execute
+```
+
+### SAC Training
 
 ```powershell
 python sac\train_sac_msk_bench.py --list-envs
@@ -400,17 +453,77 @@ python sac\train_sac_msk_bench.py `
 
 SAC defaults include 8 training envs, 2 eval envs, seed 0, learning rate `1e-4`, buffer size 1,000,000, batch size 256, gamma 0.99, tau 0.005, train frequency 1, gradient steps 1, entropy coefficient 0.05, and resume enabled. Use `--no-resume` to start fresh.
 
-### Latent-Action Middleware
+Evaluate the trained SAC checkpoint from the default output root:
 
-The middleware package registers `-Middleware-v0` variants for the 22 canonical tasks and wraps base environments with `BioMiddlewareWrapper`. Modes are selected from the registry: `residual` for Balance, DoorOpen, and ChinUp; `primate_bimanual` for Reach and Catch; `hard` for the remaining canonical tasks unless overridden.
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm sac `
+  --env MSKBenchWalk-v0 `
+  --model-root sac\runs `
+  --execute
+```
 
-Useful middleware commands:
+### depRL Training
+
+MSK-Bench depRL configs live in `depRL/experiments/msk_bench_training_files/`. The depRL entry point reads the YAML or JSON config from the last command-line argument, so run it from the `depRL/` directory or install `depRL` in editable mode first.
+
+```powershell
+cd D:\MSK-Bench\depRL
+python -m deprl.main experiments\msk_bench_training_files\msk_bench_walk.yaml
+```
+
+The bundled MSK-Bench depRL configs set `working_dir: ./baselines_MSKBench`, so a walk run is written under `depRL\baselines_MSKBench\MSKBenchWalk_DEP\<timestamp>\checkpoints\`. Evaluators can auto-select the newest run from `--model-root`, or you can point at one run explicitly:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm deprl `
+  --env MSKBenchWalk-v0 `
+  --run-path depRL\baselines_MSKBench\MSKBenchWalk_DEP\<timestamp> `
+  --checkpoint last `
+  --execute
+```
+
+Use `--checkpoint-file depRL\baselines_MSKBench\MSKBenchWalk_DEP\<timestamp>\checkpoints\step_<n>.pt` when you want one exact checkpoint file.
+
+### DynSyn/msgym Training
+
+DynSyn/msgym configs live in `msgym/configs/`. Training writes a run log directory, copies the JSON config, stores TensorBoard and monitor outputs, and saves model artifacts under the run's `checkpoint/` folder.
+
+```powershell
+python msgym\SB3-Scripts\train.py --list-configs
+python msgym\SB3-Scripts\train.py -f configs\msk_bench_walk.json
+```
+
+The default `log_root_dir` in the bundled configs is `./runs/msgym_logs`, so from the repository root the trained outputs are under `msgym\runs\msgym_logs\<env-name>\<timestamp_seed>\checkpoint\`. The evaluator expects `best_model.zip` and `best_env.zip` there when evaluating a best checkpoint. It also supports direct overrides:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm msgym `
+  --env MSKBenchWalk-v0 `
+  --log-path msgym\runs\msgym_logs\MSKBenchWalk-v0\<timestamp_seed> `
+  --execute
+
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm msgym `
+  --env MSKBenchWalk-v0 `
+  --model-path msgym\runs\msgym_logs\MSKBenchWalk-v0\<timestamp_seed>\checkpoint\best_model.zip `
+  --norm-path msgym\runs\msgym_logs\MSKBenchWalk-v0\<timestamp_seed>\checkpoint\best_env.zip `
+  --execute
+```
+
+### Latent-Action Middleware Training
+
+The middleware workflow has two layers: train or provide middleware encoder/decoder weights, then train depRL/Tonic policies on the generated `-Middleware-v0` environments. The wrapper can run without explicit encoder/decoder weights when configs use `strict_weights=False`, but publication-grade experiments should record the exact encoder and decoder files used.
 
 ```powershell
 python deprl_middleware_22tasks\generate_configs.py `
   --output-dir deprl_middleware_22tasks\configs `
-  --encoder-path artifacts\encoder.pt `
-  --decoder-path artifacts\decoder.pt
+  --encoder-path artifacts\spinal_encoder_weights.pth `
+  --decoder-path artifacts\spinal_decoder_weights.pth
 
 python deprl_middleware_22tasks\collect_expert_data.py `
   --env MSKBenchReach-v0 `
@@ -427,6 +540,24 @@ python deprl_middleware_22tasks\train_expert_transformer.py `
   --learning-rate 1e-4
 ```
 
+After generating middleware configs, train a middleware policy through depRL:
+
+```powershell
+cd D:\MSK-Bench\depRL
+python -m deprl.main ..\deprl_middleware_22tasks\configs\msk_bench_walk_middleware.yaml
+```
+
+Generated middleware configs use `working_dir: ./baselines_MSKBench_Middleware`, so trained policies are written under `depRL\baselines_MSKBench_Middleware\<tonic-name>\<timestamp>\checkpoints\` and load through the unified evaluator like any depRL-style checkpoint:
+
+```powershell
+python benchmark_eval\evaluate.py `
+  --metric success `
+  --algorithm middleware `
+  --env MSKBenchWalk-v0 `
+  --run-path depRL\baselines_MSKBench_Middleware\<tonic-name>\<timestamp> `
+  --checkpoint last `
+  --execute
+```
 ## Development And Testing
 
 Run the full regression suite:
@@ -457,16 +588,6 @@ Important test coverage:
 
 The Ruff configuration targets Python 3.11, uses a 120-character line length, and currently selects `E` and `F` lint rules while ignoring `E501` and `E402`. Large upstream or compatibility areas are excluded from linting in `pyproject.toml`.
 
-## Third-Party Components And Local Patches
-
-Some baseline directories include adapted or vendored open-source code. The local README files in those directories describe the MSK-Bench integration surface and should not be replaced wholesale with upstream README files.
-
-Release-facing attribution is tracked in two places:
-
-- `THIRD_PARTY_NOTICES.md`: component paths, upstream URLs, license-file locations, and a short description of local MSK-Bench changes.
-- `PATCHES.md`: maintainer-oriented summaries of how upstream-derived baseline code was modified for this repository.
-
-Before redistributing a modified baseline directory, preserve its upstream license files, keep the local attribution README in place, and update both notice files if the upstream source, license, path, or local integration changes.
 ## Artifact And Cache Policy
 
 Generated files that should stay out of version control include:
@@ -483,6 +604,17 @@ The repository layout tests also expect these legacy or nested paths not to exis
 - `draw_emg_12_muscles.py` as a legacy top-level script.
 
 If cache directories appear after manual local commands, remove only repository-local `__pycache__/` directories and rerun tests with `python -B`.
+
+## Third-Party Components And Local Patches
+
+Some baseline directories include adapted or vendored open-source code. The local README files in those directories describe the MSK-Bench integration surface and should not be replaced wholesale with upstream README files.
+
+Release-facing attribution is tracked in two places:
+
+- `THIRD_PARTY_NOTICES.md`: component paths, upstream URLs, license-file locations, and a short description of local MSK-Bench changes.
+- `PATCHES.md`: maintainer-oriented summaries of how upstream-derived baseline code was modified for this repository.
+
+Before redistributing a modified baseline directory, preserve its upstream license files, keep the local attribution README in place, and update both notice files if the upstream source, license, path, or local integration changes.
 
 ## Troubleshooting
 

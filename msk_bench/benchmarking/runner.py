@@ -97,9 +97,12 @@ class BenchmarkRunRequest:
     output_json: Path | None = None
     output_csv: Path | None = None
     model_root: Path | None = None
+    model_dir: Path | None = None
     model_path: Path | None = None
     norm_path: Path | None = None
     run_path: Path | None = None
+    log_path: Path | None = None
+    checkpoint: str | None = None
     checkpoint_file: Path | None = None
     extra_args: tuple[str, ...] = field(default_factory=tuple)
     dry_run: bool = True
@@ -171,12 +174,18 @@ def build_command(request: BenchmarkRunRequest, repo_root: Path | str = Path("."
         command += ["--csv", str(request.output_csv)]
     if request.model_root is not None:
         command += ["--model-root", str(request.model_root)]
+    if request.model_dir is not None:
+        command += ["--model-dir", str(request.model_dir)]
     if request.model_path is not None:
         command += ["--model-path", str(request.model_path)]
     if request.norm_path is not None:
         command += ["--norm-path", str(request.norm_path)]
     if request.run_path is not None:
         command += ["--run-path", str(request.run_path)]
+    if request.log_path is not None:
+        command += ["--log-path", str(request.log_path)]
+    if request.checkpoint is not None:
+        command += ["--checkpoint", str(request.checkpoint)]
     if request.checkpoint_file is not None:
         command += ["--checkpoint-file", str(request.checkpoint_file)]
     if not request.dry_run:
@@ -197,9 +206,11 @@ def validate_request_assets(request: BenchmarkRunRequest, repo_root: Path | str 
         missing.append(f"script: {script.relative_to(repo_root).as_posix()}")
     for label, path in (
         ("model_root", request.model_root),
+        ("model_dir", request.model_dir),
         ("model_path", request.model_path),
         ("norm_path", request.norm_path),
         ("run_path", request.run_path),
+        ("log_path", request.log_path),
         ("checkpoint_file", request.checkpoint_file),
     ):
         if path is not None and not Path(path).exists():
@@ -231,9 +242,12 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--json", dest="output_json", type=Path, default=None)
     parser.add_argument("--csv", dest="output_csv", type=Path, default=None)
     parser.add_argument("--model-root", type=Path, default=None)
+    parser.add_argument("--model-dir", type=Path, default=None)
     parser.add_argument("--model-path", type=Path, default=None)
     parser.add_argument("--norm-path", type=Path, default=None)
     parser.add_argument("--run-path", type=Path, default=None)
+    parser.add_argument("--log-path", type=Path, default=None)
+    parser.add_argument("--checkpoint", default=None)
     parser.add_argument("--checkpoint-file", type=Path, default=None)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--python", default="python")
@@ -254,9 +268,12 @@ def main(argv: Iterable[str] | None = None) -> int:
         output_json=args.output_json,
         output_csv=args.output_csv,
         model_root=args.model_root,
+        model_dir=args.model_dir,
         model_path=args.model_path,
         norm_path=args.norm_path,
         run_path=args.run_path,
+        log_path=args.log_path,
+        checkpoint=args.checkpoint,
         checkpoint_file=args.checkpoint_file,
         extra_args=tuple(args.extra_args),
         dry_run=not args.execute,
