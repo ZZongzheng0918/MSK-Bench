@@ -7,16 +7,21 @@ import unittest
 from pathlib import Path
 
 
+def path_text(value: str) -> str:
+    return str(Path(value))
+
+
 class UnifiedEvaluationEntrypointTest(unittest.TestCase):
     def test_builds_one_metric_across_multiple_algorithms(self) -> None:
         from benchmark_eval.evaluate import EvaluationRequest, build_commands
 
+        benchmark_root = Path("D:/MSK-Bench")
         request = EvaluationRequest(
             metric="success",
             algorithms=("ppo", "sac", "deprl"),
             env_id="MSKBenchWalk-v0",
             episodes=3,
-            benchmark_root=Path("D:/MSK-Bench"),
+            benchmark_root=benchmark_root,
             output_json=Path("results/success.json"),
         )
 
@@ -33,7 +38,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
             self.assertIn("--episodes", command)
             self.assertIn("3", command)
             self.assertIn("--benchmark-root", command)
-            self.assertIn("D:\\MSK-Bench", command)
+            self.assertIn(str(benchmark_root), command)
             self.assertTrue(any(f"success_{algorithm}.json" in item for item in command), command)
 
     def test_weight_inputs_are_first_class_evaluation_request_fields(self) -> None:
@@ -64,9 +69,9 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         )
         ppo_command = build_command(ppo_request, "ppo")
         self.assertIn("--model-root", ppo_command)
-        self.assertIn("weights\\ppo", ppo_command)
+        self.assertIn(path_text("weights/ppo"), ppo_command)
         self.assertIn("--model-dir", ppo_command)
-        self.assertIn("weights\\ppo\\walk", ppo_command)
+        self.assertIn(path_text("weights/ppo/walk"), ppo_command)
         self.assertIn("--model-path", ppo_command)
         self.assertIn("--norm-path", ppo_command)
         self.assertNotIn("--checkpoint", ppo_command)
@@ -80,7 +85,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         )
         deprl_command = build_command(deprl_request, "deprl")
         self.assertIn("--run-path", deprl_command)
-        self.assertIn("weights\\deprl\\walk_run", deprl_command)
+        self.assertIn(path_text("weights/deprl/walk_run"), deprl_command)
         self.assertIn("--checkpoint", deprl_command)
         self.assertIn("5000000", deprl_command)
 
@@ -125,6 +130,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         self.assertEqual(Path("weights/msgym/walk_log"), request.log_path)
         self.assertEqual("last", request.checkpoint)
         self.assertEqual(Path("weights/deprl/walk_run/checkpoints/step_5000000.pt"), request.checkpoint_file)
+
     def test_msgym_weight_inputs_use_log_path_and_optional_model_files(self) -> None:
         from benchmark_eval.evaluate import EvaluationRequest, build_command
 
@@ -141,11 +147,11 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
 
         self.assertIn("msgym/eval_msgym_success.py", command)
         self.assertIn("--log-path", command)
-        self.assertIn("weights\\msgym\\MSKBenchWalk-v0\\0721-120000_0", command)
+        self.assertIn(path_text("weights/msgym/MSKBenchWalk-v0/0721-120000_0"), command)
         self.assertIn("--model-path", command)
-        self.assertIn("weights\\msgym\\MSKBenchWalk-v0\\0721-120000_0\\checkpoint\\best_model.zip", command)
+        self.assertIn(path_text("weights/msgym/MSKBenchWalk-v0/0721-120000_0/checkpoint/best_model.zip"), command)
         self.assertIn("--norm-path", command)
-        self.assertIn("weights\\msgym\\MSKBenchWalk-v0\\0721-120000_0\\checkpoint\\best_env.zip", command)
+        self.assertIn(path_text("weights/msgym/MSKBenchWalk-v0/0721-120000_0/checkpoint/best_env.zip"), command)
 
     def test_readme_documents_training_entrypoints_for_each_baseline(self) -> None:
         repo_root = Path(__file__).resolve().parents[1]
@@ -171,6 +177,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         )
         for phrase in expected_phrases:
             self.assertIn(phrase, text)
+
     def test_metric_aliases_route_to_existing_legacy_scripts(self) -> None:
         from benchmark_eval.evaluate import EvaluationRequest, build_commands
 
@@ -221,4 +228,3 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

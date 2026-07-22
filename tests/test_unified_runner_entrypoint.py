@@ -4,6 +4,10 @@ import unittest
 from pathlib import Path
 
 
+def path_text(value: str) -> str:
+    return str(Path(value))
+
+
 class UnifiedRunnerEntrypointTest(unittest.TestCase):
     def test_package_runner_builds_unified_entrypoint_command(self) -> None:
         from msk_bench.benchmarking.runner import BenchmarkRunRequest, build_command
@@ -25,7 +29,6 @@ class UnifiedRunnerEntrypointTest(unittest.TestCase):
         self.assertIn("ppo", command)
         self.assertIn("--metric", command)
         self.assertIn("energy", command)
-
 
     def test_package_runner_passes_weight_inputs_to_unified_evaluator(self) -> None:
         from msk_bench.benchmarking.runner import BenchmarkRunRequest, build_command
@@ -53,18 +56,20 @@ class UnifiedRunnerEntrypointTest(unittest.TestCase):
 
         for expected in (
             "--model-root",
-            "weights\\deprl",
+            path_text("weights/deprl"),
             "--model-dir",
-            "weights\\deprl\\walk",
+            path_text("weights/deprl/walk"),
             "--run-path",
-            "weights\\deprl\\walk_run",
+            path_text("weights/deprl/walk_run"),
             "--log-path",
-            "weights\\msgym\\walk_log",
+            path_text("weights/msgym/walk_log"),
             "--checkpoint",
             "last",
             "--checkpoint-file",
-            "weights\\deprl\\walk_run\\checkpoints\\step_5000000.pt",
+            path_text("weights/deprl/walk_run/checkpoints/step_5000000.pt"),
         ):
             self.assertIn(expected, command)
+
+
 if __name__ == "__main__":
     unittest.main()
