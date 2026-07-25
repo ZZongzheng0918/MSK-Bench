@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="MSK-Bench project page for full-body musculoskeletal motor control benchmarking.">
+  <title>MSK-Bench</title>
+  <link rel="stylesheet" href="./static/css/index.css?v=20260611-residual-clean">
+</head>
+<body>
+  <nav class="site-nav" aria-label="Primary">
+    <a class="brand" href="#top" aria-label="MSK-Bench home">MSK-Bench</a>
+    <button class="nav-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    <div class="nav-links">
+      <a href="#abstract">Abstract</a>
+      <a href="#benchmark">Benchmark</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#bibtex">BibTeX</a>
+    </div>
+  </nav>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container is-max-desktop">
+          <div class="publication">
+            <p class="eyebrow">Full-body muscle-actuated humanoid control benchmark</p>
+            <h1 class="publication-title">
+              <span class="desktop-title">
+                <span class="title-line">MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control</span>
+                <span class="title-line">Across Tasks, Learning Paradigms, and Physiological Metrics</span>
+              </span>
+              <span class="mobile-title">
+                <span class="title-line">MSK-Bench:</span>
+                <span class="title-line">Benchmarking Full-Body</span>
+                <span class="title-line">Musculoskeletal</span>
+                <span class="title-line">Motor Control</span>
+                <span class="title-line">Across Tasks,</span>
+                <span class="title-line">Learning Paradigms,</span>
+                <span class="title-line">and Physiological</span>
+                <span class="title-line">Metrics</span>
+              </span>
+            </h1>
+            <div class="publication-authors" aria-label="Authors">
+              <p class="author-list">
+                <span class="author-line">
+                  <span>Mengtao Ou<sup>*</sup></span>,
+                  <span>Zongzheng Zhang<sup>*</sup></span>,
+                  <span>Zhenghao Xiao</span>,
+                  <a href="https://lzpyx.github.io/" target="_blank" rel="noopener noreferrer">Yixuan Pan</a>,
+                  <a href="https://ziwenzhuang.github.io/" target="_blank" rel="noopener noreferrer">Ziwen Zhuang</a>
+                </span><br class="author-break">
+                <span class="author-line">
+                  <a href="https://hangzhaomit.github.io/" target="_blank" rel="noopener noreferrer">Hang Zhao</a>,
+                  <a href="https://www.hongyang.li/" target="_blank" rel="noopener noreferrer">Hongyang Li</a>,
+                  <a href="https://yanansui.com/" target="_blank" rel="noopener noreferrer">Yanan Sui</a>,
+                  <a href="https://libliu.info/" target="_blank" rel="noopener noreferrer">Libin Liu</a>,
+                  <a href="https://sites.google.com/view/fromandto" target="_blank" rel="noopener noreferrer">Hao Zhao<sup>&dagger;</sup></a>
+                </span>
+              </p>
+              <p class="author-notes">
+                <span><sup>*</sup> Equal Contribution</span>
+                <span><sup>&dagger;</sup> Corresponding author</span>
+              </p>
+            </div>
+            <div class="publication-links" aria-label="Project links">
+              <a class="button" href="#">
+                <span class="button-icon" aria-hidden="true">PDF</span>
+                <span>Paper</span>
+              </a>
+              <a class="button" href="#">
+                <span class="button-icon" aria-hidden="true">AX</span>
+                <span>arXiv</span>
+              </a>
+              <a class="button is-placeholder" href="#">
+                <span class="button-icon" aria-hidden="true">CODE</span>
+                <span>Code Coming Soon</span>
+              </a>
+            </div>
+            <div class="hero-highlights" aria-label="Benchmark highlights">
+              <div><strong>416/700</strong><span>muscle-control dimensions</span></div>
+              <div><strong>22</strong><span>full-body motor tasks</span></div>
+              <div><strong>3</strong><span>task families</span></div>
+              <div><strong>5</strong><span>learning paradigms</span></div>
+              <div><strong>9</strong><span>metrics</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-rail" aria-label="MSK-Bench task preview">
+        <div class="task-track">
+          <article class="task-chip"><video src="./static/videos/tasks/stand.mp4" poster="./static/images/task-01.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Stand DepRL task video"></video><span>stand</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/powerlift.mp4" poster="./static/images/task-02.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Powerlift DepRL task video"></video><span>powerlift</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/squat.mp4" poster="./static/images/task-03.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Squat DepRL task video"></video><span>squat</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/sit.mp4" poster="./static/images/task-04.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Sit DepRL task video"></video><span>sit</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/singleleg-stand.mp4" poster="./static/images/task-05.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Single-leg stand DepRL task video"></video><span>singleleg stand</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/balance.mp4" poster="./static/images/task-06.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Balance DepRL task video"></video><span>balance</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/walk-forward.mp4" poster="./static/images/task-07.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Walk forward residual RL task video"></video><span>walk forward</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/run.mp4" poster="./static/images/task-08.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Run residual RL task video"></video><span>run</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/walk-turn.mp4" poster="./static/images/task-09.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Walk turn DepRL task video"></video><span>walk turn</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/jump.mp4" poster="./static/images/task-10.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Jump DepRL task video"></video><span>jump</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/sidestep.mp4" poster="./static/images/task-11.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Sidestep DepRL task video"></video><span>sidestep</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/crawl.mp4" poster="./static/images/task-12.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Crawl DepRL task video"></video><span>crawl</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/stairs.mp4" poster="./static/images/task-13.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Stairs residual RL task video"></video><span>stairs</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/catch.mp4" poster="./static/images/task-14.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Catch DepRL task video"></video><span>catch</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/hurdle.mp4" poster="./static/images/task-15.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Hurdle DepRL task video"></video><span>hurdle</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/slide.mp4" poster="./static/images/task-16.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Slide DepRL task video"></video><span>slide</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/stepping-stones.mp4" poster="./static/images/task-17.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Stepping stones DepRL task video"></video><span>stepping stones</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/pole-walk.mp4" poster="./static/images/task-18.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Pole walk DepRL task video"></video><span>pole walk</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/reach.mp4" poster="./static/images/task-19.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Reach DepRL task video"></video><span>reach</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/walk-and-sit.mp4" poster="./static/images/task-20.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Walk and sit DepRL task video"></video><span>walk and sit</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/chin-up.mp4" poster="./static/images/task-21.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Chin up DepRL task video"></video><span>chin up</span></article>
+          <article class="task-chip"><video src="./static/videos/tasks/open-door.mp4" poster="./static/images/task-22.jpg" autoplay muted loop playsinline preload="metadata" aria-label="Open door DepRL task video"></video><span>open door</span></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section abstract-band" id="abstract">
+      <div class="container is-max-desktop">
+        <div class="section-heading has-text-centered">
+          <p class="eyebrow">Abstract</p>
+        </div>
+        <p class="abstract-text">
+          Musculoskeletal (MSK) humanoids provide a physiologically grounded embodiment for studying full-body motor control, but their high-dimensional muscle actuation, delayed activation dynamics, and redundant muscle-tendon structures make learning substantially harder than torque-driven humanoid control. Existing MSK benchmarks remain fragmented across gait, prosthetics, dexterous hands, or challenge-specific tracks, leaving full-body muscle-actuated control insufficiently evaluated under standardized tasks, methods, and metrics. We introduce MSK-Bench, a benchmark of 22 full-body motor-control tasks organized into three progressively challenging categories: postural stabilization, common locomotor behaviors, and contact-rich environmental interaction. Under unified task protocols and robustness perturbations, MSK-Bench evaluates 5 representative control paradigms, including reward-based RL, agentic reward tuning, latent-action RL, imitation-prior control, and residual adaptation over imitation priors. Beyond task success and reward, MSK-Bench further reports robustness analysis and physiology-oriented diagnostics, including activation cost, joint smoothness, and walking EMG-envelope similarity. Our empirical study shows that embodiment-aware exploration improves task coverage in high-dimensional muscle spaces, imitation priors enhance reference-compatible stabilization and locomotion but degrade under contact-rich terrain mismatch, and residual adaptation can recover successful behaviors when fixed references fail. MSK-Bench provides a task-method-metric testbed for full-body muscle-actuated humanoid control.
+        </p>
+      </div>
+    </section>
+
+    <section class="section benchmark-section" id="benchmark">
+      <div class="container">
+        <div class="benchmark-layout">
+          <figure class="paper-figure benchmark-figure">
+            <img src="./static/images/teaser.png" alt="Overview of MSK-Bench task families and method evaluation radar charts">
+            <figcaption><strong>Overview of the Musculoskeletal Benchmark (MSK-Bench).</strong> (a) <strong>Benchmark Components:</strong> An open-source suite featuring <strong>22</strong> tasks across stabilization, locomotion, and interaction, evaluated under <strong>5</strong> control paradigms and <strong>9</strong> metrics. (b) <strong>Method Evaluation:</strong> Radar charts compare control methods across the <strong>3</strong> task families based on <strong>8</strong> performance and robustness axes. Each value represents the average performance across all tasks within the respective category. Due to the scarcity of human reference data, the EMG correlation coefficient is only evaluated on the walk task, and the remaining cumulative return metric is detailed in the main results figure.</figcaption>
+          </figure>
+          <figure class="paper-figure benchmark-comparison-figure">
+            <img src="./static/images/benchmark-comparison.png" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
+            <figcaption><strong>Comparison of torque-driven humanoid and musculoskeletal benchmark frameworks.</strong> MSK agents transform muscle excitations through activation-contraction dynamics into muscle forces and joint torques, introducing redundancy, delay, nonlinear muscle-tendon behavior, and biomechanical constraints. MSK-Bench targets full-body terrain MSK control with 416/700 muscle actuation, 3D terrain and contact-rich interaction, hierarchical task design, physiology-oriented evaluation, and 5 evaluated task families.</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section surface" id="tasks">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Task Families</p>
+          <h2>From postural regulation to contact-rich environmental interaction.</h2>
+        </div>
+        <div class="family-grid policy-family-grid" id="task-family-browser" aria-live="polite"></div>
+        <article class="takeaway-card inline-takeaway">
+          <span class="takeaway-index">T1</span>
+          <h3>Embodiment-aware exploration and action structure are essential for broad task coverage.</h3>
+          <p>Full-body MSK control is difficult because many muscles act on fewer mechanical degrees of freedom, agonist-antagonist activations can cancel, and short uncoordinated commands are filtered by muscle activation dynamics before producing useful motion. Under the fixed training budget, DepRL achieves the broadest coverage by exploiting embodiment-aware sensor-action couplings, while DynSyn-SAC is competitive on action-structured skills such as sidestepping. The negative results are equally important: unconstrained online reward retuning makes the objective unstable, and aggressive action compression below moderate dimensions removes the bandwidth needed to coordinate posture, locomotion, and contact-rich behavior.</p>
+        </article>
+        <figure class="learning-curve-figure" id="learning-curve-figure">
+          <div class="learning-curve-media">
+            <img src="./static/images/main22.png" alt="Learning curves across 22 benchmark tasks for DepRL, DynSyn-SAC, SAC, and PPO">
+          </div>
+          <figcaption>
+            <strong>Learning curves across 22 of the 22 benchmark tasks for DepRL, DynSyn-SAC, SAC, and PPO.</strong>
+            DepRL achieves the broadest task coverage under the fixed training budget, while PPO and SAC often fail to obtain stable high-return behaviors on dynamic locomotion and contact-rich tasks. DynSyn-SAC performs competitively on selected action-structured tasks such as sidestepping. Shaded regions indicate variation across seeds.
+          </figcaption>
+          <div class="curve-method-legend" aria-label="Learning curve method legend">
+            <button class="curve-method is-active" type="button" data-linked-policy="deprl" aria-pressed="true"><span class="curve-swatch curve-deprl"></span>DepRL</button>
+            <button class="curve-method" type="button" data-linked-policy="dynsyn-sac" aria-pressed="false"><span class="curve-swatch curve-dynsyn"></span>DynSyn-SAC</button>
+            <button class="curve-method" type="button" data-linked-policy="sac" aria-pressed="false"><span class="curve-swatch curve-sac"></span>SAC</button>
+            <button class="curve-method" type="button" data-linked-policy="ppo" aria-pressed="false"><span class="curve-swatch curve-ppo"></span>PPO</button>
+          </div>
+          <p class="curve-link-note" id="curve-link-note" aria-live="polite">DepRL curves highlighted; task videos above are grouped by DepRL.</p>
+        </figure>
+        <figure class="supplemental-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/agentic-reward-tuning.png" alt="Agentic reward tuning reward weights and robustness perturbation plots">
+          </div>
+          <figcaption><strong>Online LLM-guided reward-weight tuning does not consistently improve robustness over fixed-reward DepRL.</strong> (a) Evolution of reward weights updated online during training; reward terms are fixed and only scalar weights are modified. (b-d) Survival steps under action, observation, and dynamics perturbations for Agentic-DepRL and fixed-reward DepRL. Both variants use the same DepRL base algorithm, training budget, and policy architecture. Survival is capped at 1000 steps, and each point averages 50 held-out evaluation seeds.</figcaption>
+        </figure>
+        <figure class="supplemental-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/latent-action-128.png" alt="Latent action compression reward and robustness plots">
+          </div>
+          <div class="latent-action-videos" aria-label="Latent action rollout videos by action dimension">
+            <figure class="latent-action-video">
+              <video src="./static/videos/latent-action/latent-128d.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Latent action rollout with 128-dimensional action space"></video>
+              <figcaption><strong>128D</strong><span>latent dimension</span></figcaption>
+            </figure>
+            <figure class="latent-action-video">
+              <video src="./static/videos/latent-action/latent-64d.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Latent action rollout with 64-dimensional action space"></video>
+              <figcaption><strong>64D</strong><span>latent dimension</span></figcaption>
+            </figure>
+            <figure class="latent-action-video">
+              <video src="./static/videos/latent-action/latent-32d.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Latent action rollout with 32-dimensional action space"></video>
+              <figcaption><strong>32D</strong><span>latent dimension</span></figcaption>
+            </figure>
+          </div>
+          <figcaption><strong>Moderate action-space compression helps, but aggressive compression loses expressivity.</strong> Reducing the 416-dimensional muscle-control space to 128 dimensions improves reward learning and several robustness settings, whereas stronger compression to 64, 32, or 16 dimensions substantially degrades performance.</figcaption>
+        </figure>
+        <article class="takeaway-card inline-takeaway">
+          <span class="takeaway-index">T2</span>
+          <h3>Motion priors improve reference-compatible movement, but contact-rich terrain exposes tracking mismatch.</h3>
+          <p>Imitation-prior control reduces exploration burden by supplying phase-structured gait and posture regularities, which helps on flat-ground and reference-compatible stabilization or locomotion tasks. However, once terrain height, contact timing, or object interaction deviates from the reference distribution, tracking errors accumulate. On stairs, for example, misplaced contacts and off-timing force generation make pure imitation brittle, whereas reward-driven exploration and residual adaptation can recover task-specific contact strategies.</p>
+        </article>
+        <figure class="supplemental-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/musclemimic-vs-deprl.png" alt="Robustness comparison and tracking error analysis between imitation prior and DepRL">
+          </div>
+          <figcaption><strong>Robustness comparison and tracking error analysis between imitation prior and DepRL.</strong> (a-e) Success rates of MuscleMimic/MM (PPO) and DepRL under increasing dynamic perturbation scales on Stand, Jump, Walk, Run, and Stairs. MM (PPO) shows stronger robustness on Stand, Jump, Walk, and Run, whereas DepRL performs better on Stairs. (f) Tracking error magnitude of MuscleMimic on the Stairs task over time reveals limitations of imitation-based policies on complex terrain.</figcaption>
+        </figure>
+        <article class="takeaway-card inline-takeaway">
+          <span class="takeaway-index">T3</span>
+          <h3>Physiology-oriented diagnostics reveal what task success alone hides.</h3>
+          <p>Success rate and reward do not explain whether the controller moves in a biomechanically plausible way. Joint-smoothness analysis shows that jerk is shaped by the physical impact profile of each task: stabilization is smoothest, locomotion is highest-impact, and interaction falls between them. EMG-envelope comparisons show that task optimization can recover more human-like recruitment than imitation alone for some muscles. Load and anatomy studies further show that heavier powerlift weights shift activation toward trunk/back support, and the 700-muscle model recruits additional axial stabilizers that the 416-muscle model cannot express.</p>
+        </article>
+        <figure class="supplemental-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/emg-envelope-similarity.png" alt="Walking EMG-envelope similarity across policies">
+          </div>
+          <figcaption><strong>Walking EMG-envelope similarity across policies.</strong> Simulated muscle activation envelopes are compared with normalized human walking EMG data. Pearson correlations measure gait-cycle waveform similarity for reward-based RL, latent-action RL, agentic reward tuning, and imitation-prior control.</figcaption>
+        </figure>
+        <figure class="supplemental-analysis-figure compact-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/joint-smoothness.png" alt="Task-wise joint smoothness across benchmark tasks">
+          </div>
+          <figcaption><strong>Task-wise joint smoothness across benchmark tasks.</strong> Bars show the log10 mean squared joint jerk computed from finite differences of joint velocities. Stabilization tasks exhibit the lowest jerk, locomotion tasks show the highest jerk due to repeated rhythmic impacts, and contact-rich interaction tasks fall in an intermediate range. This diagnostic characterizes task-dependent movement smoothness and impact profile.</figcaption>
+        </figure>
+        <figure class="supplemental-analysis-figure compact-analysis-figure heatmap-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/powerlift-activation-load.png" alt="Load-dependent muscle-family activation during powerlift">
+          </div>
+          <div class="powerlift-load-videos" aria-label="Powerlift rollout videos by barbell weight">
+            <figure class="powerlift-load-video">
+              <video src="./static/videos/powerlift-load/powerlift-0_05kg.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout with 0.05 kilogram barbell"></video>
+              <figcaption><strong>0.05kg</strong><span>barbell weight</span></figcaption>
+            </figure>
+            <figure class="powerlift-load-video">
+              <video src="./static/videos/powerlift-load/powerlift-0_5kg.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout with 0.5 kilogram barbell"></video>
+              <figcaption><strong>0.5kg</strong><span>barbell weight</span></figcaption>
+            </figure>
+            <figure class="powerlift-load-video">
+              <video src="./static/videos/powerlift-load/powerlift-5kg.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout with 5 kilogram barbell"></video>
+              <figcaption><strong>5kg</strong><span>barbell weight</span></figcaption>
+            </figure>
+            <figure class="powerlift-load-video">
+              <video src="./static/videos/powerlift-load/powerlift-10kg.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout with 10 kilogram barbell"></video>
+              <figcaption><strong>10kg</strong><span>barbell weight</span></figcaption>
+            </figure>
+          </div>
+          <figcaption><strong>Load-dependent muscle-family activation during the powerlift task.</strong> Heatmap values show absolute activation mass accumulated by muscle family under increasing barbell weights. Heavier loads induce stronger recruitment of trunk/back and support-related muscle groups, illustrating how external loading changes the policy's internal muscle-use strategy.</figcaption>
+        </figure>
+        <figure class="supplemental-analysis-figure compact-analysis-figure">
+          <div class="supplemental-analysis-media">
+            <img src="./static/images/anatomy-resolution-416-700.png" alt="Effect of anatomical resolution on powerlift muscle recruitment">
+          </div>
+          <div class="anatomy-resolution-videos" aria-label="Powerlift rollout videos by anatomical resolution">
+            <figure class="anatomy-resolution-video">
+              <video src="./static/videos/anatomy-resolution/powerlift-416-muscle.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout using the 416-muscle model"></video>
+              <figcaption><strong>416-muscle model</strong><span>shared muscle families</span></figcaption>
+            </figure>
+            <figure class="anatomy-resolution-video">
+              <video src="./static/videos/anatomy-resolution/powerlift-700-muscle.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Powerlift rollout using the 700-muscle model"></video>
+              <figcaption><strong>700-muscle model</strong><span>additional axial stabilizers</span></figcaption>
+            </figure>
+          </div>
+          <figcaption><strong>Effect of anatomical resolution on powerlift muscle recruitment.</strong> Total activation mass is compared between the 416-muscle model over shared muscle families and the 700-muscle model, which additionally includes neck, deep-trunk, and deep-scapular muscle groups. Increasing anatomical resolution changes available recruitment pathways and enables the policy to recruit additional axial stabilizers during load support.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section residual-method-section" id="residual-adaptation">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Residual Adaptation</p>
+          <h2>Residual RL preserves imitation structure while learning task-specific muscle corrections.</h2>
+        </div>
+        <figure class="paper-figure residual-method-figure compact-method-figure">
+          <div class="residual-method-media">
+            <div class="residual-comparison-grid" aria-label="Residual RL and MuscleMimic video comparison on stairs, run, and walk">
+              <div class="residual-row-label">MuscleMimic</div>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/musclemimic/stair.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="MuscleMimic stairs rollout"></video>
+                <figcaption>Stairs</figcaption>
+              </figure>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/musclemimic/run.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="MuscleMimic run rollout"></video>
+                <figcaption>Run</figcaption>
+              </figure>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/musclemimic/walk.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="MuscleMimic walk rollout"></video>
+                <figcaption>Walk</figcaption>
+              </figure>
+              <div class="residual-row-label">Residual RL (Ours)</div>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/residual-rl/stair.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Residual RL stairs rollout"></video>
+                <figcaption>Stairs</figcaption>
+              </figure>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/residual-rl/run.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Residual RL run rollout"></video>
+                <figcaption>Run</figcaption>
+              </figure>
+              <figure class="residual-comparison-video">
+                <video src="./static/videos/gallery/residual-rl/walk.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Residual RL walk rollout"></video>
+                <figcaption>Walk</figcaption>
+              </figure>
+            </div>
+          </div>
+          <figcaption><strong>Residual RL and MuscleMimic video comparison.</strong> MuscleMimic imitation-prior rollouts are shown on the top row for stair-climbing, running, and walking, with the corresponding Residual RL (Ours) rollouts below. The comparison highlights how residual adaptation preserves imitation structure while learning task-specific corrections for contact-rich and high-impact settings.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section class="section" id="bibtex">
+      <div class="container is-max-desktop">
+        <div class="section-heading">
+          <p class="eyebrow">Citation</p>
+          <h2>BibTeX</h2>
+        </div>
+        <div class="code-block">
+          <button class="copy-button" type="button" data-copy="#bibtex-code">Copy</button>
+          <pre><code id="bibtex-code">@misc{mskbench2026,
+  title = {MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Learning Paradigms, and Physiological Metrics},
+  author = xxx,
+  year = {2026},
+  note = {xxx}
+}</code></pre>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>This project page follows the Nerfies academic website pattern and the benchmark-oriented structure of HumanoidBench.</p>
+    </div>
+  </footer>
+
+  <script src="./static/js/index.js"></script>
+  <script src="./static/js/video-gallery.js"></script>
+</body>
+</html>
