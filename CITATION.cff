@@ -2,5 +2,6 @@
 message: "If you use MSK-Bench in your work, please cite the software repository."
 title: "MSK-Bench: Musculoskeletal Control Benchmark Environments and Baselines"
 version: "0.1.0"
+license: MIT
 authors:
   - name: "MSK-Bench contributors"

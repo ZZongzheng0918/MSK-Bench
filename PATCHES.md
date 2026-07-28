@@ -31,7 +31,7 @@ Local MSK-Bench changes:
 
 Upstream: this is a local MSK-Bench integration package that builds around depRL-style workflows rather than a direct upstream checkout.
 
-License references: depRL-derived components retain the depRL notices listed above; MSK-Bench wrapper code follows the repository's top-level license status.
+License references: original MSK-Bench wrapper code is released under the top-level MIT License; depRL-derived components retain the depRL notices listed above.
 
 Local MSK-Bench changes:
 

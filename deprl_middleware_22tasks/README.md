@@ -5,7 +5,7 @@ This directory contains the latent-action middleware wrapper, config generation 
 ## Attribution
 
 - Upstream: this package is a local MSK-Bench integration built around depRL-style latent-action workflows. Related depRL upstream code is tracked at https://github.com/martius-lab/depRL.
-- License: depRL-derived components retain the license files in `../depRL/`; MSK-Bench wrapper code follows the repository's top-level license status until the final license is confirmed.
+- License: original MSK-Bench wrapper code is released under the repository's top-level MIT License; depRL-derived components retain the license files in `../depRL/`.
 - Local MSK-Bench changes: 22-task middleware registration, benchmark config generation, expert-data collection, transformer training, encoder/decoder artifact handling, evaluator entry points, JSON/CSV result export, EMG export, and rendering helpers.
 
 Do not remove this attribution section. This README describes the MSK-Bench middleware integration and should not be replaced by an upstream README from a related dependency.

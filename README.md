@@ -1,5 +1,7 @@
 # MSK-Bench
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 MSK-Bench is an open-source musculoskeletal-control benchmark for full-body MyoSuite-style tasks. It provides Gymnasium-compatible environments, a canonical 22-task benchmark suite, baseline training and evaluation entry points, metric utilities, and shared tooling for comparing control algorithms on muscle-driven humanoid tasks.
 
 The repository focuses on reusable benchmark code. Model checkpoints, long-running experiment outputs, videos, logs, and local run artifacts are intentionally kept out of version control.
@@ -20,7 +22,7 @@ The repository focuses on reusable benchmark code. Model checkpoints, long-runni
 - [Artifact And Cache Policy](#artifact-and-cache-policy)
 - [Third-Party Components And Local Patches](#third-party-components-and-local-patches)
 - [Troubleshooting](#troubleshooting)
-- [License Status](#license-status)
+- [License](#license)
 
 ## Features
 
@@ -40,7 +42,6 @@ Not included by default:
 - Trained checkpoints.
 - Large generated datasets.
 - Local run directories, videos, TensorBoard logs, or experiment tracking outputs.
-- A finalized unified top-level open-source license. See [License Status](#license-status).
 
 ## Repository Layout
 
@@ -657,8 +658,9 @@ Common causes are empty signals, non-finite values, constant signals with no var
 
 Run tests with `python -B` and remove only repository-local cache directories. Do not delete unrelated user files or external artifacts.
 
-## License Status
+## License
 
-The top-level `LICENSE` file is currently a license-status notice: the wrapper code is intended for open-source release, but the final unified license requires author confirmation before publication. Do not remove or overwrite upstream license files in nested third-party components. Preserve each upstream license in its original location and add a complete third-party notices file before public redistribution if required.
+Except where otherwise noted, original MSK-Bench code is released under the [MIT License](LICENSE).
 
+Third-party components and model assets retain their respective upstream licenses. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for component paths, upstream sources, and license locations. Do not remove or overwrite nested upstream license and notice files when redistributing this repository.
 
