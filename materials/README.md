@@ -8,7 +8,7 @@ The 24-page document preserves the technical appendix and its references from th
 
 | Material | Location in the appendix | PDF pages |
 | --- | --- | --- |
-| Task descriptions, notation, rewards, observations, initialization, and termination | A; Tables VI-XI | 2-8 |
+| Task descriptions, notation, rewards, observations, initialization, and termination | A; Tables VI-XI | 1-8 |
 | Metric definitions and perturbation protocol | B | 8-9 |
 | Full task-wise performance tables | Tables XII-XIV | 10-11 |
 | Comparison scope and aggregation | C-D; Tables XV-XVI | 9-12 |
@@ -16,7 +16,7 @@ The 24-page document preserves the technical appendix and its references from th
 | Reward tuning and latent-action representation | H-I | 13-17 |
 | Human EMG processing and comparison | J | 17-18 |
 | Anatomical grouping and load study | K-L | 18-19 |
-| Residual, reward, and timing adaptation | M | 19-21 |
+| Residual, reward, and timing adaptation | M | 18-20 |
 | Bibliographic sources | Appendix References | 23-24 |
 
 ## Benchmark scope
