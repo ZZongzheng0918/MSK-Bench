@@ -1,0 +1,10 @@
+.review-table-wrap { overflow-x: auto; margin: 1.5rem 0 2.5rem; }
+.review-table { width: 100%; border-collapse: collapse; font-size: .95rem; font-variant-numeric: tabular-nums; }
+.review-table th, .review-table td { padding: .8rem; border-bottom: 1px solid #ccd7df; text-align: left; white-space: nowrap; }
+.review-table thead { background: #eef3f7; }
+.review-table caption { caption-side: bottom; text-align: left; padding-top: .9rem; line-height: 1.6; color: #445362; font-size: .9rem; }
+#review-materials p, #review-materials li { line-height: 1.75; font-size: 1rem; }
+#review-materials h3 { font-size: 1.25rem; margin: 2rem 0 1rem; }
+#review-materials ul { padding-left: 1.5rem; }
+#review-materials .button { margin-bottom: .6rem; }
+a:focus-visible, button:focus-visible { outline: 3px solid #247cb2; outline-offset: 4px; }
