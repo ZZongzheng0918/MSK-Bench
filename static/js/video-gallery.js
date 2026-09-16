@@ -138,10 +138,11 @@ const taskPolicyViews = [
   {
     id: "imitation-prior",
     title: "Imitation-prior control",
+    shortTitle: "Imitation prior",
     groups: ["musclemimic"],
-    note: "Due to missing reference motions, the other tasks either cannot be evaluated or failed during evaluation.",
+    note: "MuscleMimic is evaluated on stand, jump, walk, run, and stairs. Other tasks are outside this reported study; missing videos do not indicate task failure.",
   },
-  { id: "residual-adaptation", title: "Residual adaptation over imitation priors", groups: ["residual-rl"] },
+  { id: "residual-adaptation", title: "Residual adaptation over imitation priors", shortTitle: "Residual adaptation", groups: ["residual-rl"] },
 ];
 
 const familyPolicySelections = new Map();
@@ -237,7 +238,7 @@ function updateLearningCurveLegend() {
   }
 
   note.textContent = activeLabel
-    ? `${activeLabel} curves highlighted; task videos above are grouped by ${firstView.title}.`
+    ? `Task videos above are grouped by ${firstView.title}; the static chart shows all four reward-based methods.`
     : `${firstView.title} videos above are shown separately; this learning-curve figure compares DepRL, DynSyn-SAC, SAC, and PPO.`;
 }
 
@@ -247,8 +248,8 @@ function renderFamilyPolicyTabs(family, activeView) {
     const count = countFamilyPolicyVideos(view, family);
     return `
       <button class="policy-tab family-policy-tab${selected ? " is-active" : ""}" type="button" role="tab" aria-selected="${selected}" data-family-id="${family.id}" data-policy-view="${view.id}">
-        <span>${view.title}</span>
-        <small>${count} videos</small>
+        <span>${view.shortTitle ?? view.title}</span>
+        <small>${count} ${count === 1 ? "video" : "videos"}</small>
       </button>
     `;
   }).join("");

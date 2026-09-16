@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="MSK-Bench project page for full-body musculoskeletal motor control benchmarking.">
-  <title>MSK-Bench</title>
-  <link rel="stylesheet" href="./static/css/index.css?v=20260611-residual-clean">
+  <meta name="description" content="MSK-Bench: 22 full-body musculoskeletal tasks, 5 control paradigms, and 7 metric families for evaluating task performance, robustness, and physiological behavior.">
+  <title>MSK-Bench | Full-Body Musculoskeletal Motor Control</title>
+  <link rel="stylesheet" href="./static/css/index.css?v=20260916-spacing-refinement">
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary">
@@ -19,6 +19,8 @@
       <a href="#abstract">Abstract</a>
       <a href="#benchmark">Benchmark</a>
       <a href="#tasks">Tasks</a>
+      <a href="#findings">Results</a>
+      <a href="#residual-adaptation">Adaptation</a>
       <a href="#bibtex">BibTeX</a>
     </div>
   </nav>
@@ -32,7 +34,7 @@
             <h1 class="publication-title">
               <span class="desktop-title">
                 <span class="title-line">MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control</span>
-                <span class="title-line">Across Tasks, Learning Paradigms, and Physiological Metrics</span>
+                <span class="title-line">Across Tasks, Control Paradigms, and Physiological Metrics</span>
               </span>
               <span class="mobile-title">
                 <span class="title-line">MSK-Bench:</span>
@@ -40,7 +42,7 @@
                 <span class="title-line">Musculoskeletal</span>
                 <span class="title-line">Motor Control</span>
                 <span class="title-line">Across Tasks,</span>
-                <span class="title-line">Learning Paradigms,</span>
+                <span class="title-line">Control Paradigms,</span>
                 <span class="title-line">and Physiological</span>
                 <span class="title-line">Metrics</span>
               </span>
@@ -68,25 +70,22 @@
               </p>
             </div>
             <div class="publication-links" aria-label="Project links">
-              <a class="button" href="#">
-                <span class="button-icon" aria-hidden="true">PDF</span>
-                <span>Paper</span>
+              <a class="button is-primary" href="./static/papers/MSK-Bench.pdf" target="_blank" rel="noopener noreferrer">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><span>Paper</span>
               </a>
-              <a class="button" href="#">
-                <span class="button-icon" aria-hidden="true">AX</span>
-                <span>arXiv</span>
+              <a class="button" aria-label="Code and reproducibility package" title="Code and reproducibility package" href="https://anonymous.4open.science/r/MSK-Bench-CF1B/" target="_blank" rel="noopener noreferrer">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></svg><span>Code</span>
               </a>
-              <a class="button is-placeholder" href="#">
-                <span class="button-icon" aria-hidden="true">CODE</span>
-                <span>Code Coming Soon</span>
+              <a class="button" aria-label="Supplementary material" title="Supplementary material" href="https://anonymous.4open.science/r/MSK-Bench-FBB1/" target="_blank" rel="noopener noreferrer">
+                <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8zM2 12l10 5 10-5M2 16l10 5 10-5"/></svg><span>Supplement</span>
               </a>
             </div>
             <div class="hero-highlights" aria-label="Benchmark highlights">
-              <div><strong>416/700</strong><span>muscle-control dimensions</span></div>
-              <div><strong>22</strong><span>full-body motor tasks</span></div>
+              <div><strong>416</strong><span>muscles</span></div>
+              <div><strong>22</strong><span>motor tasks</span></div>
               <div><strong>3</strong><span>task families</span></div>
-              <div><strong>5</strong><span>learning paradigms</span></div>
-              <div><strong>9</strong><span>metrics</span></div>
+              <div><strong>5</strong><span>control paradigms</span></div>
+              <div><strong>7</strong><span>metric families</span></div>
             </div>
           </div>
         </div>
@@ -126,7 +125,7 @@
           <p class="eyebrow">Abstract</p>
         </div>
         <p class="abstract-text">
-          Musculoskeletal (MSK) humanoids provide a physiologically grounded embodiment for studying full-body motor control, but their high-dimensional muscle actuation, delayed activation dynamics, and redundant muscle-tendon structures make learning substantially harder than torque-driven humanoid control. Existing MSK benchmarks remain fragmented across gait, prosthetics, dexterous hands, or challenge-specific tracks, leaving full-body muscle-actuated control insufficiently evaluated under standardized tasks, methods, and metrics. We introduce MSK-Bench, a benchmark of 22 full-body motor-control tasks organized into three progressively challenging categories: postural stabilization, common locomotor behaviors, and contact-rich environmental interaction. Under unified task protocols and robustness perturbations, MSK-Bench evaluates 5 representative control paradigms, including reward-based RL, agentic reward tuning, latent-action RL, imitation-prior control, and residual adaptation over imitation priors. Beyond task success and reward, MSK-Bench further reports robustness analysis and physiology-oriented diagnostics, including activation cost, joint smoothness, and walking EMG-envelope similarity. Our empirical study shows that embodiment-aware exploration improves task coverage in high-dimensional muscle spaces, imitation priors enhance reference-compatible stabilization and locomotion but degrade under contact-rich terrain mismatch, and residual adaptation can recover successful behaviors when fixed references fail. MSK-Bench provides a task-method-metric testbed for full-body muscle-actuated humanoid control.
+          Musculoskeletal (MSK) humanoids provide a physiologically grounded embodiment for studying full-body motor control, but their high-dimensional muscle actuation, delayed activation dynamics, and redundant muscle-tendon structures make learning substantially harder than torque-driven humanoid control. Existing MSK benchmarks remain fragmented across gait, prosthetics, dexterous hands, or challenge-specific tracks, leaving full-body muscle-actuated control insufficiently evaluated under standardized tasks, methods, and metrics. We introduce MSK-Bench, a benchmark of 22 full-body motor-control tasks organized into three progressively challenging categories: postural stabilization, common locomotor behaviors, and contact-rich environmental interaction. Under unified task protocols and robustness perturbations, MSK-Bench evaluates 5 representative control paradigms, including reward-based RL, agentic reward tuning, latent-action RL, imitation-prior control, and residual adaptation over imitation priors. Beyond task success and reward, MSK-Bench further reports robustness analysis and physiology-oriented diagnostics, including activation cost, joint smoothness, and EMG-envelope similarity. Our empirical study shows that embodiment-aware exploration and structured action representations improve task coverage in high-dimensional muscle spaces, imitation priors enhance reference-compatible stabilization and locomotion but degrade under contact-rich terrain mismatch, and residual adaptation can recover successful behaviors when fixed references fail. We further find that improved task success does not necessarily imply improved physiological agreement, highlighting the importance of evaluating task performance, robustness, and physiological behavior jointly. MSK-Bench provides a task-method-metric testbed for full-body muscle-actuated humanoid control.
         </p>
       </div>
     </section>
@@ -136,12 +135,50 @@
         <div class="benchmark-layout">
           <figure class="paper-figure benchmark-figure">
             <img src="./static/images/teaser.png" alt="Overview of MSK-Bench task families and method evaluation radar charts">
-            <figcaption><strong>Overview of the Musculoskeletal Benchmark (MSK-Bench).</strong> (a) <strong>Benchmark Components:</strong> An open-source suite featuring <strong>22</strong> tasks across stabilization, locomotion, and interaction, evaluated under <strong>5</strong> control paradigms and <strong>9</strong> metrics. (b) <strong>Method Evaluation:</strong> Radar charts compare control methods across the <strong>3</strong> task families based on <strong>8</strong> performance and robustness axes. Each value represents the average performance across all tasks within the respective category. Due to the scarcity of human reference data, the EMG correlation coefficient is only evaluated on the walk task, and the remaining cumulative return metric is detailed in the main results figure.</figcaption>
+            <figcaption><strong>Overview of MSK-Bench (Fig. 1).</strong> An open-source suite of <strong>22 tasks</strong> across stabilization, locomotion, and interaction, evaluated through <strong>5 control paradigms</strong> and <strong>7 metric families</strong>. Radar charts use eight reported axes derived from these metrics, averaged over applicable tasks in each family. EMG-envelope similarity is evaluated only where matched human reference data are available; cumulative reward is reported separately in the learning curves.</figcaption>
           </figure>
           <figure class="paper-figure benchmark-comparison-figure">
-            <img src="./static/images/benchmark-comparison.png" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
-            <figcaption><strong>Comparison of torque-driven humanoid and musculoskeletal benchmark frameworks.</strong> MSK agents transform muscle excitations through activation-contraction dynamics into muscle forces and joint torques, introducing redundancy, delay, nonlinear muscle-tendon behavior, and biomechanical constraints. MSK-Bench targets full-body terrain MSK control with 416/700 muscle actuation, 3D terrain and contact-rich interaction, hierarchical task design, physiology-oriented evaluation, and 5 evaluated task families.</figcaption>
+            <div class="benchmark-comparison-media" tabindex="0" role="region" aria-label="Benchmark comparison table">
+              <img src="./static/images/benchmark-comparison.png" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
+            </div>
+            <figcaption><strong>Benchmark comparison (Table I).</strong> MSK-Bench uses a <strong>416-muscle</strong> full-body model across 22 tasks and considers five control families. F/S/C/H/P denote full body, scene/terrain, contact, hierarchy, and physiology; checkmarks, dots, and crosses denote full, partial, and no support in the cited evaluations. The <strong>700-muscle model is used only in the anatomy study</strong>. Reference numbers follow the paper.</figcaption>
           </figure>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="protocol">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Evaluation Protocol</p>
+          <h2>One task suite, five control paradigms, seven metric families.</h2>
+          <p>All 22 tasks use MuJoCo and the same 416-muscle elastic-tendon full-body model. Success requires task completion, survival, and safety under fixed task-specific criteria. Within each task, the four full-suite baselines share observations, rewards, termination conditions, and evaluation.</p>
+        </div>
+        <div class="protocol-grid">
+          <article class="protocol-card">
+            <h3>Control paradigms &amp; study scope</h3>
+            <ol class="protocol-list">
+              <li><strong>Reward-based RL:</strong> PPO, SAC, DepRL, and DynSyn-SAC; each is trained and evaluated on all 22 tasks.</li>
+              <li><strong>Agentic reward tuning:</strong> focused DepRL studies with bounded reward-coefficient updates using DeepSeek-V4-Flash and GPT-6 Astra.</li>
+              <li><strong>Latent-action RL:</strong> a focused study of an expert-trained, state-conditioned encoder–decoder; compression changes the command representation, not the executed muscle-action space.</li>
+              <li><strong>Imitation-prior control:</strong> pretrained MuscleMimic evaluated on stand, jump, walk, run, and stairs.</li>
+              <li><strong>Residual adaptation:</strong> a frozen imitation prior with bounded corrections and task-specific objective/timing changes on walk, run, and stairs.</li>
+            </ol>
+            <p class="evaluation-note">Focused studies differ in task coverage and may change reward coefficients or introduce reference objectives. They are reported separately from the full-suite ranking.</p>
+          </article>
+          <article class="protocol-card">
+            <h3>What the seven metric families measure</h3>
+            <ol class="protocol-list">
+              <li><strong>Success Rate:</strong> successful evaluation episodes in the restored training environment, including native noise. Family and full-suite means weight tasks equally.</li>
+              <li><strong>Cumulative Reward:</strong> task-specific evaluation return, never pooled across tasks.</li>
+              <li><strong>Peak-Efficiency Steps:</strong> the evaluated training step attaining the highest mean return.</li>
+              <li><strong>Perturbation Robustness:</strong> normalized trapezoidal area under success versus perturbation scale, averaged equally over tasks and action, observation, and muscle-dynamics sweeps.</li>
+              <li><strong>Activation Cost:</strong> mean squared muscle activation, used as an effort proxy.</li>
+              <li><strong>Joint Smoothness:</strong> mean squared angular jerk from finite differences of joint velocities, displayed logarithmically.</li>
+              <li><strong>EMG-Envelope Similarity:</strong> mean per-muscle Pearson correlation after 101-point cycle resampling, per-muscle min–max normalization, cycle averaging, and correlation-maximizing cyclic alignment.</li>
+            </ol>
+            <p class="evaluation-note">Action/dynamics scales: 0, 0.05, 0.10, 0.15, 0.20; observation scales: 0, 0.02, 0.05, 0.08, 0.10. Activation cost and smoothness are interpreted only for successful, behaviorally comparable policies. EMG correlations assess phase-optimized waveform shape, not absolute amplitude or timing.</p>
+          </article>
         </div>
       </div>
     </section>
@@ -153,18 +190,47 @@
           <h2>From postural regulation to contact-rich environmental interaction.</h2>
         </div>
         <div class="family-grid policy-family-grid" id="task-family-browser" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="section findings-section" id="findings">
+      <div class="container">
+        <div class="section-heading">
+          <p class="eyebrow">Results &amp; Analysis</p>
+          <h2>Performance, robustness, and physiological behavior.</h2>
+        </div>
         <article class="takeaway-card inline-takeaway">
           <span class="takeaway-index">T1</span>
-          <h3>Embodiment-aware exploration and action structure are essential for broad task coverage.</h3>
-          <p>Full-body MSK control is difficult because many muscles act on fewer mechanical degrees of freedom, agonist-antagonist activations can cancel, and short uncoordinated commands are filtered by muscle activation dynamics before producing useful motion. Under the fixed training budget, DepRL achieves the broadest coverage by exploiting embodiment-aware sensor-action couplings, while DynSyn-SAC is competitive on action-structured skills such as sidestepping. The negative results are equally important: unconstrained online reward retuning makes the objective unstable, and aggressive action compression below moderate dimensions removes the bandwidth needed to coordinate posture, locomotion, and contact-rich behavior.</p>
+          <h3>Controller rankings depend on task family and metric.</h3>
+          <p>DynSyn-SAC has the highest full-suite mean success rate (52.00%), driven primarily by locomotion. DepRL performs better on interaction tasks, has nonzero observed success on 22/22 tasks, and scores higher on action and dynamics robustness; DynSyn-SAC scores higher on observation robustness. These are separately trained task-specific policies. Focused studies reveal trade-offs in reward adaptation and action representation, rather than a uniformly superior design.</p>
         </article>
+        <div class="results-block" id="results">
+          <div class="table-scroll" role="region" aria-labelledby="results-caption" tabindex="0">
+            <table class="results-table">
+              <caption id="results-caption">Full-suite point estimates · Table II</caption>
+              <thead><tr><th scope="col">Metric ↑</th><th scope="col">DynSyn-SAC</th><th scope="col">DepRL</th><th scope="col">SAC</th><th scope="col">PPO</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Stabilization SR (%) · 6 tasks</th><td><strong>57.33</strong></td><td>50.33</td><td>42.33</td><td>0.00</td></tr>
+                <tr><th scope="row">Locomotion SR (%) · 6 tasks</th><td><strong>81.33</strong></td><td>41.33</td><td>0.00</td><td>0.00</td></tr>
+                <tr><th scope="row">Interaction SR (%) · 10 tasks</th><td>31.20</td><td><strong>51.40</strong></td><td>2.80</td><td>7.40</td></tr>
+                <tr><th scope="row">Mean SR (%) · 22 tasks</th><td><strong>52.00</strong></td><td>48.36</td><td>12.82</td><td>3.36</td></tr>
+                <tr><th scope="row">Action robustness</th><td>46.66</td><td><strong>53.06</strong></td><td>15.36</td><td>3.10</td></tr>
+                <tr><th scope="row">Observation robustness</th><td><strong>43.37</strong></td><td>38.10</td><td>4.26</td><td>3.40</td></tr>
+                <tr><th scope="row">Dynamics robustness</th><td>34.75</td><td><strong>39.84</strong></td><td>14.50</td><td>2.92</td></tr>
+                <tr><th scope="row">Mean robustness</th><td>41.59</td><td><strong>43.67</strong></td><td>11.37</td><td>3.14</td></tr>
+                <tr><th scope="row">Coverage · SR &gt; 0</th><td>16/22</td><td><strong>22/22</strong></td><td>4/22</td><td>1/22</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evaluation-note">SR retains training noise. Means weight tasks equally. Robustness areas are normalized to 0–100, with the average weighting perturbation types equally. Coverage counts tasks with nonzero observed success, not universal success. Bold indicates the best point estimate in each row; these are not claims of statistical significance.</p>
+        </div>
         <figure class="learning-curve-figure" id="learning-curve-figure">
           <div class="learning-curve-media">
-            <img src="./static/images/main22.png" alt="Learning curves across 22 benchmark tasks for DepRL, DynSyn-SAC, SAC, and PPO">
+            <img src="./static/images/main22.png" alt="Task-specific reward-learning curves for 20 of 22 tasks, comparing DepRL, DynSyn-SAC, SAC, and PPO">
           </div>
           <figcaption>
-            <strong>Learning curves across 22 of the 22 benchmark tasks for DepRL, DynSyn-SAC, SAC, and PPO.</strong>
-            DepRL achieves the broadest task coverage under the fixed training budget, while PPO and SAC often fail to obtain stable high-return behaviors on dynamic locomotion and contact-rich tasks. DynSyn-SAC performs competitively on selected action-structured tasks such as sidestepping. Shaded regions indicate variation across seeds.
+            <strong>Task-specific reward-learning curves for 20 of 22 tasks (Fig. 2).</strong>
+            DynSyn-SAC attains higher returns than DepRL on jump and hurdle over the displayed overlapping ranges, while DepRL leads on walk-turn and catch; SAC remains competitive on powerlift. Shading shows across-run variation. The full-suite table separately reports success, nonzero-success coverage, and robustness over all 22 tasks.
           </figcaption>
           <div class="curve-method-legend" aria-label="Learning curve method legend">
             <button class="curve-method is-active" type="button" data-linked-policy="deprl" aria-pressed="true"><span class="curve-swatch curve-deprl"></span>DepRL</button>
@@ -172,14 +238,42 @@
             <button class="curve-method" type="button" data-linked-policy="sac" aria-pressed="false"><span class="curve-swatch curve-sac"></span>SAC</button>
             <button class="curve-method" type="button" data-linked-policy="ppo" aria-pressed="false"><span class="curve-swatch curve-ppo"></span>PPO</button>
           </div>
-          <p class="curve-link-note" id="curve-link-note" aria-live="polite">DepRL curves highlighted; task videos above are grouped by DepRL.</p>
+          <p class="curve-link-note" id="curve-link-note" aria-live="polite">Task videos above are grouped by DepRL; the static chart shows all four reward-based methods.</p>
         </figure>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
             <img src="./static/images/agentic-reward-tuning.png" alt="Agentic reward tuning reward weights and robustness perturbation plots">
           </div>
-          <figcaption><strong>Online LLM-guided reward-weight tuning does not consistently improve robustness over fixed-reward DepRL.</strong> (a) Evolution of reward weights updated online during training; reward terms are fixed and only scalar weights are modified. (b-d) Survival steps under action, observation, and dynamics perturbations for Agentic-DepRL and fixed-reward DepRL. Both variants use the same DepRL base algorithm, training budget, and policy architecture. Survival is capped at 1000 steps, and each point averages 50 held-out evaluation seeds.</figcaption>
+          <figcaption><strong>Reward adaptation and robustness (Fig. 3).</strong> In the original Agentic-DepRL setting, coefficients are updated every 20,000 steps and each nonzero-weight change is limited to 20%; unnormalized coefficient magnitudes still grow. Fixed-reward DepRL maintains higher survival under the tested action and observation perturbations, while agentic tuning leads at larger dynamics-perturbation scales. Both share learner, architecture, and budget. Each point averages 50 held-out seeds; survival is capped at 1,000 steps.</figcaption>
         </figure>
+        <div class="results-block" id="reasoner-results">
+          <div class="table-scroll" role="region" aria-labelledby="reasoner-results-caption" tabindex="0">
+            <table class="results-table">
+              <caption id="reasoner-results-caption">Matched reasoner comparison · Table III</caption>
+              <thead><tr><th scope="col">Setting</th><th scope="col">Survival (steps) ↑</th><th scope="col">Tracking RMSE ↓</th><th scope="col">Activation ↓</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Fixed reward</th><td><strong>417</strong></td><td>0.4446</td><td>0.4769</td></tr>
+                <tr><th scope="row">DeepSeek</th><td>246.6</td><td>0.4355</td><td>0.3999</td></tr>
+                <tr><th scope="row">GPT-6 Astra</th><td>360</td><td><strong>0.4324</strong></td><td><strong>0.3879</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evaluation-note">DeepSeek and GPT-6 Astra use the same DepRL learner, architecture, training budget, and evaluation, with an identical reward-coefficient constraint ‖w‖₁ = 40. GPT-6 Astra has better point estimates than DeepSeek on all three measures, but shorter survival than fixed-reward DepRL despite lower RMSE and activation.</p>
+        </div>
+        <div class="results-block" id="direct-control-results">
+          <div class="table-scroll" role="region" aria-labelledby="direct-control-results-caption" tabindex="0">
+            <table class="results-table">
+              <caption id="direct-control-results-caption">Direct muscle-control diagnostic · Table IV</caption>
+              <thead><tr><th scope="col">Task</th><th scope="col">Duration (s) ↑</th><th scope="col">Divergence (s) ↑</th><th scope="col">Tracking RMSE ↓</th><th scope="col">Outcome</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Walk</th><td>0.75</td><td>0.53</td><td>0.158</td><td>Fall</td></tr>
+                <tr><th scope="row">Run</th><td>2.02</td><td>0.94</td><td>0.653</td><td>Fall</td></tr>
+                <tr><th scope="row">Stairs</th><td>0.80</td><td>N/A</td><td>0.173</td><td>Fall</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evaluation-note">GPT-6 Astra directly outputs 354-dimensional muscle excitations at 5 Hz in a 100-Hz simulation, holding each action for 0.2 s, without training or a learned low-level controller. One seed-0 rollout per task uses a 3-s horizon. Divergence denotes the first sustained tracking divergence; N/A means the fixed criterion was not met. These outcomes characterize only this tested configuration.</p>
+        </div>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
             <img src="./static/images/latent-action-128.png" alt="Latent action compression reward and robustness plots">
@@ -198,35 +292,35 @@
               <figcaption><strong>32D</strong><span>latent dimension</span></figcaption>
             </figure>
           </div>
-          <figcaption><strong>Moderate action-space compression helps, but aggressive compression loses expressivity.</strong> Reducing the 416-dimensional muscle-control space to 128 dimensions improves reward learning and several robustness settings, whereas stronger compression to 64, 32, or 16 dimensions substantially degrades performance.</figcaption>
+          <figcaption><strong>Action compression in a focused study (Fig. 4).</strong> A 128-dimensional state-conditioned representation improves returns over the displayed overlapping training interval and success at several perturbation scales relative to the 416-dimensional baseline. Stronger compression to 64, 32, or 16 dimensions degrades performance and reconstruction statistics. The executed muscle-action space remains unchanged; this is not a full-suite comparison.</figcaption>
         </figure>
         <article class="takeaway-card inline-takeaway">
           <span class="takeaway-index">T2</span>
-          <h3>Motion priors improve reference-compatible movement, but contact-rich terrain exposes tracking mismatch.</h3>
-          <p>Imitation-prior control reduces exploration burden by supplying phase-structured gait and posture regularities, which helps on flat-ground and reference-compatible stabilization or locomotion tasks. However, once terrain height, contact timing, or object interaction deviates from the reference distribution, tracking errors accumulate. On stairs, for example, misplaced contacts and off-timing force generation make pure imitation brittle, whereas reward-driven exploration and residual adaptation can recover task-specific contact strategies.</p>
+          <h3>Task-specific tests characterize a stair-control failure.</h3>
+          <p>Under the tested dynamics perturbations, MuscleMimic generally has higher measured success than DepRL on stand, jump, walk, and run. On stairs, MuscleMimic has no observed successes at any tested scale, including zero dynamics perturbation. Tracking errors characterize divergence from the reference without establishing a timing mismatch or identifying the cause of failure. This task-specific limitation motivates the combined residual adaptation study below.</p>
         </article>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
             <img src="./static/images/musclemimic-vs-deprl.png" alt="Robustness comparison and tracking error analysis between imitation prior and DepRL">
           </div>
-          <figcaption><strong>Robustness comparison and tracking error analysis between imitation prior and DepRL.</strong> (a-e) Success rates of MuscleMimic/MM (PPO) and DepRL under increasing dynamic perturbation scales on Stand, Jump, Walk, Run, and Stairs. MM (PPO) shows stronger robustness on Stand, Jump, Walk, and Run, whereas DepRL performs better on Stairs. (f) Tracking error magnitude of MuscleMimic on the Stairs task over time reveals limitations of imitation-based policies on complex terrain.</figcaption>
+          <figcaption><strong>Task-dependent dynamics robustness and stair-tracking errors (Fig. 5).</strong> (a–e) Success rates of MuscleMimic/MM (PPO) and DepRL on stand, jump, walk, run, and stairs. MuscleMimic has no observed stair successes, including at zero perturbation. (f) From step 150 to 300, absolute-site error rises from 0.35 to 1.31 and root-XYZ error from 0.25 to 0.77. These errors describe reference divergence; they do not establish its cause.</figcaption>
         </figure>
         <article class="takeaway-card inline-takeaway">
           <span class="takeaway-index">T3</span>
-          <h3>Physiology-oriented diagnostics reveal what task success alone hides.</h3>
-          <p>Success rate and reward do not explain whether the controller moves in a biomechanically plausible way. Joint-smoothness analysis shows that jerk is shaped by the physical impact profile of each task: stabilization is smoothest, locomotion is highest-impact, and interaction falls between them. EMG-envelope comparisons show that task optimization can recover more human-like recruitment than imitation alone for some muscles. Load and anatomy studies further show that heavier powerlift weights shift activation toward trunk/back support, and the 700-muscle model recruits additional axial stabilizers that the 416-muscle model cannot express.</p>
+          <h3>Task success does not characterize muscle use.</h3>
+          <p>Walking retains 100% success after adaptation while selected muscle correlations improve; running improves in both success and mean EMG correlation. Stairs recovers from 0% to 100% success, but mean correlation changes only from 0.51 to 0.52 and remains below DepRL’s 0.56. Muscle-wise EMG comparisons, task-dependent joint jerk, load-specific recruitment, and anatomical resolution reveal differences that aggregate task scores do not capture.</p>
         </article>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
             <img src="./static/images/emg-envelope-similarity.png" alt="Walking EMG-envelope similarity across policies">
           </div>
-          <figcaption><strong>Walking EMG-envelope similarity across policies.</strong> Simulated muscle activation envelopes are compared with normalized human walking EMG data. Pearson correlations measure gait-cycle waveform similarity for reward-based RL, latent-action RL, agentic reward tuning, and imitation-prior control.</figcaption>
+          <figcaption><strong>Walking EMG-envelope comparison (Fig. 6).</strong> Human recordings from Gait120 versus simulated activations for reward-based RL, latent-action RL, agentic tuning, and imitation-prior control. Signals are resampled to 101 gait-cycle points, min–max normalized per muscle, cycle-averaged, and cyclically aligned to maximize Pearson correlation. Correlations assess phase-optimized waveform shape, not absolute amplitude or timing. Agreement varies by muscle: latent-action RL improves biceps femoris correlation (0.95 vs. 0.84) but lowers vastus lateralis correlation (0.21 vs. 0.73) relative to reward-based RL. Walking and stair references use Gait120; running uses the 3-m/s recordings of Van Hooren and Meijer.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure">
           <div class="supplemental-analysis-media">
             <img src="./static/images/joint-smoothness.png" alt="Task-wise joint smoothness across benchmark tasks">
           </div>
-          <figcaption><strong>Task-wise joint smoothness across benchmark tasks.</strong> Bars show the log10 mean squared joint jerk computed from finite differences of joint velocities. Stabilization tasks exhibit the lowest jerk, locomotion tasks show the highest jerk due to repeated rhythmic impacts, and contact-rich interaction tasks fall in an intermediate range. This diagnostic characterizes task-dependent movement smoothness and impact profile.</figcaption>
+          <figcaption><strong>Task-wise joint smoothness (Fig. 7).</strong> Bars report log10 mean squared angular jerk computed from finite differences of joint velocities. Levels depend on the task, with overlapping ranges across task families. This characterizes movement fluctuations, not a cross-task ranking of success, control quality, or human similarity.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure heatmap-analysis-figure">
           <div class="supplemental-analysis-media">
@@ -250,7 +344,7 @@
               <figcaption><strong>10kg</strong><span>barbell weight</span></figcaption>
             </figure>
           </div>
-          <figcaption><strong>Load-dependent muscle-family activation during the powerlift task.</strong> Heatmap values show absolute activation mass accumulated by muscle family under increasing barbell weights. Heavier loads induce stronger recruitment of trunk/back and support-related muscle groups, illustrating how external loading changes the policy's internal muscle-use strategy.</figcaption>
+          <figcaption><strong>Load-dependent recruitment in powerlift (Fig. 8).</strong> Heatmap values show activation mass accumulated by muscle family over recorded motions. Trunk/back totals are 30.1, 50.4, and 46.0 at 0.05, 5, and 10 kg. These describe load-specific muscle use, not a uniform activation increase, instantaneous activation, or agreement with human recordings.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure">
           <div class="supplemental-analysis-media">
@@ -266,7 +360,7 @@
               <figcaption><strong>700-muscle model</strong><span>additional axial stabilizers</span></figcaption>
             </figure>
           </div>
-          <figcaption><strong>Effect of anatomical resolution on powerlift muscle recruitment.</strong> Total activation mass is compared between the 416-muscle model over shared muscle families and the 700-muscle model, which additionally includes neck, deep-trunk, and deep-scapular muscle groups. Increasing anatomical resolution changes available recruitment pathways and enables the policy to recruit additional axial stabilizers during load support.</figcaption>
+          <figcaption><strong>Anatomical resolution and powerlift recruitment (Fig. 9).</strong> Activation mass for the 416- and 700-muscle models. The 700-muscle model adds neck, deep-trunk, and deep-scapular groups, expanding the available recruitment pathways and diagnostics. These model-specific profiles do not establish greater human similarity; only this anatomy study uses the 700-muscle model.</figcaption>
         </figure>
       </div>
     </section>
@@ -275,7 +369,24 @@
       <div class="container">
         <div class="section-heading">
           <p class="eyebrow">Residual Adaptation</p>
-          <h2>Residual RL preserves imitation structure while learning task-specific muscle corrections.</h2>
+          <h2>Task recovery and EMG agreement must be assessed separately.</h2>
+          <p>A case study connects stair-failure diagnosis to multi-metric validation. A frozen MuscleMimic prior supplies base actions and a trainable three-layer MLP supplies bounded corrections. The pipeline also changes task objectives and reference timing; its results do not isolate the effect of residual actions alone.</p>
+        </div>
+        <div class="residual-study-grid">
+        <article class="protocol-card residual-protocol">
+          <h3>Combined adaptation pipeline</h3>
+          <p class="control-equation">a<sub>full</sub> = clip(a<sub>base</sub> + α clip(a<sub>res</sub>, −1, 1), −1, 1)</p>
+          <ul class="protocol-list">
+            <li><strong>Stairs:</strong> reference progression is normal below 0.4 m planar root error and slows by 50% otherwise. Vertical root displacement is excluded from tracking; progress targets the reference state 1 s ahead.</li>
+            <li><strong>Walking:</strong> residual authority is 0.6 in swing and 0.2 in stance, with activation magnitude and temporal-change penalties.</li>
+            <li><strong>Running:</strong> flight-phase tracking penalties are halved, toe-off is rewarded, and vertical ground-reaction forces above 2.5 times body weight receive a soft penalty.</li>
+          </ul>
+          <p class="evaluation-note">A small L2 residual penalty (c<sub>res</sub> = −0.02) replaces the generic action-rate and activation-cost terms. The 354-dimensional actions in the controller diagram exclude hand actuation.</p>
+        </article>
+        <figure class="paper-figure residual-architecture-figure">
+          <img src="./static/images/residual-architecture-performance.png" alt="Frozen MuscleMimic prior plus trainable residual controller, with example stair, run, and walk motions">
+          <figcaption><strong>Residual architecture and example motions (Fig. 10).</strong> The frozen prior and trainable correction are combined into the executed action. The original lower-branch label “ref action” denotes the residual correction in the equation above. Blue skeletons are references. Rewards and reference timing also change.</figcaption>
+        </figure>
         </div>
         <figure class="paper-figure residual-method-figure compact-method-figure">
           <div class="residual-method-media">
@@ -293,7 +404,7 @@
                 <video src="./static/videos/gallery/musclemimic/walk.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="MuscleMimic walk rollout"></video>
                 <figcaption>Walk</figcaption>
               </figure>
-              <div class="residual-row-label">Residual RL (Ours)</div>
+              <div class="residual-row-label">Residual adaptation</div>
               <figure class="residual-comparison-video">
                 <video src="./static/videos/gallery/residual-rl/stair.mp4" controls autoplay muted loop playsinline preload="metadata" aria-label="Residual RL stairs rollout"></video>
                 <figcaption>Stairs</figcaption>
@@ -308,8 +419,23 @@
               </figure>
             </div>
           </div>
-          <figcaption><strong>Residual RL and MuscleMimic video comparison.</strong> MuscleMimic imitation-prior rollouts are shown on the top row for stair-climbing, running, and walking, with the corresponding Residual RL (Ours) rollouts below. The comparison highlights how residual adaptation preserves imitation structure while learning task-specific corrections for contact-rich and high-impact settings.</figcaption>
+          <figcaption><strong>MuscleMimic and the combined residual adaptation pipeline.</strong> The top row shows imitation-prior rollouts for stairs, running, and walking, with adapted rollouts below. Videos illustrate behavior; task success and EMG-envelope agreement are reported separately in Table V.</figcaption>
         </figure>
+        <div class="results-block" id="residual-results">
+          <div class="table-scroll" role="region" aria-labelledby="residual-results-caption" tabindex="0">
+            <table class="results-table">
+              <caption id="residual-results-caption">Residual adaptation results · Table V</caption>
+              <thead><tr><th scope="col">Task</th><th scope="col">MM SR (%) ↑</th><th scope="col">Residual SR (%) ↑</th><th scope="col">MM EMG r ↑</th><th scope="col">DepRL EMG r ↑</th><th scope="col">Residual EMG r ↑</th></tr></thead>
+              <tbody>
+                <tr><th scope="row">Walking</th><td><strong>100</strong></td><td><strong>100</strong></td><td>0.71 / 0.69 / 0.63</td><td>—</td><td><strong>0.75 / 0.80 / 0.67</strong></td></tr>
+                <tr><th scope="row">Running</th><td>90</td><td><strong>100</strong></td><td>0.43</td><td>0.70</td><td><strong>0.77</strong></td></tr>
+                <tr><th scope="row">Stairs</th><td>0</td><td><strong>100</strong></td><td>0.51</td><td><strong>0.56</strong></td><td>0.52</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="evaluation-note">MM = MuscleMimic. SR retains training noise. Walking reports soleus medialis / biceps femoris / semitendinosus correlations; running and stairs report 12-muscle phase-aligned means. The dash means no DepRL walking value is reported in this table. Bold marks the best point estimate in each comparison. Task recovery does not imply uniformly better human EMG agreement.</p>
+        </div>
+        <p class="evaluation-note">Additional diagnostics: stair height rises from 0.94 to 1.21 m and tracking error falls from 0.1968 to 0.1079 rad. Running tracking error falls from 0.2267 to 0.1338 rad and peak ground-reaction force from 6.40 to 6.07 times body weight.</p>
       </div>
     </section>
 
@@ -322,10 +448,10 @@
         <div class="code-block">
           <button class="copy-button" type="button" data-copy="#bibtex-code">Copy</button>
           <pre><code id="bibtex-code">@misc{mskbench2026,
-  title = {MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Learning Paradigms, and Physiological Metrics},
-  author = xxx,
+  title = {MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Control Paradigms, and Physiological Metrics},
+  author = {Ou, Mengtao and Zhang, Zongzheng and Xiao, Zhenghao and Pan, Yixuan and Zhuang, Ziwen and Zhao, Hang and Li, Hongyang and Sui, Yanan and Liu, Libin and Zhao, Hao},
   year = {2026},
-  note = {xxx}
+  url = {https://github.com/ZZongzheng0918/MSK-Bench}
 }</code></pre>
         </div>
       </div>
