@@ -6,7 +6,7 @@ This review package contains the existing project demonstrations and the supplem
 
 - [Project page source](index.html): the original project layout, task galleries, and updated findings.
 - [Protocols, findings, and appendix reading guide](materials/README.md).
-- [Technical appendix (PDF, 24 pages)](materials/supplementary-material.pdf): task definitions, reward functions, observations, termination criteria, metrics, complete result tables, and method details.
+- [Technical appendix (PDF, 25 pages)](materials/supplementary-material.pdf): task definitions, reward functions, observations, termination criteria, metrics, complete result tables, and method details, including the direct GPT-6 control protocol.
 - [Task demonstrations](static/videos/tasks/).
 - [Policy-by-task video gallery](static/videos/gallery/).
 

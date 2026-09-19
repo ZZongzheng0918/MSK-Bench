@@ -2,7 +2,7 @@
 
 [Read the technical appendix (PDF)](supplementary-material.pdf)
 
-The 24-page document preserves the technical appendix and its references from the current anonymous manuscript. Table and figure numbering are retained so it can be read alongside the main paper. The guide below highlights the material most relevant to interpreting and reproducing the reported comparisons.
+The 25-page document preserves the technical appendix and its references from the current anonymous manuscript. Table and figure numbering are retained so it can be read alongside the main paper. The guide below highlights the material most relevant to interpreting and reproducing the reported comparisons.
 
 ## Reading guide
 
@@ -17,7 +17,8 @@ The 24-page document preserves the technical appendix and its references from th
 | Human EMG processing and comparison | J | 17-18 |
 | Anatomical grouping and load study | K-L | 18-19 |
 | Residual, reward, and timing adaptation | M | 18-20 |
-| Bibliographic sources | Appendix References | 23-24 |
+| Direct GPT-6 control protocol: visible state, action contract, stepping, fall gate, and metrics | P | 23 |
+| Bibliographic sources | Appendix References | 24-25 |
 
 ## Benchmark scope
 
