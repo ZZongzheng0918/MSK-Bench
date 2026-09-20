@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="MSK-Bench: 22 full-body musculoskeletal tasks, 5 control paradigms, and 7 metric families for evaluating task performance, robustness, and physiological behavior.">
   <title>MSK-Bench | Full-Body Musculoskeletal Motor Control</title>
-  <link rel="stylesheet" href="./static/css/index.css?v=20260916-spacing-refinement">
+  <link rel="stylesheet" href="./static/css/index.css?v=20260920-rss-workshop">
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary">
@@ -50,34 +50,37 @@
             <div class="publication-authors" aria-label="Authors">
               <p class="author-list">
                 <span class="author-line">
-                  <span>Mengtao Ou<sup>*</sup></span>,
-                  <span>Zongzheng Zhang<sup>*</sup></span>,
-                  <span>Zhenghao Xiao</span>,
-                  <a href="https://lzpyx.github.io/" target="_blank" rel="noopener noreferrer">Yixuan Pan</a>,
-                  <a href="https://ziwenzhuang.github.io/" target="_blank" rel="noopener noreferrer">Ziwen Zhuang</a>
+                  <span>Mengtao Ou<sup>*,1</sup></span>,
+                  <span>Zongzheng Zhang<sup>*,1</sup></span>,
+                  <a href="https://lzpyx.github.io/" target="_blank" rel="noopener noreferrer">Yixuan Pan<sup>2</sup></a>,
+                  <a href="https://ziwenzhuang.github.io/" target="_blank" rel="noopener noreferrer">Ziwen Zhuang<sup>3</sup></a>
                 </span><br class="author-break">
                 <span class="author-line">
-                  <a href="https://hangzhaomit.github.io/" target="_blank" rel="noopener noreferrer">Hang Zhao</a>,
-                  <a href="https://www.hongyang.li/" target="_blank" rel="noopener noreferrer">Hongyang Li</a>,
-                  <a href="https://yanansui.com/" target="_blank" rel="noopener noreferrer">Yanan Sui</a>,
-                  <a href="https://libliu.info/" target="_blank" rel="noopener noreferrer">Libin Liu</a>,
-                  <a href="https://sites.google.com/view/fromandto" target="_blank" rel="noopener noreferrer">Hao Zhao<sup>&dagger;</sup></a>
+                  <a href="https://hangzhaomit.github.io/" target="_blank" rel="noopener noreferrer">Hang Zhao<sup>3</sup></a>,
+                  <a href="https://www.hongyang.li/" target="_blank" rel="noopener noreferrer">Hongyang Li<sup>2</sup></a>,
+                  <a href="https://yanansui.com/" target="_blank" rel="noopener noreferrer">Yanan Sui<sup>4</sup></a>,
+                  <a href="https://libliu.info/" target="_blank" rel="noopener noreferrer">Libin Liu<sup>5</sup></a>,
+                  <a href="https://sites.google.com/view/fromandto" target="_blank" rel="noopener noreferrer">Hao Zhao<sup>&dagger;,1</sup></a>
                 </span>
               </p>
+              <div class="publication-affiliations" aria-label="Author affiliations">
+                <span><sup>1</sup> Institute for AI Industry Research (AIR), Tsinghua University</span>
+                <span><sup>2</sup> The University of Hong Kong (HKU)</span>
+                <span><sup>3</sup> Institute for Interdisciplinary Information Sciences (IIIS), Tsinghua University</span>
+                <span><sup>4</sup> School of Aerospace Engineering, Tsinghua University</span>
+                <span><sup>5</sup> Peking University (PKU)</span>
+              </div>
               <p class="author-notes">
                 <span><sup>*</sup> Equal Contribution</span>
                 <span><sup>&dagger;</sup> Corresponding author</span>
               </p>
             </div>
             <div class="publication-links" aria-label="Project links">
-              <a class="button is-primary" href="./static/papers/MSK-Bench.pdf" target="_blank" rel="noopener noreferrer">
+              <a class="button is-primary" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer">
                 <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M8 13h8M8 17h5"/></svg><span>Paper</span>
               </a>
-              <a class="button" aria-label="Code and reproducibility package" title="Code and reproducibility package" href="https://anonymous.4open.science/r/MSK-Bench-CF1B/" target="_blank" rel="noopener noreferrer">
+              <a class="button" aria-label="Code and reproducibility package" title="Code and reproducibility package" href="https://github.com/ZZongzheng0918/MSK-Bench/tree/code" target="_blank" rel="noopener noreferrer">
                 <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></svg><span>Code</span>
-              </a>
-              <a class="button" aria-label="Supplementary material" title="Supplementary material" href="https://anonymous.4open.science/r/MSK-Bench-FBB1/" target="_blank" rel="noopener noreferrer">
-                <svg class="button-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 5-10 5L2 8zM2 12l10 5 10-5M2 16l10 5 10-5"/></svg><span>Supplement</span>
               </a>
             </div>
             <div class="hero-highlights" aria-label="Benchmark highlights">
@@ -134,14 +137,14 @@
       <div class="container">
         <div class="benchmark-layout">
           <figure class="paper-figure benchmark-figure">
-            <img src="./static/images/teaser.png" alt="Overview of MSK-Bench task families and method evaluation radar charts">
+            <img src="./static/images/teaser.png?v=20260920-rss-workshop" alt="Overview of MSK-Bench task families and method evaluation radar charts">
             <figcaption><strong>Overview of MSK-Bench (Fig. 1).</strong> An open-source suite of <strong>22 tasks</strong> across stabilization, locomotion, and interaction, evaluated through <strong>5 control paradigms</strong> and <strong>7 metric families</strong>. Radar charts use eight reported axes derived from these metrics, averaged over applicable tasks in each family. EMG-envelope similarity is evaluated only where matched human reference data are available; cumulative reward is reported separately in the learning curves.</figcaption>
           </figure>
           <figure class="paper-figure benchmark-comparison-figure">
             <div class="benchmark-comparison-media" tabindex="0" role="region" aria-label="Benchmark comparison table">
-              <img src="./static/images/benchmark-comparison.png" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
+              <img src="./static/images/benchmark-comparison.png?v=20260920-rss-workshop" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
             </div>
-            <figcaption><strong>Benchmark comparison (Table I).</strong> MSK-Bench uses a <strong>416-muscle</strong> full-body model across 22 tasks and considers five control families. F/S/C/H/P denote full body, scene/terrain, contact, hierarchy, and physiology; checkmarks, dots, and crosses denote full, partial, and no support in the cited evaluations. The <strong>700-muscle model is used only in the anatomy study</strong>. Reference numbers follow the paper.</figcaption>
+            <figcaption><strong>Benchmark comparison (Table I).</strong> MSK-Bench uses a <strong>416-muscle</strong> full-body model across 22 tasks and considers five control families. Columns compare embodiment, environment, task design, and evaluation; checkmarks, dots, and crosses denote full, partial, and no support in the cited evaluations. The <strong>700-muscle model is used only in the anatomy study</strong>. Reference numbers follow the paper.</figcaption>
           </figure>
         </div>
       </div>
@@ -226,10 +229,10 @@
         </div>
         <figure class="learning-curve-figure" id="learning-curve-figure">
           <div class="learning-curve-media">
-            <img src="./static/images/main22.png" alt="Task-specific reward-learning curves for 20 of 22 tasks, comparing DepRL, DynSyn-SAC, SAC, and PPO">
+            <img src="./static/images/main22.png?v=20260920-rss-workshop" alt="Task-specific reward-learning curves for 22 tasks, comparing DepRL, DynSyn-SAC, SAC, and PPO">
           </div>
           <figcaption>
-            <strong>Task-specific reward-learning curves for 20 of 22 tasks (Fig. 2).</strong>
+            <strong>Task-specific reward-learning curves for 22 tasks (Fig. 2).</strong>
             DynSyn-SAC attains higher returns than DepRL on jump and hurdle over the displayed overlapping ranges, while DepRL leads on walk-turn and catch; SAC remains competitive on powerlift. Shading shows across-run variation. The full-suite table separately reports success, nonzero-success coverage, and robustness over all 22 tasks.
           </figcaption>
           <div class="curve-method-legend" aria-label="Learning curve method legend">
@@ -242,7 +245,7 @@
         </figure>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/agentic-reward-tuning.png" alt="Agentic reward tuning reward weights and robustness perturbation plots">
+            <img src="./static/images/agentic-reward-tuning.png?v=20260920-rss-workshop" alt="Agentic reward tuning reward weights and robustness perturbation plots">
           </div>
           <figcaption><strong>Reward adaptation and robustness (Fig. 3).</strong> In the original Agentic-DepRL setting, coefficients are updated every 20,000 steps and each nonzero-weight change is limited to 20%; unnormalized coefficient magnitudes still grow. Fixed-reward DepRL maintains higher survival under the tested action and observation perturbations, while agentic tuning leads at larger dynamics-perturbation scales. Both share learner, architecture, and budget. Each point averages 50 held-out seeds; survival is capped at 1,000 steps.</figcaption>
         </figure>
@@ -276,7 +279,7 @@
         </div>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/latent-action-128.png" alt="Latent action compression reward and robustness plots">
+            <img src="./static/images/latent-action-128.png?v=20260920-rss-workshop" alt="Latent action compression reward and robustness plots">
           </div>
           <div class="latent-action-videos" aria-label="Latent action rollout videos by action dimension">
             <figure class="latent-action-video">
@@ -301,9 +304,9 @@
         </article>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/musclemimic-vs-deprl.png" alt="Robustness comparison and tracking error analysis between imitation prior and DepRL">
+            <img src="./static/images/musclemimic-vs-deprl.png?v=20260920-rss-workshop" alt="Robustness comparison and tracking error analysis between imitation prior and DepRL">
           </div>
-          <figcaption><strong>Task-dependent dynamics robustness and stair-tracking errors (Fig. 5).</strong> (a–e) Success rates of MuscleMimic/MM (PPO) and DepRL on stand, jump, walk, run, and stairs. MuscleMimic has no observed stair successes, including at zero perturbation. (f) From step 150 to 300, absolute-site error rises from 0.35 to 1.31 and root-XYZ error from 0.25 to 0.77. These errors describe reference divergence; they do not establish its cause.</figcaption>
+          <figcaption><strong>Task-dependent dynamics robustness and stair-tracking errors (Fig. 5).</strong> (a–e) Success rates of MuscleMimic/MM (PPO) and DepRL on stand, jump, walk, run, and stairs. MuscleMimic has no observed stair successes, including at zero perturbation. (f) From step 150 to 300, absolute-site error rises from 0.35 to 1.31 and root-XYZ error from 0.25 to 0.77. These errors describe reference divergence; they do not establish its cause. Both methods share success conditions and perturbation settings within each task. This focused protocol differs from the full-suite benchmark; its values are excluded from aggregate robustness scores.</figcaption>
         </figure>
         <article class="takeaway-card inline-takeaway">
           <span class="takeaway-index">T3</span>
@@ -312,19 +315,19 @@
         </article>
         <figure class="supplemental-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/emg-envelope-similarity.png" alt="Walking EMG-envelope similarity across policies">
+            <img src="./static/images/emg-envelope-similarity.png?v=20260920-rss-workshop" alt="Walking EMG-envelope similarity across policies">
           </div>
           <figcaption><strong>Walking EMG-envelope comparison (Fig. 6).</strong> Human recordings from Gait120 versus simulated activations for reward-based RL, latent-action RL, agentic tuning, and imitation-prior control. Signals are resampled to 101 gait-cycle points, min–max normalized per muscle, cycle-averaged, and cyclically aligned to maximize Pearson correlation. Correlations assess phase-optimized waveform shape, not absolute amplitude or timing. Agreement varies by muscle: latent-action RL improves biceps femoris correlation (0.95 vs. 0.84) but lowers vastus lateralis correlation (0.21 vs. 0.73) relative to reward-based RL. Walking and stair references use Gait120; running uses the 3-m/s recordings of Van Hooren and Meijer.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/joint-smoothness.png" alt="Task-wise joint smoothness across benchmark tasks">
+            <img src="./static/images/joint-smoothness.png?v=20260920-rss-workshop" alt="Task-wise joint smoothness across benchmark tasks">
           </div>
           <figcaption><strong>Task-wise joint smoothness (Fig. 7).</strong> Bars report log10 mean squared angular jerk computed from finite differences of joint velocities. Levels depend on the task, with overlapping ranges across task families. This characterizes movement fluctuations, not a cross-task ranking of success, control quality, or human similarity.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure heatmap-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/powerlift-activation-load.png" alt="Load-dependent muscle-family activation during powerlift">
+            <img src="./static/images/powerlift-activation-load.png?v=20260920-rss-workshop" alt="Load-dependent muscle-family activation during powerlift">
           </div>
           <div class="powerlift-load-videos" aria-label="Powerlift rollout videos by barbell weight">
             <figure class="powerlift-load-video">
@@ -344,11 +347,11 @@
               <figcaption><strong>10kg</strong><span>barbell weight</span></figcaption>
             </figure>
           </div>
-          <figcaption><strong>Load-dependent recruitment in powerlift (Fig. 8).</strong> Heatmap values show activation mass accumulated by muscle family over recorded motions. Trunk/back totals are 30.1, 50.4, and 46.0 at 0.05, 5, and 10 kg. These describe load-specific muscle use, not a uniform activation increase, instantaneous activation, or agreement with human recordings.</figcaption>
+          <figcaption><strong>Load-dependent recruitment in powerlift (Fig. 8).</strong> Heatmap values sum the time-averaged activations of the actuators in each muscle family. Trunk/back totals are 30.1, 50.4, and 46.0 at 0.05, 5, and 10 kg. These describe load-specific muscle use, not a uniform activation increase, instantaneous activation, or agreement with human recordings.</figcaption>
         </figure>
         <figure class="supplemental-analysis-figure compact-analysis-figure">
           <div class="supplemental-analysis-media">
-            <img src="./static/images/anatomy-resolution-416-700.png" alt="Effect of anatomical resolution on powerlift muscle recruitment">
+            <img src="./static/images/anatomy-resolution-416-700.png?v=20260920-rss-workshop" alt="Effect of anatomical resolution on powerlift muscle recruitment">
           </div>
           <div class="anatomy-resolution-videos" aria-label="Powerlift rollout videos by anatomical resolution">
             <figure class="anatomy-resolution-video">
@@ -384,8 +387,8 @@
           <p class="evaluation-note">A small L2 residual penalty (c<sub>res</sub> = −0.02) replaces the generic action-rate and activation-cost terms. The 354-dimensional actions in the controller diagram exclude hand actuation.</p>
         </article>
         <figure class="paper-figure residual-architecture-figure">
-          <img src="./static/images/residual-architecture-performance.png" alt="Frozen MuscleMimic prior plus trainable residual controller, with example stair, run, and walk motions">
-          <figcaption><strong>Residual architecture and example motions (Fig. 10).</strong> The frozen prior and trainable correction are combined into the executed action. The original lower-branch label “ref action” denotes the residual correction in the equation above. Blue skeletons are references. Rewards and reference timing also change.</figcaption>
+          <img src="./static/images/residual-architecture-performance.png?v=20260920-rss-workshop" alt="Frozen MuscleMimic prior plus trainable residual controller, with example stair, run, and walk motions">
+          <figcaption><strong>Residual architecture and example motions (Fig. 10).</strong> The frozen prior and trainable correction are combined into the executed action. The lower branch supplies the residual action in the equation above. Blue skeletons are references. Rewards and reference timing also change.</figcaption>
         </figure>
         </div>
         <figure class="paper-figure residual-method-figure compact-method-figure">
@@ -433,9 +436,21 @@
               </tbody>
             </table>
           </div>
-          <p class="evaluation-note">MM = MuscleMimic. SR retains training noise. Walking reports soleus medialis / biceps femoris / semitendinosus correlations; running and stairs report 12-muscle phase-aligned means. The dash means no DepRL walking value is reported in this table. Bold marks the best point estimate in each comparison. Task recovery does not imply uniformly better human EMG agreement.</p>
+          <p class="evaluation-note">MM = MuscleMimic. SR retains training noise. Walking reports soleus medialis / biceps femoris / semitendinosus correlations; running reports an 11-channel phase-aligned mean, and stairs reports a 12-muscle phase-aligned mean. The dash means no DepRL walking value is reported in this table. Bold marks the best point estimate in each comparison. Task recovery does not imply uniformly better human EMG agreement.</p>
         </div>
         <p class="evaluation-note">Additional diagnostics: stair height rises from 0.94 to 1.21 m and tracking error falls from 0.1968 to 0.1079 rad. Running tracking error falls from 0.2267 to 0.1338 rad and peak ground-reaction force from 6.40 to 6.07 times body weight.</p>
+      </div>
+    </section>
+
+    <section class="section surface" id="limitations">
+      <div class="container is-max-desktop">
+        <div class="section-heading">
+          <p class="eyebrow">Limitations &amp; Future Work</p>
+          <h2>Scope of the benchmark and next steps.</h2>
+        </div>
+        <p>The reported results describe the evaluated tasks and perturbations; they do not establish statistical dominance or direct transfer to unseen embodiments. The shared 416-muscle humanoid controls for body design, but conclusions may not generalize to other anatomical models.</p>
+        <p>Human-reference EMG evaluation covers three tasks with task-dependent lower-limb signals: three selected muscles for walking in Table V, 11 independent channels for running, and 12 matched muscles for stairs. The correlations measure phase-optimized activation-envelope shape rather than complete biological similarity. Residual adaptation changes actions, rewards, and reference timing together, so its gains characterize the complete pipeline.</p>
+        <p>Future extensions include more dexterous manipulation tasks, longer-horizon behaviors, real-world validation, and broader physiological measurements.</p>
       </div>
     </section>
 
@@ -449,7 +464,7 @@
           <button class="copy-button" type="button" data-copy="#bibtex-code">Copy</button>
           <pre><code id="bibtex-code">@misc{mskbench2026,
   title = {MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Control Paradigms, and Physiological Metrics},
-  author = {Ou, Mengtao and Zhang, Zongzheng and Xiao, Zhenghao and Pan, Yixuan and Zhuang, Ziwen and Zhao, Hang and Li, Hongyang and Sui, Yanan and Liu, Libin and Zhao, Hao},
+  author = {Ou, Mengtao and Zhang, Zongzheng and Pan, Yixuan and Zhuang, Ziwen and Zhao, Hang and Li, Hongyang and Sui, Yanan and Liu, Libin and Zhao, Hao},
   year = {2026},
   url = {https://github.com/ZZongzheng0918/MSK-Bench}
 }</code></pre>

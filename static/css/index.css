@@ -2156,8 +2156,8 @@ section[id], .results-block[id] {
 /* Consistent project links and page rhythm across screen sizes. */
 .publication-links {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  width: min(480px, 100%);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(320px, 100%);
   gap: 12px;
   margin: 28px auto 0;
 }
@@ -2329,7 +2329,7 @@ button:focus-visible,
   }
 
   .publication-links {
-    width: min(480px, 100%);
+    width: min(320px, 100%);
     gap: 8px;
     margin-top: 24px;
   }
@@ -2451,5 +2451,28 @@ button:focus-visible,
 @media (min-width: 721px) and (max-width: 960px) {
   .section {
     padding-block: 44px;
+  }
+}
+
+/* Affiliations match the named authors in the RSS workshop manuscript. */
+.publication-affiliations {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 4px 20px;
+  max-width: 1040px;
+  margin: 16px auto 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  text-wrap: balance;
+}
+
+@media (max-width: 720px) {
+  .publication-affiliations {
+    flex-direction: column;
+    gap: 6px;
+    max-width: 440px;
+    font-size: 0.73rem;
   }
 }
