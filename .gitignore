@@ -26,6 +26,7 @@ data/
 outputs/
 runs/
 wandb/
+/experiments/gpt6_direct_control/results/
 *.mp4
 *.avi
 *.gif
@@ -35,3 +36,13 @@ wandb/
 Thumbs.db
 .vscode/
 .idea/
+
+# Isolated development worktrees
+.worktrees/
+
+# Local restricted data and runtime directories: never commit or redistribute these.
+/authorized-motions/
+/rl_paradigms/residualrl/walking_medium09_poses.npz
+/rl_paradigms/residualrl/walking_run04_poses.npz
+/.venv/
+/.smoke/

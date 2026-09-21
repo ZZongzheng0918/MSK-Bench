@@ -16,6 +16,18 @@ class MinimalLayoutTest(unittest.TestCase):
         self.assertFalse((repo_root / "scripts").exists())
         self.assertFalse((repo_root / "draw_emg_12_muscles.py").exists())
 
+        for relative in (
+            "benchmark_eval/common.py",
+            "benchmark_eval/emg_export.py",
+        ):
+            self.assertTrue((repo_root / relative).is_file(), relative)
+
+        for relative in (
+            "msk_eval_common.py",
+            "emg_export_common.py",
+        ):
+            self.assertFalse((repo_root / relative).exists(), relative)
+
     def test_open_source_metadata_files_exist(self) -> None:
         repo_root = Path(__file__).resolve().parents[1]
 
@@ -35,11 +47,12 @@ class MinimalLayoutTest(unittest.TestCase):
         repo_root = Path(__file__).resolve().parents[1]
 
         for relative in (
-            "ppo/README.md",
-            "sac/README.md",
-            "depRL/README.md",
-            "msgym/README.md",
-            "deprl_middleware_22tasks/README.md",
+            "rl_paradigms/ppo/README.md",
+            "rl_paradigms/sac/README.md",
+            "rl_paradigms/depRL/README.md",
+            "rl_paradigms/msgym/README.md",
+            "rl_paradigms/deprl_middleware_22tasks/README.md",
+            "rl_paradigms/musclemimic/README.MSK-Bench.md",
             "benchmark_eval/README.md",
         ):
             self.assertTrue((repo_root / relative).is_file(), relative)

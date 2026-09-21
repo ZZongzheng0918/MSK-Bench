@@ -2,6 +2,9 @@
 
 from typing import List
 
+from .runtime import configure_mujoco_gl
+
+configure_mujoco_gl()
 from .version import __version_tuple__
 
 try:

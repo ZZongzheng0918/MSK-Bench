@@ -99,7 +99,17 @@ class SimScene(metaclass=abc.ABCMeta):
 
     def close(self):
         """Cleans up any resources used by the simulation."""
-        self.renderer.close()
+        renderer = getattr(self, "renderer", None)
+        if renderer is not None:
+            renderer.close()
+            self.renderer = None
+        simulation = getattr(self, "sim", None)
+        free = getattr(simulation, "free", None)
+        if callable(free):
+            free()
+        self.sim = None
+        self.model = None
+        self.data = None
 
     def forward(self):
         """Run the simulation forward"""

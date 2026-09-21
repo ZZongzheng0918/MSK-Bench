@@ -27,17 +27,25 @@ def _step_from_row(row: Mapping[str, Any]) -> float | None:
 
 
 def peak_efficiency_steps(rows: Iterable[Mapping[str, Any]]) -> int | float:
-    """Return the largest logged environment step for peak-efficiency reporting."""
+    """Earliest evaluated step attaining the best mean return (one task only).
 
-    max_step: float | None = None
+    Repeated rows at a step are averaged with equal weight (e.g. seed means).
+    Invalid observations are omitted; missing return data is not efficiency.
+    """
+    returns: dict[float, list[float]] = {}
     for row in rows:
         step = _step_from_row(row)
-        if step is None:
+        lowered = {str(key).strip().lower(): value for key, value in row.items()}
+        reward = next((_as_number(lowered[key]) for key in
+                       ("mean_return", "avg_return", "eval/mean_reward", "avg_reward")
+                       if key in lowered), None)
+        if step is None or step < 0 or reward is None:
             continue
-        max_step = step if max_step is None else max(max_step, step)
-    if max_step is None:
-        return 0
-    return int(max_step) if float(max_step).is_integer() else max_step
+        returns.setdefault(step, []).append(reward)
+    if not returns:
+        raise ValueError("Peak efficiency requires finite evaluation steps and mean returns.")
+    best = max(sorted(returns), key=lambda step: sum(returns[step]) / len(returns[step]))
+    return int(best) if best.is_integer() else best
 
 
 __all__ = ["STEP_ALIASES", "peak_efficiency_steps"]

@@ -152,7 +152,9 @@ class MJRenderer(Renderer):
 
     def close(self):
         """Cleans up any resources being used by the renderer."""
+        if self._renderer is not None:
+            self._renderer.close()
+            self._renderer = None
         if self._window:
             self._window.close()
             self._window = None
-            quit()

@@ -20,7 +20,7 @@ class UnifiedRunnerEntrypointTest(unittest.TestCase):
                 env_id="MSKBenchWalk-v0",
                 episodes=2,
             ),
-            repo_root=Path("D:/MSK-Bench"),
+            repo_root=Path("."),
             python="python",
         )
 
@@ -50,7 +50,7 @@ class UnifiedRunnerEntrypointTest(unittest.TestCase):
                 checkpoint="last",
                 checkpoint_file=Path("weights/deprl/walk_run/checkpoints/step_5000000.pt"),
             ),
-            repo_root=Path("D:/MSK-Bench"),
+            repo_root=Path("."),
             python="python",
         )
 

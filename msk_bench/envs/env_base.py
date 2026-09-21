@@ -30,13 +30,15 @@ from msk_bench.utils import seed_envs
 # should path methods(compute_path_rewards, truncate_paths, evaluate_success) be moved to paths_utils?
 
 class MujocoEnv(gym.Env, gym.utils.EzPickle, ObsVecDict):
+    metadata = {"render_modes": ["rgb_array"], "render_fps": 100}
+
     """
     Superclass for all MuJoCo environments.
     """
 
     DEFAULT_CREDIT = """\
-        MSK-Bench: a collection of environments/tasks to be solved by musculoskeletal models | https://sites.google.com/view/msk_bench
-        Code: https://github.com/MyoHub/msk_bench/stargazers (add a star to support the project)
+        MSK-Bench: environments and tasks for musculoskeletal models.
+        See THIRD_PARTY_NOTICES.md for upstream attribution and licenses.
     """
 
     def __init__(self,  model_path, obsd_model_path=None, seed=None, edit_fn=None, env_credits=DEFAULT_CREDIT):
@@ -157,6 +159,7 @@ class MujocoEnv(gym.Env, gym.utils.EzPickle, ObsVecDict):
         # resolve obs
         self.obs_dict = {}
         self.obs_keys = obs_keys
+        self._observation_dtype = np.dtype(np.float32)
 
         # resolve proprio
         self.proprio_dict = {}
@@ -172,7 +175,15 @@ class MujocoEnv(gym.Env, gym.utils.EzPickle, ObsVecDict):
         # Question: Should we replace above with following? Its specially helpful for hardware as it forces a env reset before continuing, without which the hardware will make a big jump from its position to the position asked by step.
         # observation = self.reset()
         assert not done, "Check initialization. Simulation starts in a done state."
-        self.observation_space = gym.spaces.Box(obs_range[0]*np.ones(observation.size), obs_range[1]*np.ones(observation.size), dtype=np.float32)
+        configured_limit = max(
+            float(abs(obs_range[1])),
+            float(getattr(self, "SAFE_OBS_CLIP", 0.0)),
+        )
+        limit = np.maximum(
+            np.abs(np.asarray(observation, dtype=np.float64)) * 2.0 + 1.0,
+            configured_limit,
+        )
+        self.observation_space = gym.spaces.Box(-limit, limit, dtype=self._observation_dtype)
 
         return
 
@@ -368,7 +379,10 @@ class MujocoEnv(gym.Env, gym.utils.EzPickle, ObsVecDict):
 
         # recoved observation vector from the obs_dict
         t, obs = self.obsdict2obsvec(self.obs_dict, self.obs_keys)
-        return obs
+        observation_dtype = getattr(self, "_observation_dtype", None)
+        if observation_dtype is None:
+            return obs
+        return np.asarray(obs, dtype=observation_dtype)
 
 
     def get_visuals(self, sim=None, visual_keys:list=None, device_id:int=None)->dict:
@@ -455,6 +469,32 @@ class MujocoEnv(gym.Env, gym.utils.EzPickle, ObsVecDict):
                     visual_dict.update({d_key:dpt})
 
         return visual_dict
+
+    def render(self):
+        """Render the current simulation as a Gymnasium RGB array."""
+        render_mode = getattr(self, "render_mode", None)
+        if render_mode != "rgb_array":
+            raise RuntimeError(
+                "MSK-Bench rendering requires render_mode='rgb_array' at environment creation."
+            )
+        simulation = getattr(self, "sim", None)
+        if simulation is None:
+            raise RuntimeError("Cannot render a closed MSK-Bench environment.")
+        frame = simulation.renderer.render_offscreen(
+            width=640, height=480, camera_id=0, device_id=self.device_id
+        )
+        return np.asarray(frame, dtype=np.uint8)[:, :, :3]
+
+    def close(self):
+        """Release each distinct simulation owned by this environment."""
+        simulations = []
+        for simulation in (getattr(self, "sim", None), getattr(self, "sim_obsd", None)):
+            if simulation is not None and all(simulation is not item for item in simulations):
+                simulations.append(simulation)
+        for simulation in simulations:
+            simulation.close()
+        self.sim = None
+        self.sim_obsd = None
 
 
     def get_proprioception(self, obs_dict=None)->dict:

@@ -2,6 +2,10 @@
 
 Use `benchmark_eval/evaluate.py` when you want one metric across multiple control methods. The command is a dry run by default: it prints the underlying algorithm-specific evaluator commands without running simulation.
 
+## Package contents
+
+`evaluate.py` dispatches algorithm-specific commands. `common.py` owns shared metric and rendering helpers, while `emg_export.py` owns shared target-muscle export logic. Algorithm-specific training and evaluation code remains under `rl_paradigms/`.
+
 ## Dry Run
 
 ```powershell
@@ -76,4 +80,6 @@ python benchmark_eval/evaluate.py `
 | `--checkpoint-file` | depRL, middleware | Explicit checkpoint file. |
 
 Supported metrics are `success`, `robustness`, `smooth`, `energy`, `emg`, and `render`.
+For post-processing use `python -B -m benchmark_eval.analyze --help`.
+See [analysis workflows](../docs/analysis-workflows.md) for input schemas and corrected metric definitions.
 The old algorithm-specific scripts are still present for compatibility, but this entrypoint is the canonical command surface for comparing methods under the same metric.

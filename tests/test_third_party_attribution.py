@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import unittest
 from pathlib import Path
@@ -15,15 +15,15 @@ class ThirdPartyAttributionTest(unittest.TestCase):
         text = self._text("THIRD_PARTY_NOTICES.md")
 
         expectations = {
-            "deprl": ("depRL/", "https://github.com/martius-lab/depRL", "mit", "local msk-bench changes"),
-            "dynsyn": ("msgym/", "https://github.com/Beanpow/DynSyn", "apache-2.0", "local msk-bench changes"),
+            "deprl": ("rl_paradigms/depRL/", "https://github.com/martius-lab/depRL", "mit", "local msk-bench changes"),
+            "dynsyn": ("rl_paradigms/msgym/", "https://github.com/Beanpow/DynSyn", "apache-2.0", "local msk-bench changes"),
             "musclemimic": (
-                "third_party/musclemimic/",
+                "rl_paradigms/musclemimic/",
                 "https://github.com/amathislab/musclemimic",
                 "apache-2.0",
                 "local msk-bench changes",
             ),
-            "tonic": ("depRL/deprl/vendor/tonic/", "https://github.com/fabiopardo/tonic", "mit", "vendored"),
+            "tonic": ("rl_paradigms/depRL/deprl/vendor/tonic/", "https://github.com/fabiopardo/tonic", "mit", "vendored"),
             "ms-human-700": ("msk_bench/simhive/ms_human_700/", "ms-human-700", "license", "model assets"),
         }
         for component, required_phrases in expectations.items():
@@ -33,9 +33,9 @@ class ThirdPartyAttributionTest(unittest.TestCase):
 
     def test_modified_baseline_readmes_have_integration_attribution(self) -> None:
         for relative in (
-            "depRL/README.md",
-            "msgym/README.md",
-            "deprl_middleware_22tasks/README.md",
+            "rl_paradigms/depRL/README.md",
+            "rl_paradigms/msgym/README.md",
+            "rl_paradigms/deprl_middleware_22tasks/README.md",
         ):
             text = self._text(relative)
             self.assertIn("upstream", text, relative)
@@ -44,7 +44,7 @@ class ThirdPartyAttributionTest(unittest.TestCase):
             self.assertIn("do not remove", text, relative)
 
     def test_third_party_musclemimic_has_local_integration_readme(self) -> None:
-        path = self.repo_root / "third_party" / "musclemimic" / "README.MSK-Bench.md"
+        path = self.repo_root / "rl_paradigms" / "musclemimic" / "README.MSK-Bench.md"
         self.assertTrue(path.is_file())
         text = path.read_text(encoding="utf-8").lower()
         self.assertIn("https://github.com/amathislab/musclemimic", text)
@@ -55,9 +55,9 @@ class ThirdPartyAttributionTest(unittest.TestCase):
     def test_local_patch_summary_exists(self) -> None:
         text = self._text("PATCHES.md")
         for phrase in (
-            "depRL/",
-            "msgym/",
-            "third_party/musclemimic/",
+            "rl_paradigms/depRL/",
+            "rl_paradigms/msgym/",
+            "rl_paradigms/musclemimic/",
             "local msk-bench changes",
             "upstream",
         ):

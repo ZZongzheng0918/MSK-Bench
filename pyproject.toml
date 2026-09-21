@@ -1,68 +1,224 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel", "packaging>=24.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "msk-bench"
 version = "0.1.0"
 description = "MSK-Bench musculoskeletal benchmark environments and baseline entry points."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = [
+  "LICENSE",
+  "NOTICE",
+  "THIRD_PARTY_NOTICES.md",
+  "licenses/*",
+  "msk_bench/simhive/ms_human_700/LICENSE",
+  "rl_paradigms/depRL/LICENSE*",
+  "rl_paradigms/depRL/deprl/vendor/tonic/LICENSE",
+  "rl_paradigms/msgym/LICENSE",
+  "rl_paradigms/musclemimic/LICENSE",
+]
+authors = [
+  { name = "Mengtao Ou" },
+  { name = "Zongzheng Zhang" },
+  { name = "Yixuan Pan" },
+  { name = "Ziwen Zhuang" },
+  { name = "Hang Zhao" },
+  { name = "Hongyang Li" },
+  { name = "Yanan Sui" },
+  { name = "Libin Liu" },
+  { name = "Hao Zhao" },
+]
 requires-python = ">=3.11"
-license = { file = "LICENSE" }
+keywords = [
+  "musculoskeletal control",
+  "reinforcement learning",
+  "humanoid control",
+  "biomechanics",
+  "benchmark",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering",
+]
 dependencies = [
   "gymnasium>=0.29,<1.0",
-  "mujoco>=3.1",
-  "numpy>=1.24",
+  "mujoco==3.4.0",
+  "dm-control==1.0.36",
+  "numpy>=1.26,<3",
   "scipy>=1.10",
+  "scikit-video>=1.1.11",
+  "flatten-dict>=0.4",
+  "GitPython>=3.1",
+  "termcolor>=2.4",
+  "packaging>=23",
+  "imageio>=2.34",
+  "imageio-ffmpeg>=0.5",
+  "matplotlib>=3.8",
 ]
 
 [project.optional-dependencies]
 core = []
+agentic = [
+  "openai>=1.0,<3",
+  "gdown>=5",
+  "pandas>=2",
+  "torch>=2.3",
+  "pyyaml>=6.0",
+]
 sb3 = [
-  "stable-baselines3>=2.3",
+  "stable-baselines3>=2.3,<3",
   "tensorboard>=2.14",
 ]
 deprl = [
-  "torch>=2.0",
+  "gdown>=5",
+  "pandas>=2",
+  "torch>=2.3",
   "pyyaml>=6.0",
 ]
 dynsyn = [
-  "stable-baselines3>=2.3",
-  "sb3-contrib>=2.3",
-  "torch>=2.0",
+  "stable-baselines3>=2.3,<3",
+  "sb3-contrib>=2.3,<3",
+  "torch>=2.3",
+  "tensorboard>=2.14",
+ ]
+middleware = [
+  "gdown>=5",
+  "pandas>=2",
+  "torch>=2.3",
+  "pyyaml>=6.0",
 ]
 residual = [
-  "jax>=0.4",
+  "mujoco-mjx==3.4.0",
+  "numpy==2.2.6",
+  "scipy>=1.14.0",
+  "warp-lang==1.10.0",
+  "jax==0.7.2",
+  "jaxlib==0.7.2",
+  "flax==0.12.0",
+  "optax>=0.2.4",
+  "orbax==0.1.9",
+  "distrax==0.1.7",
   "omegaconf>=2.3",
-  "mujoco>=3.1",
+  "hydra-core>=1.3",
+  "pyyaml>=6.0",
+  "ml-collections>=1.1.0",
+  "opencv-python>=4.10",
+  "huggingface-hub>=0.27",
+  "imageio>=2.37.0",
+  "imageio-ffmpeg>=0.6.0",
+  "seaborn>=0.13.2",
+  "metrx>=0.1",
+  "wandb>=0.19.10",
+  "viser>=1.0.10",
+  "trimesh>=4.0.0",
+  "Pillow>=10.0.0",
+  "tqdm>=4.66",
+  "musclemimic-models>=1.0.2",
+]
+
+all = [
+  "openai>=1.0,<3",
+  "gdown>=5",
+  "pandas>=2",
+  "stable-baselines3>=2.3,<3",
+  "sb3-contrib>=2.3,<3",
+  "tensorboard>=2.14",
+  "torch>=2.3",
+  "mujoco-mjx==3.4.0",
+  "numpy==2.2.6",
+  "scipy>=1.14.0",
+  "warp-lang==1.10.0",
+  "jax==0.7.2",
+  "jaxlib==0.7.2",
+  "flax==0.12.0",
+  "optax>=0.2.4",
+  "orbax==0.1.9",
+  "distrax==0.1.7",
+  "omegaconf>=2.3",
+  "hydra-core>=1.3",
+  "pyyaml>=6.0",
+  "ml-collections>=1.1.0",
+  "opencv-python>=4.10",
+  "huggingface-hub>=0.27",
+  "imageio>=2.37.0",
+  "imageio-ffmpeg>=0.6.0",
+  "seaborn>=0.13.2",
+  "metrx>=0.1",
+  "wandb>=0.19.10",
+  "viser>=1.0.10",
+  "trimesh>=4.0.0",
+  "Pillow>=10.0.0",
+  "tqdm>=4.66",
+  "musclemimic-models>=1.0.2",
 ]
 dev = [
   "pytest>=8",
   "ruff>=0.5",
 ]
 
+[project.urls]
+Homepage = "https://zzongzheng0918.github.io/MSK-Bench/"
+Repository = "https://github.com/ZZongzheng0918/MSK-Bench"
+Documentation = "https://github.com/ZZongzheng0918/MSK-Bench/blob/code/USER_GUIDE.md"
+Issues = "https://github.com/ZZongzheng0918/MSK-Bench/issues"
+
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["msk_bench*"]
+where = [
+  ".",
+  "rl_paradigms/depRL",
+  "rl_paradigms/msgym",
+  "rl_paradigms/deprl_middleware_22tasks",
+  "rl_paradigms/musclemimic",
+]
+include = [
+  "benchmark_eval*",
+  "experiments*",
+  "msk_bench*",
+  "rl_paradigms*",
+  "deprl*",
+  "msgym*",
+  "deprl_middleware_22tasks*",
+  "musclemimic*",
+  "loco_mujoco*",
+]
+namespaces = false
 
 [tool.setuptools.package-data]
 msk_bench = [
   "simhive/**/*",
-  "envs/msk/benchmark/residualrl/*.npz",
+]
+"rl_paradigms.agentic_walk" = [
+  "clean_walk.npy",
+]
+"rl_paradigms.residualrl" = [
+  "*.npz",
+  "*.xml",
+]
+loco_mujoco = [
+  "**/*.yaml",
 ]
 
 [tool.ruff]
 target-version = "py311"
 line-length = 120
 exclude = [
-  "third_party",
-  "depRL/deprl",
-  "depRL/local_tests",
+  "build",
+  "dist",
+  ".smoke",
+  "rl_paradigms/musclemimic",
+  "rl_paradigms/depRL/deprl",
+  "rl_paradigms/depRL/local_tests",
   "msk_bench/envs",
   "msk_bench/physics",
   "msk_bench/renderer",
   "msk_bench/robot",
   "msk_bench/utils",
-  "msgym/SB3-Scripts/utils.py",
+  "rl_paradigms/msgym/SB3-Scripts/utils.py",
   "__pycache__",
   ".ruff_cache",
 ]
@@ -70,3 +226,6 @@ exclude = [
 [tool.ruff.lint]
 select = ["E", "F"]
 ignore = ["E501", "E402"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

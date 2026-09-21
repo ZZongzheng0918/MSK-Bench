@@ -358,7 +358,11 @@ class WalkEnvV0(BaseV0):
             return self._sanitize_obs_dict(obs)
         if isinstance(obs, tuple):
             return tuple(self._sanitize_obs_like(x) if i == 0 else x for i, x in enumerate(obs))
-        return self._safe_array(obs, default=0.0, clip=self.SAFE_OBS_CLIP, name="obs")
+        clean = self._safe_array(obs, default=0.0, clip=self.SAFE_OBS_CLIP, name="obs")
+        observation_dtype = getattr(self, "_observation_dtype", None)
+        if observation_dtype is None:
+            return clean
+        return np.asarray(clean, dtype=observation_dtype)
 
     def _sanitize_reward_dict(self, rwd_dict):
         clean = collections.OrderedDict()

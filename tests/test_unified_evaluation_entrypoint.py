@@ -15,7 +15,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
     def test_builds_one_metric_across_multiple_algorithms(self) -> None:
         from benchmark_eval.evaluate import EvaluationRequest, build_commands
 
-        benchmark_root = Path("D:/MSK-Bench")
+        benchmark_root = Path(".")
         request = EvaluationRequest(
             metric="success",
             algorithms=("ppo", "sac", "deprl"),
@@ -28,9 +28,9 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         commands = build_commands(request, python="python")
 
         self.assertEqual([command[1] for command in commands], [
-            "ppo/eval_ppo_success.py",
-            "sac/eval_sac_success.py",
-            "depRL/eval_deprl_success.py",
+            "rl_paradigms/ppo/eval_ppo_success.py",
+            "rl_paradigms/sac/eval_sac_success.py",
+            "rl_paradigms/depRL/eval_deprl_success.py",
         ])
         for algorithm, command in zip(("ppo", "sac", "deprl"), commands):
             self.assertIn("--env", command)
@@ -145,7 +145,7 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
 
         command = build_command(request, "msgym")
 
-        self.assertIn("msgym/eval_msgym_success.py", command)
+        self.assertIn("rl_paradigms/msgym/eval_msgym_success.py", command)
         self.assertIn("--log-path", command)
         self.assertIn(path_text("weights/msgym/MSKBenchWalk-v0/0721-120000_0"), command)
         self.assertIn("--model-path", command)
@@ -155,24 +155,26 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
 
     def test_readme_documents_training_entrypoints_for_each_baseline(self) -> None:
         repo_root = Path(__file__).resolve().parents[1]
-        text = (repo_root / "README.md").read_text(encoding="utf-8")
+        landing = (repo_root / "README.md").read_text(encoding="utf-8")
+        self.assertIn("[USER_GUIDE.md](USER_GUIDE.md)", landing)
+        text = (repo_root / "USER_GUIDE.md").read_text(encoding="utf-8")
 
         expected_phrases = (
             "### Training Overview",
             "### PPO Training",
-            "python ppo\\train_ppo_msk_bench.py",
+            "python rl_paradigms\\ppo\\train_ppo_msk_bench.py",
             "### SAC Training",
-            "python sac\\train_sac_msk_bench.py",
+            "python rl_paradigms\\sac\\train_sac_msk_bench.py",
             "### depRL Training",
             "python -m deprl.main",
-            "depRL\\baselines_MSKBench",
+            "rl_paradigms\\depRL\\baselines_MSKBench",
             "### DynSyn/msgym Training",
-            "python msgym\\SB3-Scripts\\train.py -f configs\\msk_bench_walk.json",
-            "msgym\\runs\\msgym_logs",
+            "python rl_paradigms\\msgym\\SB3-Scripts\\train.py -f configs\\msk_bench_walk.json",
+            "rl_paradigms\\msgym\\runs\\msgym_logs",
             "best_model.zip",
             "best_env.zip",
             "### Latent-Action Middleware Training",
-            "python deprl_middleware_22tasks\\generate_configs.py",
+            "python rl_paradigms\\deprl_middleware_22tasks\\generate_configs.py",
             "baselines_MSKBench_Middleware",
         )
         for phrase in expected_phrases:
@@ -190,10 +192,10 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
         commands = build_commands(request)
 
         self.assertEqual([command[1] for command in commands], [
-            "ppo/export_ppo_emg.py",
-            "sac/export_sac_emg.py",
-            "msgym/export_msgym_emg.py",
-            "deprl_middleware_22tasks/export_middleware_emg.py",
+            "rl_paradigms/ppo/export_ppo_emg.py",
+            "rl_paradigms/sac/export_sac_emg.py",
+            "rl_paradigms/msgym/export_msgym_emg.py",
+            "rl_paradigms/deprl_middleware_22tasks/export_middleware_emg.py",
         ])
 
     def test_cli_dry_run_prints_commands_without_running_simulation(self) -> None:
@@ -220,8 +222,8 @@ class UnifiedEvaluationEntrypointTest(unittest.TestCase):
             check=True,
         )
 
-        self.assertIn("ppo/eval_ppo_success.py", completed.stdout)
-        self.assertIn("sac/eval_sac_success.py", completed.stdout)
+        self.assertIn("rl_paradigms/ppo/eval_ppo_success.py", completed.stdout)
+        self.assertIn("rl_paradigms/sac/eval_sac_success.py", completed.stdout)
         self.assertIn("--metric success", completed.stdout)
         self.assertEqual("", completed.stderr)
 

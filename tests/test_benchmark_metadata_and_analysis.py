@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import math
 from pathlib import Path
@@ -78,7 +78,7 @@ class BenchmarkMetadataAndAnalysisTest(unittest.TestCase):
                 output_json=output_json,
             )
 
-            command = build_command(request, repo_root=Path("D:/MSK-Bench"))
+            command = build_command(request, repo_root=Path("."))
             self.assertEqual(command[:2], ["python", "benchmark_eval/evaluate.py"])
             self.assertIn("--algorithm", command)
             self.assertIn("ppo", command)

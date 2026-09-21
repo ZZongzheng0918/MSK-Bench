@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from msk_bench.paths import paradigm_path
 from msk_bench.registry import CANONICAL_TASKS, model_path_for
 from msk_bench.utils import gym
 
 register = gym.register
 curr_dir = Path(__file__).resolve().parent
 MSK_BENCH_BODY_DIR = (curr_dir / "../../../simhive/msk_sim/body").resolve()
-RESIDUAL_RL_DIR = curr_dir / "residualrl"
+RESIDUAL_RL_DIR = paradigm_path("residualrl")
 
 
 def msk_bench_model(filename):
@@ -55,26 +56,26 @@ for task in CANONICAL_TASKS:
 
 register_residual_msk_bench_task(
     "ResidualRun",
-    "msk_bench.envs.msk.benchmark.residualrl.run:make_env",
+    "rl_paradigms.residualrl.run:make_env",
     max_episode_steps=5000,
     motion_path=residualrl_resource("walking_run04_poses.npz"),
 )
 register_residual_msk_bench_task(
     "ResidualStair",
-    "msk_bench.envs.msk.benchmark.residualrl.stair:make_env",
+    "rl_paradigms.residualrl.stair:make_env",
     max_episode_steps=2000,
     motion_path=residualrl_resource("stair_prior_89d.npz"),
 )
 register_residual_msk_bench_task(
     "ResidualWalk",
-    "msk_bench.envs.msk.benchmark.residualrl.walk:make_env",
+    "rl_paradigms.residualrl.walk:make_env",
     max_episode_steps=1000,
     motion_path=residualrl_resource("walking_medium09_poses.npz"),
 )
 
 register(
     id="MSKBenchAgenticWalk-v0",
-    entry_point="msk_bench.envs.msk.benchmark.agentic_walk_v0:MSKBenchAgenticWalkEnvV0",
+    entry_point="rl_paradigms.agentic_walk.agentic_walk_v0:MSKBenchAgenticWalkEnvV0",
     max_episode_steps=1000,
     kwargs={"model_path": msk_bench_model("full_body.xml")},
 )

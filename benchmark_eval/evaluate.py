@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import argparse
+import json
 import subprocess
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable
@@ -36,44 +38,44 @@ METRIC_ALIASES = {
 
 SCRIPT_TEMPLATES = {
     "ppo": {
-        "success": "ppo/eval_ppo_success.py",
-        "robustness": "ppo/eval_ppo_robustness.py",
-        "smooth": "ppo/eval_ppo_smooth.py",
-        "energy": "ppo/eval_ppo_energy.py",
-        "emg": "ppo/export_ppo_emg.py",
-        "render": "ppo/render_ppo.py",
+        "success": "rl_paradigms/ppo/eval_ppo_success.py",
+        "robustness": "rl_paradigms/ppo/eval_ppo_robustness.py",
+        "smooth": "rl_paradigms/ppo/eval_ppo_smooth.py",
+        "energy": "rl_paradigms/ppo/eval_ppo_energy.py",
+        "emg": "rl_paradigms/ppo/export_ppo_emg.py",
+        "render": "rl_paradigms/ppo/render_ppo.py",
     },
     "sac": {
-        "success": "sac/eval_sac_success.py",
-        "robustness": "sac/eval_sac_robustness.py",
-        "smooth": "sac/eval_sac_smooth.py",
-        "energy": "sac/eval_sac_energy.py",
-        "emg": "sac/export_sac_emg.py",
-        "render": "sac/render_sac.py",
+        "success": "rl_paradigms/sac/eval_sac_success.py",
+        "robustness": "rl_paradigms/sac/eval_sac_robustness.py",
+        "smooth": "rl_paradigms/sac/eval_sac_smooth.py",
+        "energy": "rl_paradigms/sac/eval_sac_energy.py",
+        "emg": "rl_paradigms/sac/export_sac_emg.py",
+        "render": "rl_paradigms/sac/render_sac.py",
     },
     "deprl": {
-        "success": "depRL/eval_deprl_success.py",
-        "robustness": "depRL/eval_deprl_robustness.py",
-        "smooth": "depRL/eval_deprl_smooth.py",
-        "energy": "depRL/eval_deprl_energy.py",
-        "emg": "depRL/export_deprl_emg.py",
-        "render": "depRL/render_deprl.py",
+        "success": "rl_paradigms/depRL/eval_deprl_success.py",
+        "robustness": "rl_paradigms/depRL/eval_deprl_robustness.py",
+        "smooth": "rl_paradigms/depRL/eval_deprl_smooth.py",
+        "energy": "rl_paradigms/depRL/eval_deprl_energy.py",
+        "emg": "rl_paradigms/depRL/export_deprl_emg.py",
+        "render": "rl_paradigms/depRL/render_deprl.py",
     },
     "msgym": {
-        "success": "msgym/eval_msgym_success.py",
-        "robustness": "msgym/eval_msgym_robustness.py",
-        "smooth": "msgym/eval_msgym_smooth.py",
-        "energy": "msgym/eval_msgym_energy.py",
-        "emg": "msgym/export_msgym_emg.py",
-        "render": "msgym/render_msgym.py",
+        "success": "rl_paradigms/msgym/eval_msgym_success.py",
+        "robustness": "rl_paradigms/msgym/eval_msgym_robustness.py",
+        "smooth": "rl_paradigms/msgym/eval_msgym_smooth.py",
+        "energy": "rl_paradigms/msgym/eval_msgym_energy.py",
+        "emg": "rl_paradigms/msgym/export_msgym_emg.py",
+        "render": "rl_paradigms/msgym/render_msgym.py",
     },
     "middleware": {
-        "success": "deprl_middleware_22tasks/eval_middleware_success.py",
-        "robustness": "deprl_middleware_22tasks/eval_middleware_robustness.py",
-        "smooth": "deprl_middleware_22tasks/eval_middleware_smooth.py",
-        "energy": "deprl_middleware_22tasks/eval_middleware_energy.py",
-        "emg": "deprl_middleware_22tasks/export_middleware_emg.py",
-        "render": "deprl_middleware_22tasks/render_middleware.py",
+        "success": "rl_paradigms/deprl_middleware_22tasks/eval_middleware_success.py",
+        "robustness": "rl_paradigms/deprl_middleware_22tasks/eval_middleware_robustness.py",
+        "smooth": "rl_paradigms/deprl_middleware_22tasks/eval_middleware_smooth.py",
+        "energy": "rl_paradigms/deprl_middleware_22tasks/eval_middleware_energy.py",
+        "emg": "rl_paradigms/deprl_middleware_22tasks/export_middleware_emg.py",
+        "render": "rl_paradigms/deprl_middleware_22tasks/render_middleware.py",
     },
 }
 
@@ -176,7 +178,7 @@ def _clean_extra_args(extra_args: tuple[str, ...]) -> list[str]:
     return list(extra_args)
 
 
-def build_command(request: EvaluationRequest, algorithm: str, *, python: str = "python") -> list[str]:
+def build_command(request: EvaluationRequest, algorithm: str, *, python: str = sys.executable) -> list[str]:
     normalized_algorithm = normalize_algorithm(algorithm)
     normalized_metric = normalize_metric(request.metric)
     command = [
@@ -228,7 +230,7 @@ def build_command(request: EvaluationRequest, algorithm: str, *, python: str = "
     return command
 
 
-def build_commands(request: EvaluationRequest, *, python: str = "python") -> list[list[str]]:
+def build_commands(request: EvaluationRequest, *, python: str = sys.executable) -> list[list[str]]:
     return [build_command(request, algorithm, python=python) for algorithm in normalize_algorithms(request.algorithms)]
 
 
@@ -242,7 +244,7 @@ def validate_scripts(request: EvaluationRequest) -> list[str]:
     return missing
 
 
-def run_request(request: EvaluationRequest, *, python: str = "python") -> list[subprocess.CompletedProcess]:
+def run_request(request: EvaluationRequest, *, python: str = sys.executable) -> list[subprocess.CompletedProcess]:
     missing = validate_scripts(request)
     if missing:
         raise FileNotFoundError("Missing evaluator scripts:\n" + "\n".join(f"  - {item}" for item in missing))
@@ -255,6 +257,8 @@ def run_request(request: EvaluationRequest, *, python: str = "python") -> list[s
         return []
     completed: list[subprocess.CompletedProcess] = []
     for command in commands:
+        if sys.dont_write_bytecode:
+            command.insert(1, "-B")
         completed.append(subprocess.run(command, cwd=Path(request.benchmark_root), check=True))
     return completed
 
@@ -271,6 +275,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--json", dest="output_json", type=Path, default=None)
     parser.add_argument("--csv", dest="output_csv", type=Path, default=None)
     parser.add_argument("--output-dir", type=Path, default=None)
+    parser.add_argument("--artifact-manifest", type=Path, default=None)
     parser.add_argument("--model-root", type=Path, default=None)
     parser.add_argument("--model-dir", type=Path, default=None)
     parser.add_argument("--model-path", type=Path, default=None)
@@ -286,7 +291,49 @@ def build_parser() -> argparse.ArgumentParser:
     return parser
 
 
+def _apply_artifact_manifest(args: argparse.Namespace) -> None:
+    if args.artifact_manifest is None:
+        return
+    path = args.artifact_manifest.resolve()
+    data = json.loads(path.read_text(encoding="utf-8"))
+    algorithm = normalize_algorithm(data["algorithm"])
+    if args.algorithms is not None and normalize_algorithms(args.algorithms) != (algorithm,):
+        raise ValueError("A training manifest can only evaluate its own algorithm")
+    args.algorithms = [algorithm]
+    env_id = data["env_id"].replace("-Middleware-", "-")
+    if args.env_id != "all" and args.env_id != env_id:
+        raise ValueError(f"Manifest environment is {env_id}, not {args.env_id}")
+    args.env_id = env_id
+    if args.seed is None:
+        args.seed = data["seed"]
+
+    def artifact_file(value):
+        artifact = Path(value)
+        artifact = artifact if artifact.is_absolute() else path.parent / artifact
+        if not artifact.is_file():
+            raise FileNotFoundError(artifact)
+        return artifact.resolve()
+
+    model = artifact_file(data["model_path"])
+    derived = {}
+    if algorithm in {"ppo", "sac", "msgym"}:
+        derived["model_path"] = model
+        if data.get("normalization_path") is not None:
+            derived["norm_path"] = artifact_file(data["normalization_path"])
+    if algorithm == "msgym":
+        derived["log_path"] = path.parent
+    elif algorithm in {"deprl", "middleware"}:
+        derived["run_path"] = path.parent
+        derived["checkpoint_file"] = model
+    for name, value in derived.items():
+        explicit = getattr(args, name)
+        if explicit is not None and Path(explicit).resolve() != value:
+            raise ValueError(f"--{name.replace('_', '-')} conflicts with the manifest")
+        setattr(args, name, value)
+
+
 def request_from_args(args: argparse.Namespace) -> EvaluationRequest:
+    _apply_artifact_manifest(args)
     return EvaluationRequest(
         metric=args.metric,
         algorithms=normalize_algorithms(args.algorithms),
@@ -314,7 +361,7 @@ def request_from_args(args: argparse.Namespace) -> EvaluationRequest:
 
 def main(argv: Iterable[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    run_request(request_from_args(args), python="python")
+    run_request(request_from_args(args), python=sys.executable)
     return 0
 
 

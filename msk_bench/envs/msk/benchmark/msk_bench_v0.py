@@ -265,11 +265,23 @@ class MSKBenchPowerliftEnvV0(WalkEnvV0):
         super().__init__(model_path=model_path, obsd_model_path=obsd_model_path, seed=seed, normalize_act=normalize_act, **kwargs)
         self.reset_type = reset_type
 
-    def _setup(self, obs_keys=DEFAULT_OBS_KEYS, weighted_reward_keys=DEFAULT_RWD_KEYS_AND_WEIGHTS, **kwargs):
+    def _setup(self, obs_keys=DEFAULT_OBS_KEYS, weighted_reward_keys=DEFAULT_RWD_KEYS_AND_WEIGHTS, object_mass_kg=None, **kwargs):
         self.max_episode_steps = kwargs.get('max_episode_steps', 1000)
         self.steps = 0
 
         super()._setup(obs_keys=obs_keys, weighted_reward_keys=weighted_reward_keys, sites=[], **kwargs)
+
+        if object_mass_kg is not None:
+            mass = float(object_mass_kg)
+            if not np.isfinite(mass) or mass <= 0:
+                raise ValueError("object_mass_kg must be finite and positive")
+            for sim in (self.sim, self.sim_obsd):
+                index = sim.model.body_name2id("dumbbell")
+                old_mass = float(sim.model.body_mass[index])
+                sim.model.body_inertia[index] *= mass / old_mass
+                sim.model.body_mass[index] = mass
+                mujoco.mj_setConst(sim.model.ptr, sim.data.ptr)
+                sim.forward()
 
 
         try:
@@ -3056,7 +3068,7 @@ class MSKBenchStairsEnvV0(WalkEnvV0):
 
         if isinstance(ret, tuple) and len(ret) == 2: obs, info = ret
         else: obs = ret; info = {}
-        return obs if self.render_mode is None else (obs, info)
+        return obs, info
 
     def step(self, a):
         self.steps += 1
@@ -4771,7 +4783,11 @@ class MSKBenchReachEnvV0(WalkEnvV0):
         self.touch_count = 0
         self._sample_target()
 
-        ret = BaseV0.reset(self, reset_qpos=self.sim.data.qpos.copy(), reset_qvel=self.sim.data.qvel.copy(), **kwargs)
+        ret = super(WalkEnvV0, self).reset(
+            reset_qpos=self.sim.data.qpos.copy(),
+            reset_qvel=self.sim.data.qvel.copy(),
+            **kwargs,
+        )
         if isinstance(ret, tuple): return ret
         else: return ret, {}
 
