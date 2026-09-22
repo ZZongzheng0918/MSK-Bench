@@ -21,7 +21,7 @@ Open http://localhost:8000. The paper is available at `static/papers/MSK-Bench.p
 
 ## Content sources
 
-- `index.html`: manuscript-aligned narrative, metric definitions, and Tables I–V. Table I is an accessible HTML benchmark comparison.
+- `index.html`: manuscript-aligned narrative, metric definitions, and Tables I–V. Table I is an accessible HTML benchmark comparison. The Leaderboard section contains three detailed tables for all 22 tasks and four algorithms, preserving the supplied activation costs, 15 perturbation-sweep values, maximum steps, training-environment success rates, and smoothness values.
 - `static/images/`: paper figures and task posters. Figures 1–10 are rendered from the supplied manuscript; `main22.png` contains all 22 task curves in Fig. 2.
 - `static/js/video-gallery.js`: task families and policy video coverage.
 - `static/videos/`: existing supplementary rollouts, preserved from the original site.
