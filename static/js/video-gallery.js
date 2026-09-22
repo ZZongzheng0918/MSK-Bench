@@ -140,7 +140,7 @@ const taskPolicyViews = [
     title: "Imitation-prior control",
     shortTitle: "Imitation prior",
     groups: ["musclemimic"],
-    note: "MuscleMimic is evaluated on stand, jump, walk, run, and stairs. Other tasks are outside this reported study; missing videos do not indicate task failure.",
+    note: "MuscleMimic is evaluated on stand, jump, walk, run, and stairs. Imitation-prior videos are unavailable for the other tasks because no corresponding reference trajectories could be found for imitation.",
   },
   { id: "residual-adaptation", title: "Residual adaptation over imitation priors", shortTitle: "Residual adaptation", groups: ["residual-rl"] },
 ];

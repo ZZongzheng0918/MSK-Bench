@@ -21,8 +21,8 @@ Open http://localhost:8000. The paper is available at `static/papers/MSK-Bench.p
 
 ## Content sources
 
-- `index.html`: manuscript-aligned narrative, metric definitions, and Tables II–V.
-- `static/images/`: paper figures and task posters. Figures 1–10 and Table I are rendered from the supplied manuscript; `main22.png` contains all 22 task curves in Fig. 2.
+- `index.html`: manuscript-aligned narrative, metric definitions, and Tables I–V. Table I is an accessible HTML benchmark comparison.
+- `static/images/`: paper figures and task posters. Figures 1–10 are rendered from the supplied manuscript; `main22.png` contains all 22 task curves in Fig. 2.
 - `static/js/video-gallery.js`: task families and policy video coverage.
 - `static/videos/`: existing supplementary rollouts, preserved from the original site.
 

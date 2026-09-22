@@ -1075,9 +1075,59 @@ a {
   overflow-x: auto;
 }
 
-.benchmark-comparison-figure img {
-  min-width: 820px;
-  object-fit: contain;
+.benchmark-comparison-table {
+  width: 100%;
+  min-width: 1020px;
+  border-collapse: collapse;
+  color: var(--ink);
+  font-size: 0.76rem;
+  line-height: 1.45;
+  font-variant-numeric: tabular-nums;
+}
+
+.benchmark-comparison-table th,
+.benchmark-comparison-table td {
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  vertical-align: middle;
+}
+
+.benchmark-comparison-table thead th {
+  background: var(--surface-strong);
+  font-weight: 750;
+}
+
+.benchmark-comparison-table th[scope="row"],
+.benchmark-comparison-table th[rowspan],
+.benchmark-comparison-table td:last-child {
+  text-align: left;
+}
+
+.benchmark-comparison-table th[scope="row"] {
+  font-weight: 550;
+}
+
+.benchmark-comparison-table .benchmark-group th {
+  padding-block: 9px;
+  border-block: 1px solid #9aaea9;
+  background: var(--bg);
+  font-weight: 750;
+  text-align: center;
+}
+
+.benchmark-comparison-table .benchmark-ours {
+  background: #e5f1fc;
+}
+
+.support-mark {
+  display: inline-block;
+  font-family: "Segoe UI Symbol", "Arial Unicode MS", sans-serif;
+  font-weight: 700;
+}
+
+.benchmark-comparison-table .support-mark {
+  font-size: 1rem;
 }
 
 .benchmark-comparison-figure figcaption {
@@ -2475,4 +2525,14 @@ button:focus-visible,
     max-width: 440px;
     font-size: 0.73rem;
   }
+}
+
+/* Support symbols remain distinguishable without relying on color. */
+.support-mark[aria-label="Full support"] { color: #16803b; }
+.support-mark[aria-label="Partial support"] { color: #b45d08; }
+.support-mark[aria-label="No support"] { color: #c33131; }
+
+.benchmark-reference {
+  white-space: nowrap;
+  font-size: 0.85em;
 }

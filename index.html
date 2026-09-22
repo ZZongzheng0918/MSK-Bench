@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="MSK-Bench: 22 full-body musculoskeletal tasks, 5 control paradigms, and 7 metric families for evaluating task performance, robustness, and physiological behavior.">
   <title>MSK-Bench | Full-Body Musculoskeletal Motor Control</title>
-  <link rel="stylesheet" href="./static/css/index.css?v=20260920-rss-workshop">
+  <link rel="stylesheet" href="./static/css/index.css?v=20260922-benchmark-comparison">
 </head>
 <body>
   <nav class="site-nav" aria-label="Primary">
@@ -142,9 +142,46 @@
           </figure>
           <figure class="paper-figure benchmark-comparison-figure">
             <div class="benchmark-comparison-media" tabindex="0" role="region" aria-label="Benchmark comparison table">
-              <img src="./static/images/benchmark-comparison.png?v=20260920-rss-workshop" alt="Comparison table of torque-driven humanoid and musculoskeletal benchmarks">
+              <table class="benchmark-comparison-table" aria-describedby="benchmark-comparison-caption">
+                <thead>
+                  <tr>
+                    <th rowspan="2" scope="col">Benchmark / Framework</th>
+                    <th colspan="2" scope="colgroup">Embodiment</th>
+                    <th colspan="2" scope="colgroup">Environment</th>
+                    <th colspan="2" scope="colgroup">Task Design</th>
+                    <th colspan="2" scope="colgroup">Evaluation</th>
+                    <th rowspan="2" scope="col">Main Focus</th>
+                  </tr>
+                  <tr>
+                    <th scope="col">Actuation<br>(Dim.)</th>
+                    <th scope="col">Full<br>Body</th>
+                    <th scope="col">3D Scene /<br>Terrain</th>
+                    <th scope="col">Contact<br>Rich</th>
+                    <th scope="col">Task<br>Hierarchy</th>
+                    <th scope="col">Tasks /<br>Data Scale</th>
+                    <th scope="col">Physio. Eval.<br>Metrics</th>
+                    <th scope="col">Control<br>Families</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="benchmark-group"><th colspan="10" scope="rowgroup">Torque-Driven Humanoid Benchmarks</th></tr>
+                  <tr><th scope="row" data-citation="sferrazza2024humanoidbench">HumanoidBench <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 87 in the paper">[87]</a></th><td>Torque (19/61)</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td>27 tasks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Loco-manipulation</td></tr>
+                  <tr><th scope="row" data-citation="kuang2025skillblender">SkillBench / SkillBlender <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 49 in the paper">[49]</a></th><td>Torque (19)</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td>4 skills /<br>8 tasks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Skill Blending</td></tr>
+                  <tr><th scope="row" data-citation="liu2024mimicking">Mimicking-Bench <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 60 in the paper">[60]</a></th><td>Torque (19)</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>6 tasks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Scene Interaction</td></tr>
+                </tbody>
+                <tbody>
+                  <tr class="benchmark-group"><th colspan="10" scope="rowgroup">Musculoskeletal Benchmarks</th></tr>
+                  <tr><th scope="row" data-citation="al2023locomujoco">LocoMuJoCo <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 2 in the paper">[2]</a></th><td>Mixed</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td>12 envs /<br>27 tasks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>2</td><td>Locomotion Imitation</td></tr>
+                  <tr><th scope="row" data-citation="caggiano2022myosuite">MyoSuite <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 12 in the paper">[12]</a></th><td>Muscle (&le; 80)</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td>204 tasks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Dexterity and Agility</td></tr>
+                  <tr><th scope="row" data-citation="caggiano2023myodex">MyoDex <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 13 in the paper">[13]</a></th><td>Muscle (39)</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>14 train /<br>34 eval.</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Hand Manipulation</td></tr>
+                  <tr><th scope="row" data-citation="zuo2024self">MS-Human-700 / MsGym <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 126 in the paper">[126]</a></th><td>Muscle (700)</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>3 tasks</td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td>1</td><td>MSK Locomotion</td></tr>
+                  <tr><th scope="row" data-citation="wang2026myochallenge">MyoChallenge 2024 <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 107 in the paper">[107]</a></th><td>Muscle (&le; 80)</td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td>2 tracks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Prosthetics</td></tr>
+                  <tr><th scope="row" data-citation="caggiano2025myochallenge">MyoChallenge 2025 <a class="benchmark-reference" href="./static/papers/MSK-Bench.pdf?v=20260920-rss-workshop" target="_blank" rel="noopener noreferrer" aria-label="Reference 15 in the paper">[15]</a></th><td>Muscle (&le; 80)</td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Partial support">&#9679;</span></td><td>2 tasks /<br>4 tracks</td><td><span class="support-mark" role="img" aria-label="No support">&#10007;</span></td><td>1</td><td>Athletic Control</td></tr>
+                  <tr class="benchmark-ours"><th scope="row"><strong>MSK-Bench (ours)</strong></th><td><strong>Muscle (416)</strong></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><strong>22 tasks</strong></td><td><span class="support-mark" role="img" aria-label="Full support">&#10003;</span></td><td><strong>5</strong></td><td><strong>Full-body Terrain MSK</strong></td></tr>
+                </tbody>
+              </table>
             </div>
-            <figcaption><strong>Benchmark comparison (Table I).</strong> MSK-Bench uses a <strong>416-muscle</strong> full-body model across 22 tasks and considers five control families. Columns compare embodiment, environment, task design, and evaluation; checkmarks, dots, and crosses denote full, partial, and no support in the cited evaluations. The <strong>700-muscle model is used only in the anatomy study</strong>. Reference numbers follow the paper.</figcaption>
+            <figcaption id="benchmark-comparison-caption"><strong>Benchmark comparison.</strong> <span class="support-mark" role="img" aria-label="Full support">&#10003;</span>/<span class="support-mark" role="img" aria-label="Partial support">&#9679;</span>/<span class="support-mark" role="img" aria-label="No support">&#10007;</span> denote full/partial/no support in the cited evaluations. We compare actuation, full-body embodiment, scene/terrain support, contact-rich interaction, task hierarchy, benchmark scale, physiological evaluation, and evaluated control families. Reference numbers follow the paper.</figcaption>
           </figure>
         </div>
       </div>
@@ -480,6 +517,6 @@
   </footer>
 
   <script src="./static/js/index.js"></script>
-  <script src="./static/js/video-gallery.js"></script>
+  <script src="./static/js/video-gallery.js?v=20260922-reference-trajectories"></script>
 </body>
 </html>
