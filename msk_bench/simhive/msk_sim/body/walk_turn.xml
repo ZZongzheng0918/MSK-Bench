@@ -1,0 +1,41 @@
+<mujoco model="MSK-Bench WalkTurn">
+    <include file="../scene/msk_bench_scene.xml"/>
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <option timestep="0.002" integrator="Euler" />
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <asset>
+        <material name="mat_wall" rgba="0.5 0.5 0.6 0.3" specular="0.2" shininess="0.2"/>
+        <material name="mat_floor" rgba="0.2 0.2 0.2 1" specular="0.1" shininess="0.1"/>
+        <material name="mat_target" rgba="1 0 0 0.5" specular="0" shininess="0"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 1.05">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <geom name="wall1" type="box" pos="1.5 1.5 1.0" size="2.0 0.1 1.0" material="mat_wall" conaffinity="1" contype="1" condim="3"/>
+        <geom name="wall2" type="box" pos="1.5 -1.5 1.0" size="2.0 0.1 1.0" material="mat_wall" conaffinity="1" contype="1" condim="3"/>
+        
+        <geom name="wall3" type="box" pos="4.5 0.0 1.0" size="0.1 1.6 1.0" material="mat_wall" conaffinity="1" contype="1" condim="3"/>
+        
+        <geom name="wall4" type="box" pos="2.5 2.5 1.0" size="0.1 1.0 1.0" material="mat_wall" conaffinity="1" contype="1" condim="3"/>
+        
+        <geom name="wall5" type="box" pos="4.5 4.5 1.0" size="2.0 0.1 1.0" material="mat_wall" conaffinity="1" contype="1" condim="3"/>
+        
+        <site name="target_a" pos="3.5 0 0.5" size="0.2" rgba="1 0 0 0.5" type="sphere"/>
+        <site name="target_b" pos="3.5 3.5 0.5" size="0.2" rgba="1 0 0 0.5" type="sphere"/>
+        <site name="target_c" pos="6.5 3.5 0.5" size="0.2" rgba="0 1 0 0.5" type="sphere"/>
+
+    </worldbody>
+</mujoco>

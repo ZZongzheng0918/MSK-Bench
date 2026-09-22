@@ -1,0 +1,7 @@
+{
+    "imitate_qpos": 5.0,
+    "imitate_qvel": 2.0,
+    "imitate_root_rot": 3.0,
+    "alive": 5.0,
+    "smoothness": 1.0
+}

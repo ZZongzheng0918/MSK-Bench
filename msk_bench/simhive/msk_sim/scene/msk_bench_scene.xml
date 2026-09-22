@@ -1,0 +1,26 @@
+<mujoco model="msk_bench_scene">
+    <compiler angle="radian"/>
+    <statistic extent="5" center="0 -1 1"/>
+
+    <visual>
+        <global elevation="-15" offwidth="3840" offheight="1080"/>
+        <quality shadowsize="4096" numslices="128" numquads="128"/>
+        <scale light=".05" framewidth=".005"/>
+        <headlight ambient=".6 .6 .6" diffuse="0.4 0.4 0.4" specular="0.2 0.2 0.2"/>
+        <rgba actuator=".7 .4 .4 1" actuatorpositive="1 0 0 1" actuatornegative=".175 .1 .1 1"/>
+    </visual>
+
+    <asset>
+        <texture name="skybox" type="skybox" builtin="gradient" rgb1="0.55 0.53 0.50" rgb2="0.75 0.73 0.70" width="512" height="512"/>
+        <texture name="texfloor" type="2d" builtin="checker" rgb1="0.60 0.58 0.52" rgb2="0.50 0.48 0.44" width="512" height="512"/>
+        <material name="matfloor" reflectance="0.25" texture="texfloor" texrepeat="2 2" texuniform="true"/>
+        <material name="mat_hurdle" rgba="0.25 0.25 0.26 1" specular="0.0" shininess="0.0" reflectance="0.0"/>
+    </asset>
+
+    <worldbody>
+        <light directional="false" diffuse=".5 .5 .5" specular="0.2 0.2 0.2" pos="0 -3 3" dir="0 1 -1" mode="trackcom"/>
+        <camera name="side_view" pos="-3 0 2.25" xyaxes="0 -1 0 1 0 2" mode="trackcom"/>
+        <camera name="front_view" pos="0 -3 2.25" xyaxes="1 0 0 0 1 2" mode="trackcom"/>
+        <geom name="floor" pos="0 0 0" size="500 500 .1" conaffinity="1" contype="1" type="plane" material="matfloor" condim="3"/>
+    </worldbody>
+</mujoco>

@@ -1,0 +1,31 @@
+defaults:
+  - conf_fullbody_gmr
+
+wandb:
+  tags: ["fullbody", "demo", "gmr"]
+
+experiment:
+  actor_hidden_layers: [1024, 1024, 1024, 1024, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024, 1024]
+  env_params:
+    num_envs: 2048
+
+  ppo_config:
+    num_steps: 80
+
+  task_factory:
+    params:
+      amass_dataset_conf:
+        dataset_group: null
+        rel_dataset_path:
+          - "KIT/314/walking_medium09_poses"
+          - "KIT/348/turn_right03_poses"
+          - "KIT/4/WalkInCounterClockwiseCircle04_poses"
+
+  validation:
+    amass_dataset_conf:
+      dataset_group: null
+      rel_dataset_path:
+        - "KIT/314/walking_medium09_poses"
+        - "KIT/348/turn_right03_poses"
+        - "KIT/4/WalkInCounterClockwiseCircle04_poses"

@@ -1,0 +1,18 @@
+MSK-Bench
+Copyright 2026 MSK-Bench contributors
+
+MSK-Bench is licensed under the Apache License, Version 2.0. This
+NOTICE file is informational and does not modify the License.
+
+The repository includes adapted, vendored, or interoperating components
+from third-party projects. Their copyright notices and license files must
+be preserved. The component index and modification summary are maintained
+in THIRD_PARTY_NOTICES.md and PATCHES.md. In particular, the repository
+contains or adapts work from depRL, tonic, DynSyn/msgym, MuscleMimic,
+LocoMuJoCo, RoboHive/MyoHub, and MS-Human-700.
+
+Third-party datasets, motion files, model checkpoints, SMPL-family assets,
+and other externally obtained artifacts are not automatically covered by
+the MSK-Bench Apache-2.0 license. Their use and redistribution remain
+subject to the respective providers' terms. See docs/data-and-licenses.md
+for the release's data and checkpoint boundaries.

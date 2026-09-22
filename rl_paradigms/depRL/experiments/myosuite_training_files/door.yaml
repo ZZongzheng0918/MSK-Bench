@@ -1,0 +1,58 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.001     # [微调] 稍微提高一点干预概率，帮助在推门失败时跳出局部解
+  kappa: 1169.7                 # 保持标准探索参数，过高会导致推门时手部抖动太厉害
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 32            # 强正则化，抑制高频肌肉抖动，这对"推"这个持续发力动作很重要
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 5         # 测试频率稍微降低，节省时间
+  time_dist: 5
+  with_learning: true
+
+env_args: {}
+
+mpo_args:
+  hidden_size: 2048             # MyoFullBody 必须的大网络
+  lr_actor: 2.5e-05             # [关键] 学习率比走路任务更低！复合任务容易发散，慢一点更稳
+  lr_critic: 5.0e-05
+  lr_dual: 0.002
+
+tonic:
+  after_training: ''
+  
+  # Replay Buffer 设置
+  # steps_before_batches=2e5: 充分预热，收集足够的随机接触数据
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=10,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=200000))
+  
+  before_training: ''
+  checkpoint: last
+  
+  # 🔥 [核心修改] 指向我们刚注册的 MyoDoorOpen-v0 环境
+  # reset_type='init': 使用我们在 reset() 函数里写好的特定姿态，不要随机
+  environment: deprl.environments.Gym('MyoDoorOpen-v0', scaled_actions=False, reset_type='init')
+  
+  environment_name: deprl_door_open_v0
+  full_save: 0
+  
+  # 确保导入了注册环境的代码
+  header: import deprl, myosuite; from myosuite.utils import gym
+  
+  name: MyoDoorOpen_Experiment
+  
+  # 并行环境数：开门任务物理计算量稍大（因为有接触判定），如果CPU吃紧可以降到 60-80
+  parallel: 60                  
+  resume: 0
+  seed: 0
+  sequential: 10
+  test_environment: null
+  
+  # 训练步数：复合任务很难，建议至少跑 1亿步 (1e8) 甚至 2亿步
+  trainer: deprl.custom_trainer.Trainer(steps=int(2e8), epoch_steps=int(2e5), save_steps=int(1e6))
+
+working_dir: ./baselines_DoorOpen

@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Squat">
+    <include file="../scene/msk_bench_scene.xml"/>
+
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+    <option timestep="0.001" integrator="Euler" />
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <worldbody>
+        <body name="Full Body" pos="-.025 0.1 1">
+            <freejoint name="root"/>
+
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+            
+            <geom name="barbell_shaft" type="capsule" size="0.015 0.8" pos="-0.05 0 0.45" euler="1.5708 0 0" mass="1" rgba="0.8 0.8 0.8 1" contype="1" conaffinity="1"/>
+            
+            <geom name="barbell_plate_l" type="cylinder" size="0.15 0.04" pos="-0.05 0.7 0.45" euler="1.5708 0 0" mass="0.5" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+            
+            <geom name="barbell_plate_r" type="cylinder" size="0.15 0.04" pos="-0.05 -0.7 0.45" euler="1.5708 0 0" mass="0.5" rgba="0.1 0.1 0.1 1" contype="1" conaffinity="1"/>
+            
+        </body>
+    </worldbody>
+</mujoco>

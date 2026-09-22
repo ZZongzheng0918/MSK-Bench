@@ -1,0 +1,67 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.0004
+  kappa: 1169.7
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 16
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 3
+  time_dist: 5
+  with_learning: true
+
+# 可以在这里传递给环境的额外参数，例如覆盖目标速度
+# 如果您的 WholeBodyStairEnvV0 默认值已经设置好，留空即可
+env_args: {} 
+
+mpo_args:
+  # 爬楼梯涉及复杂的步态周期和重心转移，保留大网络容量
+  hidden_size: 2048
+  # Locomotion 任务有时候 Actor 学习率可以稍微大一点点，
+  # 但为了求稳，先保持和平衡任务一致的参数，防止早期梯度爆炸
+  lr_actor: 2.0e-05
+  lr_critic: 6.081e-05
+  lr_dual: 0.00213
+
+tonic:
+  after_training: ''
+  
+  # DEP 代理配置保持不变
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=3,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=2e5))
+    
+  before_training: ''
+  checkpoint: last
+  
+  # 🟢 [核心修改] 指向爬楼梯环境 ID
+  # reset_type='init' 让机器人每次都站在楼梯前的固定位置开始，有利于初期学习
+  # 如果后期想增加鲁棒性，可以改为 reset_type='random' (需环境支持)
+  environment: deprl.environments.Gym('myoLegStair-v0', scaled_actions=False, reset_type='init')
+  
+  environment_name: myo_stair_baseline
+  full_save: 0
+  
+  # 🟢 [重要提醒] 
+  # 确保您的 myoLegStair-v0 注册代码在 import myosuite 时会被执行
+  # 或者在这里显式 import 包含 register_stair_env() 的文件
+  header: import deprl, myosuite, gymnasium; from myosuite.utils import gym
+  
+  name: myoStair_v1
+  
+  # 爬楼梯容易摔倒导致回合提前结束，
+  # 需要大量并行环境来保证 Buffer 里有足够多的正样本（成功的步数）
+  parallel: 120
+  
+  resume: 0
+  seed: 42
+  sequential: 10
+  
+  # 建议训练 3亿步 (3e8)，爬楼梯是 MyoSuite 里最难的任务之一
+  # 如果资源有限，先跑 1e8 看看有没有起色
+  trainer: deprl.custom_trainer.Trainer(steps=int(3e8), epoch_steps=int(2e5), save_steps=int(1e6))
+
+working_dir: ./baselines_Stair

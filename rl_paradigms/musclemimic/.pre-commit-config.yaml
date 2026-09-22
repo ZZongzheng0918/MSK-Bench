@@ -1,0 +1,76 @@
+# Pre-commit hooks configuration
+# See https://pre-commit.com for more information
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(.*\.md|.*\.txt)$
+      - id: end-of-file-fixer
+        exclude: ^(.*\.txt)$
+      - id: check-yaml
+        args: [--unsafe]  # Allow custom YAML tags (for Hydra configs)
+      - id: check-added-large-files
+        args: [--maxkb=5000]
+      - id: check-merge-conflict
+      - id: mixed-line-ending
+        args: [--fix=lf]
+      - id: check-case-conflict
+      - id: check-toml
+      - id: debug-statements
+
+  # Ruff - Fast Python linter (replaces flake8, isort, etc.)
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.4
+    hooks:
+      # Run the linter
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+      # Run the formatter
+      - id: ruff-format
+
+  # Type checking with mypy (optional - uncomment if you want static type checking)
+  # - repo: https://github.com/pre-commit/mirrors-mypy
+  #   rev: v1.13.0
+  #   hooks:
+  #     - id: mypy
+  #       additional_dependencies: [types-all]
+  #       args: [--ignore-missing-imports, --strict-optional]
+  #       exclude: ^(tests/|examples/)
+
+# Global configuration
+default_language_version:
+  python: python3.11
+
+# Add more files to this list as we migrate them to pre-commit standards
+files: |
+  (?x)^(
+    bimanual/.*|
+    tests/unit/test_enhanced_fullbody_terminal_handler\.py|
+    tests/unit/test_enhanced_fullbody_terminal_handler_integration\.py|
+    tests/test_muscle_observations\.py|
+    musclemimic/core/terminal_state_handler/enhanced_fullbody\.py|
+    musclemimic/core/terminal_state_handler/enhanced_bimanual\.py|
+    musclemimic/environments/humanoids/base_bimanual\.py|
+    musclemimic/environments/humanoids/bimanual\.py|
+    musclemimic/utils/metrics\.py|
+    tests/unit/test_metrics\.py|
+    loco_mujoco/smpl/retargeting\.py
+  )$
+
+# Always exclude these directories
+exclude: |
+  (?x)(
+    ^\.venv/|
+    ^\.git/|
+    ^build/|
+    ^dist/|
+    ^\.eggs/|
+    ^\.pytest_cache/|
+    ^__pycache__/|
+    \.egg-info/|
+    ^converted_datasets/|
+    ^retargeting_recordings/
+  )

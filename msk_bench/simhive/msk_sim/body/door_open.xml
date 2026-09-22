@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench DoorOpen">
+    <option timestep="0.002" integrator="Euler" iterations="50" solver="Newton">
+        <flag eulerdamp="enable"/>
+    </option>
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <default>
+        <default class="visual">
+            <geom group="2" contype="0" conaffinity="0"/>
+        </default>
+        <default class="collision">
+            <geom group="3"/>
+        </default>
+        
+        <default class="door_part">
+            <geom material="mat_door" condim="3" friction="0.5 0.005 0.0001" gap="0.005" solref="0.01 1" solimp="0.9 0.95 0.001"/>
+        </default>
+    </default>
+
+    <include file="../scene/msk_bench_scene.xml"/>
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/>
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+
+    <asset>
+        <material name="mat_door" rgba="0.5 0.3 0.1 1" specular="0.1" shininess="0.1"/>
+        <material name="mat_frame" rgba="0.2 0.2 0.2 1" specular="0.5" shininess="0.8"/>
+        <material name="mat_handle" rgba="0.8 0.8 0.1 1" specular="0.9" shininess="0.9"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="-0.5 0 0.95">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="door_frame" pos="0.8 0 0">
+            <geom name="frame_left" type="box" pos="0 0.65 1.1" size="0.05 0.05 1.1" material="mat_frame" class="collision"/>
+            <geom name="frame_right" type="box" pos="0 -0.65 1.1" size="0.05 0.05 1.1" material="mat_frame" class="collision"/>
+            <geom name="frame_top" type="box" pos="0 0 2.3" size="0.05 0.7 0.05" material="mat_frame" class="collision"/>
+
+            <body name="door" pos="0 -0.55 0.05">
+                <joint name="door_hinge" pos="0 0 0" axis="0 0 -1" range="0 1.57" damping="0.05" frictionloss="0" stiffness="0" limited="true"/>
+                
+                <geom name="door_visual" type="box" pos="0 0.55 1.1" size="0.04 0.55 1.1" material="mat_door" density="100" class="visual"/>
+                
+                <geom name="door_col" type="box" pos="0 0.55 1.1" size="0.04 0.55 1.1" density="100" class="door_part"/>
+                
+                <body name="handle" pos="-0.05 0.95 1.0">
+                    <geom name="handle_geom" type="cylinder" size="0.03 0.15" zaxis="0 1 0" material="mat_handle" class="door_part"/>
+                    <site name="handle_site" pos="0 0 0" size="0.05" rgba="1 0 0 0.5"/>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+</mujoco>

@@ -1,0 +1,7 @@
+# Ruff ignore patterns
+.venv/
+__pycache__/
+*.egg-info/
+.git/
+build/
+dist/

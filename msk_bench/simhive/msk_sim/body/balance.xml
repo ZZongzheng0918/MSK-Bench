@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<mujoco model="MSK-Bench Balance">
+    <include file="../scene/msk_bench_scene.xml"/>
+    <include file="../torso/assets/torso_assets.xml"/>
+    <include file="../head/assets/head_simple_assets.xml"/>
+    <include file="../leg/assets/leg_assets.xml"/> 
+    <include file="../leg/assets/leg_tendon.xml"/>
+    <include file="../leg/assets/leg_muscle.xml"/>
+    <include file="../arm/assets/arm_assets.xml"/>
+    <include file="../arm/assets/arm_assets_left.xml"/> 
+    
+    <option timestep="0.002" integrator="Euler" gravity="0 0 -9.81" />
+
+    <compiler angle="radian" meshdir=".." texturedir=".."/>
+
+    <asset>
+        <material name="wood" rgba="0.6 0.4 0.2 1" specular="0.2" shininess="0.1"/>
+        <material name="metal" rgba="0.7 0.7 0.7 1" specular="0.9" shininess="0.5"/>
+    </asset>
+
+    <worldbody>
+        <body name="Full Body" pos="0 0 1.28">
+            <freejoint name="root"/>
+            <include file="../torso/assets/torso_chain.xml"/>
+            <include file="../leg/assets/leg_chain.xml"/>
+        </body>
+
+        <body name="ball" pos="0 0 0.17">
+            <geom name="geom_ball" type="sphere" pos="0 0 0" size="0.17" 
+                  material="metal"
+                  condim="3" 
+                  friction="2.0 0.005 0.0001"
+                  margin="0.00" 
+                  solimp="0.9 0.95 0.001" solref="0.02 1"
+                  contype="1" conaffinity="1" 
+                  priority="2" group="0"/>
+        </body>
+
+        <body name="board" pos="0 0 0.36"> 
+            <freejoint name="board_joint"/>
+            
+            <geom name="geom_board" type="box" pos="0 0 0" size="0.15 0.55 0.015" 
+                  material="wood"
+                  mass="5.0"
+                  condim="3" 
+                  friction="2.0 0.005 0.0001"
+                  solimp="0.9 0.95 0.001" solref="0.02 1"
+                  margin="0.00"
+                  contype="1" conaffinity="1" 
+                  priority="2" group="0"/>
+        </body>
+        
+    </worldbody>
+
+    <contact>
+        <pair geom1="geom_ball" geom2="geom_board" condim="3" friction="2.0 0.005 0.0001"/>
+    </contact>
+
+</mujoco>

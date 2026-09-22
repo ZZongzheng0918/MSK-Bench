@@ -1,0 +1,82 @@
+﻿name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Install package
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[deprl,dev]"
+
+      - name: Run unit tests
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -B -m unittest discover -s tests -v
+
+
+      - name: Lint maintained sources
+        run: python -m ruff check . --no-respect-gitignore
+
+      - name: Paper metric and analysis contracts
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -B -m pytest tests/test_peak_efficiency.py tests/test_paper_metrics.py tests/test_paper_workflows.py -q -p no:cacheprovider
+
+      - name: Canonical environment and dependency smoke
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+        run: python -B -m pytest tests/test_dependency_contract.py tests/test_environment_runtime.py tests/test_rl_paradigms_layout.py tests/test_restricted_motions.py tests/test_restricted_motion_safety.py -k "not extension" -q -p no:cacheprovider
+
+  integration:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install runtime and GL libraries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libegl1 libgl1 libglfw3
+          python -m pip install --upgrade pip
+          python -m pip install -e ".[all,dev]"
+          python -m pip check
+      - name: Source-release acceptance (restricted motions excluded)
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          JAX_PLATFORMS: cpu
+          MUJOCO_GL: egl
+        run: |
+          python -B -m pytest tests/test_environment_runtime.py -q -rs -p no:cacheprovider
+          python -B tools/smoke_all.py --phase training --output-dir .smoke/all --keep-going
+          python -B tools/smoke_all.py --phase evaluation --training-dir .smoke/all/training --output-dir .smoke/all --keep-going
+          python -B tools/smoke_all.py --phase rendering --training-dir .smoke/all/training --output-dir .smoke/all --keep-going
+          echo "ResidualWalk/Run need independently authorized motions; this is not full-data acceptance."
+      - name: Preserve evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: all-functions-acceptance
+          path: .smoke/all

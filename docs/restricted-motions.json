@@ -1,0 +1,21 @@
+{
+  "repo_id": "amathislab/musclemimic-retargeted",
+  "repo_type": "dataset",
+  "revision": "0c1c8f9ead144b2d783e900f8fb640d2f7a815ce",
+  "motions": [
+    {
+      "destination": "rl_paradigms/residualrl/walking_medium09_poses.npz",
+      "reference_sha256": "8f320295504ffc0a7759ba76ee454dd2b1e3f1feb7244d476b2373100235cc9b",
+      "upstream_path": null,
+      "candidate_path": "MyoFullBody/gmr/KIT/314/walking_medium09_poses.npz",
+      "candidate_sha256": "6b2c8b96a5f1cafec9dd695bc8ee9aa5814a4e7d6ba361d27167f002dc39f1fc",
+      "status": "Exact original revision not resolved; current KIT/314 candidate differs. Do not silently substitute."
+    },
+    {
+      "destination": "rl_paradigms/residualrl/walking_run04_poses.npz",
+      "reference_sha256": "a887fe08cf92a1d12ec6b470eda997f912be2e651451fcff93ea7c1db0feca63",
+      "upstream_path": "MyoFullBody/gmr/KIT/314/walking_run04_poses.npz",
+      "status": "Exact SHA-256 match with the public upstream file metadata at the pinned revision."
+    }
+  ]
+}

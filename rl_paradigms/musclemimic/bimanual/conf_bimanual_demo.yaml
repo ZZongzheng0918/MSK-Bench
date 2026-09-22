@@ -1,0 +1,29 @@
+defaults:
+  - conf_bimanual
+
+wandb:
+  tags: ["bimanual", "demo", "gmr"]
+
+experiment:
+  task_factory:
+    params:
+      amass_dataset_conf:
+        dataset_group: null
+        rel_dataset_path:
+          - "BioMotionLab_NTroje/rub039/0022_throwing_hard1_poses"
+          - "BioMotionLab_NTroje/rub109/0021_catching_and_throwing_poses"
+          - "KIT/3/tennis_forehand_right04_poses"
+          - "KIT/3/wave_left09_poses"
+          - "KIT/572/throw_left03_poses"
+          - "s9/banana_peel_1_stageii"
+          - "s9/doorknob_use_2_stageii"
+        retargeting_method: gmr
+        gmr_config:
+          src_human: smplh
+          target_fps: 30
+          solver: daqp
+          damping: 0.5
+          offset_to_ground: false
+          use_velocity_limit: false
+          use_fitted_shape: true
+          shape_fitting_iterations: 500

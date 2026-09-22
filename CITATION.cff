@@ -1,0 +1,32 @@
+cff-version: 1.2.0
+message: "If you use MSK-Bench in your research, please cite this software. Add the paper citation once its public record is available."
+title: "MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Control Paradigms, and Physiological Metrics"
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/ZZongzheng0918/MSK-Bench"
+url: "https://zzongzheng0918.github.io/MSK-Bench/"
+keywords:
+  - musculoskeletal control
+  - reinforcement learning
+  - humanoid control
+  - biomechanics
+  - benchmark
+authors:
+  - given-names: Mengtao
+    family-names: Ou
+  - given-names: Zongzheng
+    family-names: Zhang
+  - given-names: Yixuan
+    family-names: Pan
+  - given-names: Ziwen
+    family-names: Zhuang
+  - given-names: Hang
+    family-names: Zhao
+  - given-names: Hongyang
+    family-names: Li
+  - given-names: Yanan
+    family-names: Sui
+  - given-names: Libin
+    family-names: Liu
+  - given-names: Hao
+    family-names: Zhao

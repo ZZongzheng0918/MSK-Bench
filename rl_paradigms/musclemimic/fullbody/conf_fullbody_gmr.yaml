@@ -1,0 +1,40 @@
+defaults:
+  - conf_fullbody  # Inherit from base config
+
+# Override wandb tags to indicate GMR
+wandb:
+  tags: ["fullbody", "gmr"]
+
+# Override task factory to use GMR retargeting
+experiment:
+  actor_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 2048, 2048, 2048, 1024]
+  critic_hidden_layers: [1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 1024, 2048, 2048, 2048, 1024]
+  task_factory:
+    params:
+      amass_dataset_conf:
+        dataset_group: "KIT_KINESIS_TRAINING_MOTIONS"
+        retargeting_method: gmr
+        gmr_config:
+          src_human: smplh
+          target_fps: 30
+          solver: daqp
+          damping: 0.5
+          offset_to_ground: false
+          use_velocity_limit: false
+          use_fitted_shape: true  # Auto-fit SMPL shape to robot
+          shape_fitting_iterations: 500
+
+  # Validation also needs GMR retargeting
+  validation:
+    amass_dataset_conf:
+      dataset_group: "KIT_KINESIS_TESTING_MOTIONS"
+      retargeting_method: gmr
+      gmr_config:
+        src_human: smplh
+        target_fps: 30
+        solver: daqp
+        damping: 0.5
+        offset_to_ground: false
+        use_velocity_limit: false
+        use_fitted_shape: true
+        shape_fitting_iterations: 500

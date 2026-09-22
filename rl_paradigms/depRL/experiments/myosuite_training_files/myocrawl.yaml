@@ -1,0 +1,58 @@
+DEP:
+  bias_rate: 0.002
+  buffer_size: 200
+  intervention_length: 5
+  intervention_proba: 0.0004
+  kappa: 1169.7
+  normalization: independent
+  q_norm_selector: l2
+  regularization: 16
+  s4avg: 2
+  sensor_delay: 1
+  tau: 40
+  test_episode_every: 3
+  time_dist: 5
+  with_learning: true
+
+env_args: {}
+
+mpo_args:
+  hidden_size: 2048
+  lr_actor: 3.53e-05
+  lr_critic: 6.081e-05
+  lr_dual: 0.00213
+
+tonic:
+  after_training: ''
+  
+  agent: deprl.custom_agents.dep_factory(3, deprl.custom_mpo_torch.TunedMPO())(replay=deprl.replays.buffers.Buffer(return_steps=3,
+    batch_size=256, steps_between_batches=1000, batch_iterations=30, steps_before_batches=2e5))
+  
+  before_training: ''
+  checkpoint: last
+  
+  # 🔥 [关键修改 1] 指向您的 MyoCrawlEnvV0 类
+  # 假设您的类保存在 myosuite/envs/myo/myocrawl_env.py 中
+  # 并且您在 MyoSuite 的 __init__.py 中注册了 ID 为 'MyoCrawl-v0'
+  # 如果没有注册，可以使用直接类路径：'myosuite.envs.myo.myocrawl_env:MyoCrawlEnvV0'
+  environment: deprl.environments.Gym('MyoCrawl-v0', scaled_actions=False, reset_type='random')
+  
+  environment_name: deprl_crawl_v0
+  full_save: 0
+  
+  # 🔥 [关键修改 2] 确保导入了包含您环境注册代码的文件
+  # 如果您把环境类写在当前目录的 myo_crawl_env.py 里，记得把当前目录加到 path
+  header: import deprl, myosuite; from myosuite.utils import gym
+  # 🔥 [关键修改 3] 实验名称
+  name: myoCrawl_run
+  
+  parallel: 100
+  resume: 0
+  seed: 42
+  sequential: 10
+  test_environment: null
+  
+  trainer: deprl.custom_trainer.Trainer(steps=int(1e9), epoch_steps=int(2e5), save_steps=int(1e6))
+
+# 🔥 [关键修改 4] 工作目录
+working_dir: ./baselines_Crawl
