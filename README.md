@@ -3,14 +3,14 @@
 <p align="center">
   <a href="https://zzongzheng0918.github.io/MSK-Bench/"><img alt="Project Page" src="https://img.shields.io/badge/PROJECT%20PAGE-WEBSITE-2F80ED?style=for-the-badge&amp;labelColor=3B3B3B"></a>
   <a href="#"><img alt="ArXiv coming soon" src="https://img.shields.io/badge/ARXIV-COMING%20SOON-B31B1B?style=for-the-badge&amp;logo=arxiv&amp;logoColor=white&amp;labelColor=3B3B3B"></a>
-  <a href="https://huggingface.co/Zzz0918/MSK-Bench"><img alt="Hugging Face" src="https://img.shields.io/badge/MODEL-HUGGING%20FACE-FFD21E?style=for-the-badge&amp;logo=huggingface&amp;logoColor=black&amp;labelColor=3B3B3B"></a>
+  <a href="https://huggingface.co/Zzz0918/MSK-Bench"><img alt="Model" src="https://img.shields.io/badge/MODEL-FFD21E?style=for-the-badge&amp;logo=huggingface&amp;logoColor=black"></a>
 </p>
 
 MSK-Bench is a full-body musculoskeletal motor-control benchmark with 22 tasks across stabilization, locomotion, and physical interaction. This repository provides the environments, baseline training/evaluation/rendering entry points, physiology-oriented metrics, and source code for focused control studies described in the project.
 
 - Project page: https://zzongzheng0918.github.io/MSK-Bench/
 - ArXiv: coming soon
-- Hugging Face: https://huggingface.co/Zzz0918/MSK-Bench
+- Model: https://huggingface.co/Zzz0918/MSK-Bench
 - Source code: this `main` branch
 - User guide: [USER_GUIDE.md](USER_GUIDE.md)
 - Data and license boundaries: [docs/data-and-licenses.md](docs/data-and-licenses.md)
