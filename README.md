@@ -2,14 +2,14 @@
 
 <p align="center">
   <a href="https://zzongzheng0918.github.io/MSK-Bench/"><img alt="Project Page" src="https://img.shields.io/badge/PROJECT%20PAGE-WEBSITE-2F80ED?style=for-the-badge&amp;labelColor=3B3B3B"></a>
-  <a href="#"><img alt="ArXiv coming soon" src="https://img.shields.io/badge/ARXIV-COMING%20SOON-B31B1B?style=for-the-badge&amp;logo=arxiv&amp;logoColor=white&amp;labelColor=3B3B3B"></a>
+  <a href="https://arxiv.org/abs/2609.26872v1"><img alt="arXiv paper" src="https://img.shields.io/badge/ARXIV-2609.26872-B31B1B?style=for-the-badge&amp;logo=arxiv&amp;logoColor=white&amp;labelColor=3B3B3B"></a>
   <a href="https://huggingface.co/Zzz0918/MSK-Bench"><img alt="Model" src="https://img.shields.io/badge/MODEL-FFD21E?style=for-the-badge&amp;logo=huggingface&amp;logoColor=black"></a>
 </p>
 
 MSK-Bench is a full-body musculoskeletal motor-control benchmark with 22 tasks across stabilization, locomotion, and physical interaction. This repository provides the environments, baseline training/evaluation/rendering entry points, physiology-oriented metrics, and source code for focused control studies described in the project.
 
 - Project page: https://zzongzheng0918.github.io/MSK-Bench/
-- ArXiv: coming soon
+- Paper: [arXiv](https://arxiv.org/abs/2609.26872v1) | [PDF](https://arxiv.org/pdf/2609.26872v1)
 - Model: https://huggingface.co/Zzz0918/MSK-Bench
 - Source code: this `main` branch
 - User guide: [USER_GUIDE.md](USER_GUIDE.md)
@@ -188,7 +188,21 @@ python -B -m pytest tests/test_pretrained_runtime.py -q -rs -p no:cacheprovider
 
 ## Citation
 
-Citation metadata is provided in [CITATION.cff](CITATION.cff). GitHub can render it through the repository's “Cite this repository” action. Paper-specific publication metadata should be added once a public DOI or proceedings record is available.
+If you use MSK-Bench in research, please cite the [arXiv paper](https://arxiv.org/abs/2609.26872v1):
+
+```bibtex
+@misc{ou2026mskbenchbenchmarkingfullbodymusculoskeletal,
+      title={MSK-Bench: Benchmarking Full-Body Musculoskeletal Motor Control Across Tasks, Control Paradigms, and Physiological Metrics},
+      author={Mengtao Ou and Zongzheng Zhang and Zhenghao Xiao and Yixuan Pan and Ziwen Zhuang and Hang Zhao and Hongyang Li and Yanan Sui and Libin Liu and Hao Zhao},
+      year={2026},
+      eprint={2609.26872},
+      archivePrefix={arXiv},
+      primaryClass={cs.RO},
+      url={https://arxiv.org/abs/2609.26872},
+}
+```
+
+The repository also provides machine-readable citation metadata in [CITATION.cff](CITATION.cff).
 
 ## License and attribution
 
