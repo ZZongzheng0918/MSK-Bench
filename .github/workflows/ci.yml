@@ -25,8 +25,7 @@ jobs:
       - name: Install package
         run: |
           python -m pip install --upgrade pip
-          python -m pip install -e ".[deprl,dev]"
-
+          python -m pip install -e ".[deprl,residual,dev]"
       - name: Run unit tests
         env:
           PYTHONDONTWRITEBYTECODE: "1"
